@@ -1,4 +1,1 @@
-projectname-lastname.firstname
-==============================
-
-Template repo for Mulodo training. (ex: miniblog-truong.vu) 
+uidesign_20755_wireframe_design
