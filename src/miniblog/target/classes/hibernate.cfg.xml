@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+    "-//Hibernate/Hibernate Configuration DTD//EN"
+    "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd"> 
+    
+<hibernate-configuration>
+    <session-factory>
+		<property name="hibernate.current_session_context_class">thread</property>
+		<mapping class="com.mulodo.miniblog.model.Users" />
+		<mapping class="com.mulodo.miniblog.model.Posts" />
+		<mapping class="com.mulodo.miniblog.model.Comments" />
+		<mapping class="com.mulodo.miniblog.model.Tokens" />
+
+	</session-factory>         
+</hibernate-configuration>
