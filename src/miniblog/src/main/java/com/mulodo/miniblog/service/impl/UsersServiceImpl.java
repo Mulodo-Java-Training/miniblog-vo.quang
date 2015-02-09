@@ -162,5 +162,21 @@ public class UsersServiceImpl implements UsersService {
 		}
 	}
 
+	@Override
+	public Users GetUserByToken(String access_token) {
+		try {
+			Users user = usersdao.GetUserByAccessToken(access_token);
+			if (user != null)
+				return user;
+			else
+				return null;
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+		
+	}
+
 	
 }

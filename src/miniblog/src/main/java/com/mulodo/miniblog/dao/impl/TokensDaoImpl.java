@@ -75,5 +75,16 @@ public class TokensDaoImpl implements TokensDao {
 		return listToken;
 	}
 
+//	@Override
+//	public Tokens GetTokenByAccess_Token(String access_token) {
+//		Session session = sessionFactory.getCurrentSession();
+//		Transaction trans = session.beginTransaction();
+//		Criteria cr = session.createCriteria(Tokens.class);
+//		cr.add(Restrictions.eq("access_token", access_token));
+//		Tokens token = (Tokens) cr.list().get(0);
+//		trans.commit();
+//		return token;
+//	}
+
 
 }

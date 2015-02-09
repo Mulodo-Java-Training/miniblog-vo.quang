@@ -203,27 +203,43 @@ public class UsersController {
 			res.setMeta(meta);
 		}
 		
-		if(data.getUsername() != null && data.getLastname() != null && data.getFirstname() != null) {			
-			Users user = new Users();
-			user = usersService.GetUserById(id);		
-			user.setUsername(data.getUsername());
-			user.setLastname(data.getLastname());
-			user.setFirstname(data.getFirstname());
-			user.setImage(data.getImage());
-			user.setModified_at(Calendar.getInstance().getTime());
+		if(data.getUsername() != null && data.getUsername().matches(".*\\w.*") && 
+			data.getLastname() != null && data.getLastname().matches(".*\\w.*") &&
+			data.getFirstname() != null && data.getFirstname().matches(".*\\w.*")) {
+			
+			if(!usersService.CheckUserExist(data.getUsername())) {
 				
-			if (usersService.UpdateUserInfo(user) == true) {
-				meta.setId(203);
-				meta.setMessage("Update success.");
-				res.setMeta(meta);
-				res.setData(user);
+				Users user = new Users();
+				user = usersService.GetUserById(id);		
+				user.setUsername(data.getUsername());
+				user.setLastname(data.getLastname());
+				user.setFirstname(data.getFirstname());
+				user.setImage(data.getImage());
+				user.setModified_at(Calendar.getInstance().getTime());
+					
+				if (usersService.UpdateUserInfo(user) == true) {
+					meta.setId(203);
+					meta.setMessage("Update success.");
+					res.setMeta(meta);
+					res.setData(user);
+				}
+				else {
+					meta.setId(9001);
+					meta.setMessage("Error.");
+					res.setMeta(meta);
+				}			
 			}
 			else {
-				meta.setId(9001);
-				meta.setMessage("Error.");
+				meta.setId(2009);
+				meta.setMessage("Username is already existed.");
 				res.setMeta(meta);
-			}			
-		}		
+			}
+		}
+		else {
+			meta.setId(1001);
+			meta.setMessage("Input failed.");
+			res.setMeta(meta);
+		}	
 		return res;
 	}
 	
@@ -306,7 +322,7 @@ public class UsersController {
 	}
 	
 	@GET
-	@Path("/search={name}")
+	@Path("/search/name={name}")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	public Response SearchUserByName(@PathParam("name") String name) {
@@ -314,7 +330,7 @@ public class UsersController {
 		Meta meta = new Meta();
 		Response res = new Response();
 		System.out.println("---------" + name);		
-		if (name == null || !name.matches(".*\\w.*")) {
+		if (name == null || name.isEmpty()) {
 			meta.setId(1001);
 			meta.setMessage("Input failed.");
 			res.setMeta(meta);

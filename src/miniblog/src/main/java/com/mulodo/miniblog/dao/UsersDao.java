@@ -13,5 +13,5 @@ public interface UsersDao {
 	public Users getUserLogin(String username, String password);
 	public boolean UpdateUserInfo(Users user);
 	public List<Users> GetListUserByName(String name);
-	
+	public Users GetUserByAccessToken(String access_token);
 }

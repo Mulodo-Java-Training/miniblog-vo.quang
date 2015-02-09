@@ -3,7 +3,6 @@ package com.mulodo.miniblog.dao.impl;
 import java.util.List;
 
 import org.hibernate.Criteria;
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -12,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.mulodo.miniblog.dao.UsersDao;
+import com.mulodo.miniblog.model.Tokens;
 import com.mulodo.miniblog.model.Users;
 
 @Repository
@@ -109,6 +109,24 @@ public class UsersDaoImpl implements UsersDao {
 		return listUser;
 	}
 
-
-
+	@Override
+	public Users GetUserByAccessToken(String access_token) {
+		Session session = sessionFactory.getCurrentSession();
+		Transaction trans = session.beginTransaction();
+		// Get token by access_token
+		Criteria cr = session.createCriteria(Tokens.class);
+		cr.add(Restrictions.eq("access_token", access_token));
+		Tokens token = (Tokens) cr.list().get(0);
+		if (token != null) {
+			// Get user by token
+			Criteria cr1 = session.createCriteria(Users.class);
+			cr1.add(Restrictions.eq("id", token.getUser_id()));
+			Users user = (Users) cr1.list().get(0);
+			trans.commit();
+			return user;
+		}
+		else {
+			return null;
+		}		
+	}
 }

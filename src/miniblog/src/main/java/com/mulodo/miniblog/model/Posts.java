@@ -29,7 +29,7 @@ public class Posts implements Serializable {
 
 	@NotEmpty
 	@NotNull
-	@Column(name="user_id")
+	@Column(name="user_id", nullable = false)
 	private int user_id;
 	
 	@Id
@@ -38,34 +38,34 @@ public class Posts implements Serializable {
 	
 	@NotEmpty
 	@NotNull
-	@Column(name="title")
+	@Column(name="title", nullable = false)
 	private String title;
 	
 	@NotEmpty
 	@NotNull
-	@Column(name="description")
+	@Column(name="description", nullable = false)
 	private String description;
 	
 	@NotEmpty
 	@NotNull
-	@Column(name="content")
+	@Column(name="content", nullable = false)
 	private String content;
 	
 	@NotEmpty
 	@NotNull
-	@Column(name="created_at")
+	@Column(name="created_at", nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date created_at;
 	
 	@NotEmpty
 	@NotNull
-	@Column(name="modified_at")
+	@Column(name="modified_at", nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date modified_at;
 	
 	@NotEmpty
 	@NotNull
-	@Column(name="status")
+	@Column(name="status", nullable = false)
 	@Type(type="org.hibernate.type.NumericBooleanType") //map integer database value to boolean java value 
 	private boolean status = true;
 	

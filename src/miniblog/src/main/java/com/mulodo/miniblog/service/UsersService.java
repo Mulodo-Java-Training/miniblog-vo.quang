@@ -17,5 +17,6 @@ public interface UsersService {
 	public boolean Logout(Tokens token);
 	public boolean UpdateUserInfo (Users user);
 	public List<Users> GetListUserByName(String name);
+	public Users GetUserByToken(String access_token);
 	
 }
