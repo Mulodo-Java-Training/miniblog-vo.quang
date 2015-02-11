@@ -14,14 +14,14 @@ import com.mulodo.miniblog.dao.TokensDao;
 import com.mulodo.miniblog.model.Tokens;
 
 @Repository
-public class TokensDaoImpl implements TokensDao {
-
+public class TokensDaoImpl implements TokensDao 
+{
 	@Autowired
 	SessionFactory sessionFactory;
 	
 	@Override
-	public boolean Save(Tokens token) {
-		
+	public boolean isSave(Tokens token) 
+	{		
 		Session session = sessionFactory.getCurrentSession();		
 		Transaction trans = session.beginTransaction();
 		session.save(token);
@@ -30,8 +30,8 @@ public class TokensDaoImpl implements TokensDao {
 	}
 
 	@Override
-	public boolean Delete(Tokens token) {
-		
+	public boolean isDelete(Tokens token) 
+	{		
 		Session session = sessionFactory.getCurrentSession();
 		Transaction trans = session.beginTransaction();
 		session.delete(token);
@@ -41,8 +41,8 @@ public class TokensDaoImpl implements TokensDao {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Tokens Search(Tokens token) {
-		
+	public Tokens search(Tokens token) 
+	{		
 		Session session = sessionFactory.getCurrentSession();
 		Transaction trans = session.beginTransaction();
 		List<Tokens> result = session.createCriteria(Tokens.class)
@@ -51,21 +51,10 @@ public class TokensDaoImpl implements TokensDao {
 		return result.get(0);
 	}
 
-	@Override
-	public boolean CheckTokenValid(int user_id, String access_token) {
-		
-		Session session = sessionFactory.getCurrentSession();
-		Transaction trans = session.beginTransaction();
-		session.createCriteria(Tokens.class).add(Restrictions.like("user_id", user_id))
-											.add(Restrictions.like("access_token", access_token));
-		trans.commit();
-		return true;
-	}
-
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Tokens> GetTokenByUserId(int user_id) {
-		
+	public List<Tokens> getTokenByUserId(int user_id) 
+	{		
 		Session session = sessionFactory.getCurrentSession();
 		Transaction trans = session.beginTransaction();
 		Criteria cr = session.createCriteria(Tokens.class);
@@ -75,16 +64,17 @@ public class TokensDaoImpl implements TokensDao {
 		return listToken;
 	}
 
-//	@Override
-//	public Tokens GetTokenByAccess_Token(String access_token) {
-//		Session session = sessionFactory.getCurrentSession();
-//		Transaction trans = session.beginTransaction();
-//		Criteria cr = session.createCriteria(Tokens.class);
-//		cr.add(Restrictions.eq("access_token", access_token));
-//		Tokens token = (Tokens) cr.list().get(0);
-//		trans.commit();
-//		return token;
-//	}
+	@Override
+	public Tokens getTokenByAccess_Token(String access_token) 
+	{
+		Session session = sessionFactory.getCurrentSession();
+		Transaction trans = session.beginTransaction();
+		Criteria cr = session.createCriteria(Tokens.class);
+		cr.add(Restrictions.eq("access_token", access_token));
+		Tokens token = (Tokens) cr.list().get(0);
+		trans.commit();
+		return token;
+	}
 
 
 }

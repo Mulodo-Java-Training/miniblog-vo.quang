@@ -1,5 +1,7 @@
 package com.mulodo.miniblog.dao.impl;
 
+import java.util.List;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -10,14 +12,14 @@ import com.mulodo.miniblog.dao.PostsDao;
 import com.mulodo.miniblog.model.Posts;
 
 @Repository
-public class PostsDaoImpl implements PostsDao {
-
+public class PostsDaoImpl implements PostsDao 
+{
 	@Autowired
 	SessionFactory sessionFactory;
 
 	@Override
-	public boolean create(Posts post) {
-		
+	public boolean create(Posts post) 
+	{	
 		Session session = sessionFactory.getCurrentSession();
 		Transaction trans = session.beginTransaction();
 		session.save(post);		
@@ -26,8 +28,8 @@ public class PostsDaoImpl implements PostsDao {
 	}
 
 	@Override
-	public Posts GetPostById(int id) {
-
+	public Posts getPostById(int id) 
+	{
 		Session session = sessionFactory.getCurrentSession();
 		Transaction trans = session.beginTransaction();
 		Posts post = (Posts) session.get(Posts.class, id);
@@ -36,8 +38,8 @@ public class PostsDaoImpl implements PostsDao {
 	}
 
 	@Override
-	public boolean UpdatePost(Posts post) {
-		
+	public boolean isUpdatePost(Posts post) 
+	{	
 		Session session = sessionFactory.getCurrentSession();
 		Transaction trans = session.beginTransaction();
 		session.update(post);
@@ -46,8 +48,8 @@ public class PostsDaoImpl implements PostsDao {
 	}
 
 	@Override
-	public boolean DeletePost(int id) {
-		
+	public boolean isDeletePost(int id) 
+	{		
 		Session session = sessionFactory.getCurrentSession();
 		Transaction trans = session.beginTransaction();
 //		session.delete(GetPostById(id));
@@ -55,6 +57,20 @@ public class PostsDaoImpl implements PostsDao {
 		session.delete(post);
 		trans.commit();
 		return true;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Posts> getAllPost() 
+	{		
+		Session session = sessionFactory.getCurrentSession();
+		Transaction trans = session.beginTransaction();
+		List<Posts> listPost = session.createQuery("from Posts").list();
+		trans.commit();
+		if (listPost != null)
+			return listPost;
+		else
+			return null;
 	}
 	
 	

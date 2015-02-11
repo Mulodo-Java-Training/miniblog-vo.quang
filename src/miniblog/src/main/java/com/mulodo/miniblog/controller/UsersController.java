@@ -19,7 +19,7 @@ import org.jboss.resteasy.annotations.Form;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
-import com.mulodo.miniblog.encrypt.Encrypt;
+import com.mulodo.miniblog.encryption.Encryption;
 import com.mulodo.miniblog.model.Tokens;
 import com.mulodo.miniblog.model.Users;
 import com.mulodo.miniblog.responseformat.Meta;
@@ -30,11 +30,10 @@ import com.mulodo.miniblog.service.UsersService;
 
 @Path("v1/users")
 @Controller
-public class UsersController {
-
+public class UsersController 
+{
 	@Autowired
 	UsersService usersService;
-	
 	@Autowired
 	TokensService tokensService;
 
@@ -43,14 +42,14 @@ public class UsersController {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Valid
-	public Response register(Users data) {
-		
+	public Response register(Users data) 
+	{		
 		Response res = new Response();
 		Meta meta = new Meta();
 
-		if (usersService.ValidateUser(data)) {
-			if (!usersService.CheckUserExist(data.getUsername())) {
-				if (!usersService.CheckEmailExist(data.getEmail())) {
+		if (usersService.isValidateUser(data)) {
+			if (!usersService.isCheckUserExist(data.getUsername())) {
+				if (!usersService.isCheckEmailExist(data.getEmail())) {
 					Users user = new Users();
 					user.setUsername(data.getUsername());
 					user.setPassword(data.getPassword());
@@ -63,12 +62,12 @@ public class UsersController {
 					
 					// Set encrypted password to user
 					String encryptPass = user.getPassword();
-					user.setPassword(Encrypt.hashSHA256(encryptPass));
+					user.setPassword(Encryption.hashSHA256(encryptPass));
 					
 					// Register a new user account
-					if (usersService.Register(user) == true) {						
+					if (usersService.register(user) == true) {						
 						// Create access_token when create account success.   
-						String access_token = Encrypt.createToken(user.getId());
+						String access_token = Encryption.createToken(user.getId());
 						// Set access_token to user 
 						user.setAccess_token(access_token);
 						// Create token 
@@ -80,7 +79,7 @@ public class UsersController {
 						token.setAccess_token(access_token);
 						token.setUser_id(user.getId());						
 						// Save to db
-						tokensService.CreateToken(token);
+						tokensService.isCreateToken(token);
 												
 						meta.setId(200);
 						meta.setMessage("User created sucess");
@@ -113,14 +112,13 @@ public class UsersController {
 	@Path("/login")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	public Response Login(@Form LoginForm data) {
-		
+	public Response login(@Form LoginForm data) 
+	{		
 		Response res = new Response();
 		Meta meta = new Meta();
 
 		if (data.getUsername() == null || data.getUsername().isEmpty() ||
-			data.getPassword() == null || data.getPassword().isEmpty()) {
-			
+				data.getPassword() == null || data.getPassword().isEmpty()) {			
 			meta.setId(1001);
 			meta.setMessage("Input failed.");
 			res.setMeta(meta);
@@ -129,22 +127,23 @@ public class UsersController {
 		/**
 		 * Encrypt password in order to compare with encrypted password of user in database 
 		 */
-		String encryptPass = Encrypt.hashSHA256(data.getPassword());
+		String encryptPass = Encryption.hashSHA256(data.getPassword());
 		
-		if (usersService.Login(data.getUsername(), encryptPass) == true) {				
+		if (usersService.isLogin(data.getUsername(), encryptPass) == true) {				
 			// Get user by username 
-			Users user = usersService.GetUserByUsername(data.getUsername());
+			Users user = usersService.getUserByUsername(data.getUsername());
 			// Create access_token for user
-			String access_token = Encrypt.createToken(user.getId());
+			String access_token = Encryption.createToken(user.getId());
 			Tokens token = new Tokens();
 			token.setUser_id(user.getId());
 			// Current time
 			token.setCreated_at(new Timestamp(System.currentTimeMillis()));
 			// Expired in 7 days
-			token.setExpired(new Timestamp(System.currentTimeMillis() + 7*24*60*60*1000));
+			//token.setExpired(new Timestamp(System.currentTimeMillis() + 7*24*60*60*1000));
+			token.setExpired(new Timestamp(System.currentTimeMillis() + 5000));
 			token.setAccess_token(access_token);
 			// Save token to db
-			tokensService.CreateToken(token);
+			tokensService.isCreateToken(token);
 			
 			meta.setId(201);
 			meta.setMessage("Login Success");
@@ -163,18 +162,21 @@ public class UsersController {
 	@Path("/logout")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	public Response Logout(@FormParam("access_token") String access_token ) {
-		
+	public Response logout(@FormParam("access_token") String access_token ) 
+	{		
 		Response res = new Response();
 		Meta meta = new Meta();
 		
+		// Check access_token not null, no spacing
+		if (access_token != null && !access_token.isEmpty() && access_token.matches(".*\\w.*")) {
 		// Pass access_token to an token object
 		Tokens token = new Tokens();
 		token.setAccess_token(access_token);
 		// Search token in db that match token with access_token provided
-		Tokens tokenSearch = tokensService.SearchToken(token);
+		Tokens tokenSearch = tokensService.searchToken(token);
+		
 		if (tokenSearch != null) {
-			tokensService.DeleteToken(tokenSearch);
+			tokensService.isDeleteToken(tokenSearch);
 			meta.setId(202);
 			meta.setMessage("Logout success");
 			res.setMeta(meta);
@@ -182,6 +184,12 @@ public class UsersController {
 		else {
 			meta.setId(9001);
 			meta.setMessage("Error.");
+			res.setMeta(meta);
+		}	
+		}
+		else {
+			meta.setId(11111);
+			meta.setMessage("Missing access token.");
 			res.setMeta(meta);
 		}			
 		return res;
@@ -191,67 +199,71 @@ public class UsersController {
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response UpdateUserInfo(@PathParam("id") int id, Users data) { 
-		
+	public Response updateUserInfo(@PathParam("id") int id, Users data) 
+	{ 		
 		Response res = new Response();
 		Meta meta = new Meta();
 
 		// Check whether token valid or not
-		if(tokensService.CheckTokenValid(id, data.getAccess_token()) == false) {			
-			meta.setId(1001);
-			meta.setMessage("Token has expired.");
+		if (tokensService.isCheckTokenValid(data.getAccess_token()) == false) {			
+			meta.setId(1002);
+			meta.setMessage("Access token has expired.");
 			res.setMeta(meta);
 		}
-		
-		if(data.getUsername() != null && data.getUsername().matches(".*\\w.*") && 
-			data.getLastname() != null && data.getLastname().matches(".*\\w.*") &&
-			data.getFirstname() != null && data.getFirstname().matches(".*\\w.*")) {
-			
-			if(!usersService.CheckUserExist(data.getUsername())) {
+		else {
+			// Validate user's input
+			if (data.getUsername() != null && data.getUsername().matches(".*\\w.*") && 
+				data.getLastname() != null && data.getLastname().matches(".*\\w.*") &&
+				data.getFirstname() != null && data.getFirstname().matches(".*\\w.*")) {
 				
-				Users user = new Users();
-				user = usersService.GetUserById(id);		
-				user.setUsername(data.getUsername());
-				user.setLastname(data.getLastname());
-				user.setFirstname(data.getFirstname());
-				user.setImage(data.getImage());
-				user.setModified_at(Calendar.getInstance().getTime());
+				if (!usersService.isCheckUserExist(data.getUsername())) {
 					
-				if (usersService.UpdateUserInfo(user) == true) {
-					meta.setId(203);
-					meta.setMessage("Update success.");
-					res.setMeta(meta);
-					res.setData(user);
+					Users user = new Users();
+					user = usersService.getUserById(id);		
+					user.setUsername(data.getUsername());
+					user.setLastname(data.getLastname());
+					user.setFirstname(data.getFirstname());
+					user.setImage(data.getImage());
+					user.setModified_at(Calendar.getInstance().getTime());
+						
+					if (usersService.isUpdateUserInfo(user) == true) {
+						meta.setId(203);
+						meta.setMessage("Update success.");
+						res.setMeta(meta);
+						res.setData(user);
+					}
+					else {
+						meta.setId(9001);
+						meta.setMessage("Error.");
+						res.setMeta(meta);
+					}			
 				}
 				else {
-					meta.setId(9001);
-					meta.setMessage("Error.");
+					meta.setId(2009);
+					meta.setMessage("Username is already existed.");
 					res.setMeta(meta);
-				}			
+				}
 			}
 			else {
-				meta.setId(2009);
-				meta.setMessage("Username is already existed.");
+				meta.setId(1001);
+				meta.setMessage("Input failed.");
 				res.setMeta(meta);
 			}
 		}
-		else {
-			meta.setId(1001);
-			meta.setMessage("Input failed.");
-			res.setMeta(meta);
-		}	
 		return res;
 	}
 	
 	@Path("/{id}")
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response GetUserInfo(@PathParam("id") int id) {
-		
+	public Response getUserInfo(@PathParam("id") int id) 
+	{		
 		Response res = new Response();
 		Meta meta = new Meta();
 		
-		Users user = usersService.GetUserById(id);
+		// Get user by id
+		Users user = usersService.getUserById(id);
+		
 		if (user != null) {
 			meta.setId(204);
 			meta.setMessage("Get user info success");
@@ -270,54 +282,56 @@ public class UsersController {
 	@Path("/changepassword")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	public Response ChangePassword (@FormParam("id") int id, @FormParam("currentPassword") String currentPassword,
-									@FormParam("newPassword") String newPassword) {
-		
+	public Response changePassword(@FormParam("id") int id, @FormParam("currentPassword") String currentPassword,
+									@FormParam("newPassword") String newPassword) 
+	{		
 		Meta meta = new Meta();
 		Response res = new Response();
 		
-		if (id != 0 && currentPassword == null || currentPassword.isEmpty() || newPassword == null || newPassword.isEmpty()) {
+		if (id == 0 || currentPassword == null || currentPassword.isEmpty() || 
+				newPassword == null || newPassword.isEmpty()) {
 			
-			meta.setId(2002);
-			meta.setMessage("Password id required.");
+			meta.setId(1001);
+			meta.setMessage("Input failed.");
 			res.setMeta(meta);
-		}
-		
-		// Get user info by ID
-		Users user = usersService.GetUserById(id);
-		
-		// Encrypt password in order to compare with password in db
-		String passwordHash = Encrypt.hashSHA256(currentPassword);
-		
-		// if two password are equal, allow changing to new password
-		if (user.getPassword().equals(passwordHash)) {
-	
-			//Encrypt new password and set to user's password
-			user.setPassword(Encrypt.hashSHA256(newPassword));
-			user.setModified_at(Calendar.getInstance().getTime());
-			
-			// Update new password
-			usersService.UpdateUserInfo(user);
-			
-			//Delete old tokens of previous password
-			List<Tokens> listToken = tokensService.GetTokenByUserId(user.getId());
-			
-			if (listToken != null) {				
-				for (Tokens item : listToken) {
-					tokensService.DeleteToken(item);
-					//System.out.println("Delete success.");
-				}								
-			}			
-			meta.setId(205);
-			meta.setMessage("Change password success.");
-			res.setMeta(meta);
-			res.setData(user);
 		}
 		else {
-			meta.setId(2007);
-			meta.setMessage("Password id invalid.");
-			res.setMeta(meta);
-		}			
+			// Get user info by ID
+			Users user = usersService.getUserById(id);
+			
+			// Encrypt password in order to compare with password in db
+			String passwordHash = Encryption.hashSHA256(currentPassword);
+			
+			// if two password are equal, allow changing to new password
+			if (user.getPassword().equals(passwordHash)) {
+		
+				//Encrypt new password and set to user's password
+				user.setPassword(Encryption.hashSHA256(newPassword));
+				user.setModified_at(Calendar.getInstance().getTime());
+				
+				// Update new password
+				usersService.isUpdateUserInfo(user);
+					
+				//Delete old tokens of previous password
+				List<Tokens> listToken = tokensService.getTokenByUserId(user.getId());
+				
+				if (listToken != null) {				
+					for (Tokens item : listToken) {
+						tokensService.isDeleteToken(item);
+						//System.out.println("Delete success.");
+					}								
+				}			
+				meta.setId(205);
+				meta.setMessage("Change password success.");
+				res.setMeta(meta);
+				res.setData(user);
+			}
+			else {
+				meta.setId(2007);
+				meta.setMessage("Password id invalid.");
+				res.setMeta(meta);
+			}		
+		}
 		return res;
 	}
 	
@@ -325,8 +339,8 @@ public class UsersController {
 	@Path("/search/name={name}")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	public Response SearchUserByName(@PathParam("name") String name) {
-		
+	public Response searchUserByName(@PathParam("name") String name) 
+	{		
 		Meta meta = new Meta();
 		Response res = new Response();
 		System.out.println("---------" + name);		
@@ -337,9 +351,9 @@ public class UsersController {
 		}
 		
 		//Get list user searched by firstname, lastname
-		List<Users> listUser = usersService.GetListUserByName(name);
+		List<Users> listUser = usersService.getListUserByName(name);
 		
-		if(listUser != null  && listUser.size() != 0) {		
+		if (listUser != null  && listUser.size() != 0) {		
 			meta.setId(205);
 			meta.setMessage("Search success.");
 			res.setMeta(meta);

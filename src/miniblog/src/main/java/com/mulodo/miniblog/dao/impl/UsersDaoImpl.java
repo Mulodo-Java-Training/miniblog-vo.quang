@@ -15,14 +15,14 @@ import com.mulodo.miniblog.model.Tokens;
 import com.mulodo.miniblog.model.Users;
 
 @Repository
-public class UsersDaoImpl implements UsersDao {
-
+public class UsersDaoImpl implements UsersDao 
+{
 	@Autowired
 	private SessionFactory sessionFactory;
 	
 	@Override
-	public void addNewUser(Users user) {
-		
+	public void addNewUser(Users user) 
+	{		
 		Session session = sessionFactory.openSession();
 		Transaction trans = session.beginTransaction();
 		session.save(user);
@@ -30,20 +30,19 @@ public class UsersDaoImpl implements UsersDao {
 	}
 
 	@Override
-	public Users getUserById(int id) {		
-		
+	public Users getUserById(int id) 
+	{				
 		Session session = sessionFactory.getCurrentSession();
 		Transaction trans = session.beginTransaction();
 		Users user = (Users) sessionFactory.getCurrentSession().get(Users.class, id);
 		trans.commit();
-		return user;
-		
+		return user;		
 	}
 
 	@SuppressWarnings({ "unused", "unchecked" })
 	@Override
-	public Users getUserByUsername(String username) {
-		
+	public Users getUserByUsername(String username) 
+	{		
 		Session session = sessionFactory.openSession();
 		Transaction trans = session.beginTransaction();
 		Criteria cr = session.createCriteria(Users.class);
@@ -57,8 +56,8 @@ public class UsersDaoImpl implements UsersDao {
 
 	@SuppressWarnings({ "unused", "unchecked" })
 	@Override
-	public Users get_user_by_email(String email) {
-		
+	public Users get_user_by_email(String email) 
+	{		
 		Session session = sessionFactory.openSession();
 		Transaction trans = session.beginTransaction();
 		Criteria cr = session.createCriteria(Users.class);
@@ -72,8 +71,8 @@ public class UsersDaoImpl implements UsersDao {
 	
 	@SuppressWarnings({ "unused", "unchecked" })
 	@Override
-	public Users getUserLogin(String username, String password) {
-		
+	public Users getUserLogin(String username, String password) 
+	{		
 		Session session = sessionFactory.openSession();
 		Transaction trans = session.beginTransaction();
 		Criteria cr = session.createCriteria(Users.class);
@@ -87,8 +86,8 @@ public class UsersDaoImpl implements UsersDao {
 	}
 
 	@Override
-	public boolean UpdateUserInfo(Users user) {
-		
+	public boolean isUpdateUserInfo(Users user) 
+	{		
 		Session session = sessionFactory.getCurrentSession();
 		Transaction trans = session.beginTransaction();
 		session.update(user);
@@ -98,7 +97,8 @@ public class UsersDaoImpl implements UsersDao {
 
 	@SuppressWarnings({ "unchecked" })
 	@Override
-	public List<Users> GetListUserByName(String name) {
+	public List<Users> getListUserByName(String name) 
+	{
 		String rename = "%" + name + "%";
 		Session session = sessionFactory.getCurrentSession();
 		Transaction trans = session.beginTransaction();
@@ -110,7 +110,8 @@ public class UsersDaoImpl implements UsersDao {
 	}
 
 	@Override
-	public Users GetUserByAccessToken(String access_token) {
+	public Users getUserByAccessToken(String access_token) 
+	{
 		Session session = sessionFactory.getCurrentSession();
 		Transaction trans = session.beginTransaction();
 		// Get token by access_token
@@ -125,8 +126,7 @@ public class UsersDaoImpl implements UsersDao {
 			trans.commit();
 			return user;
 		}
-		else {
-			return null;
-		}		
+		else
+			return null;		
 	}
 }

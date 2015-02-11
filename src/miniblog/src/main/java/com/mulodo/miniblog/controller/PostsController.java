@@ -1,9 +1,11 @@
 package com.mulodo.miniblog.controller;
 
 import java.util.Calendar;
+import java.util.List;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -20,22 +22,26 @@ import com.mulodo.miniblog.model.Users;
 import com.mulodo.miniblog.responseformat.Meta;
 import com.mulodo.miniblog.responseformat.Response;
 import com.mulodo.miniblog.service.PostsService;
+import com.mulodo.miniblog.service.TokensService;
 import com.mulodo.miniblog.service.UsersService;
 
 @Path("v1/posts")
 @Controller
-public class PostsController {
-
+public class PostsController 
+{
 	@Autowired
 	PostsService postsService;
 	@Autowired
 	UsersService usersService;
+	@Autowired
+	TokensService tokensService;
 	
 	@POST
 	@Path("create")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response CreatePost(Posts data, @HeaderParam("access_token") String access_token) {
+	public Response createPost(Posts data, @HeaderParam("access_token") String access_token) 
+	{
 		Meta meta = new Meta();
 		Response res = new Response();
 		
@@ -51,25 +57,33 @@ public class PostsController {
 			post.setCreated_at(Calendar.getInstance().getTime());
 			post.setModified_at(Calendar.getInstance().getTime());
 			
-			if (access_token != null)
-				post.setUser_id(usersService.GetUserByToken(access_token).getId());	
+			if (access_token != null) {			
+				if (tokensService.isCheckTokenValid(access_token) == true) {
+					post.setUser_id(usersService.getUserByToken(access_token).getId());
+					if (postsService.createPost(post) == true) {			
+						meta.setId(205);
+						meta.setMessage("New post is created success");
+						res.setMeta(meta);
+						res.setData(post);
+					}
+					else {
+						meta.setId(9001);
+						meta.setMessage("Error.");
+						res.setMeta(meta);
+					}					
+				}
+				else {
+					meta.setId(1002);
+					meta.setMessage("Access token has expired.");
+					res.setMeta(meta);
+				}	
+			}
 			else {
-				meta.setId(1002);
-				meta.setMessage("Access token has expired.");
+				meta.setId(9002);
+				meta.setMessage("Missing token. Please login.");
 				res.setMeta(meta);
 			}
 							
-			if (postsService.createPost(post) == true) {			
-				meta.setId(205);
-				meta.setMessage("New post is created success");
-				res.setMeta(meta);
-				res.setData(post);
-			}
-			else {
-				meta.setId(9001);
-				meta.setMessage("Error.");
-				res.setMeta(meta);
-			}					
 		}
 		else {
 			meta.setId(9001);
@@ -82,7 +96,9 @@ public class PostsController {
 	@PUT
 	@Path("{id}/{status}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response UpdatePostStatus(@PathParam("id") int id, @PathParam("status") boolean status, @HeaderParam("access_token") String access_token) {
+	public Response updatePostStatus(@PathParam("id") int id, @PathParam("status") boolean status, 
+			@HeaderParam("access_token") String access_token) 
+	{
 		Meta meta = new Meta();
 		Response res = new Response();
 		
@@ -92,35 +108,50 @@ public class PostsController {
 		
 		// Check whether token has expired or not
 		if (access_token != null) {
-			// Get user by access token
-			Users user = usersService.GetUserByToken(access_token);
-			// Check whether post belongs to right user
-			if (post.getUser_id() == user.getId()) {
-				post.setStatus(status);
-				// Update post
-				if (postsService.UpdatePost(post) == true) {
-					meta.setId(207);
-					meta.setMessage("Post's status updated success");
-					res.setMeta(meta);
-					res.setData("Post id: " + post.getId() + "  " + "Status: " + post.isStatus());
+			if (tokensService.isCheckTokenValid(access_token) == true) {
+				// Get user by access token
+				Users user = usersService.getUserByToken(access_token);
+				// Check whether access_token is valid
+				if (user != null) {
+					// Check whether post belongs to right user
+					if (post.getUser_id() == user.getId()) {
+						post.setStatus(status);
+						// Update post
+						if (postsService.UpdatePost(post) == true) {
+							meta.setId(207);
+							meta.setMessage("Post's status updated success");
+							res.setMeta(meta);
+							res.setData("Post id: " + post.getId() + "  " + "Status: " + post.isStatus());
+						}
+						else {
+							meta.setId(9001);
+							meta.setMessage("Error.");
+							res.setMeta(meta);
+						}					
+					}
+					else {
+						meta.setId(2505);
+						meta.setMessage("This post does not belong to the user with id: " + user.getId());
+						res.setMeta(meta);
+					}			
 				}
 				else {
-					meta.setId(9001);
-					meta.setMessage("Error.");
+					meta.setId(1003);
+					meta.setMessage("Access token invalid");
 					res.setMeta(meta);
-				}					
+				}			
 			}
 			else {
-				meta.setId(2505);
-				meta.setMessage("This post does not belong to the user with id: " + user.getId());
+				meta.setId(1002);
+				meta.setMessage("Access token has expired.");
 				res.setMeta(meta);
-			}			
-		}
+			}
+		} 
 		else {
-			meta.setId(1002);
-			meta.setMessage("Access token has expired.");
+			meta.setId(9002);
+			meta.setMessage("Missing access token. Please login.");
 			res.setMeta(meta);	
-		}		
+		}	
 		return res;
 	}
 	
@@ -128,7 +159,8 @@ public class PostsController {
 	@Path("{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response EditPost(@PathParam("id") int id, Posts data, @HeaderParam("access_token") String access_token) {
+	public Response editPost(@PathParam("id") int id, Posts data, @HeaderParam("access_token") String access_token) 
+	{
 		Response res = new Response();
 		Meta meta = new Meta();
 		
@@ -136,46 +168,54 @@ public class PostsController {
 		Posts post = new Posts();
 		post = postsService.GetPostById(id);
 		
-		if(data.getTitle() != null && data.getTitle().matches(".*\\w.*") &&
+		if (data.getTitle() != null && data.getTitle().matches(".*\\w.*") &&
 			data.getDescription() != null && data.getDescription().matches(".*\\w.*") &&
 			data.getContent() != null && data.getContent().matches(".*\\w.*")) {
 			
 			// Check whether token has expired or not
 			if (access_token != null) {
-				// Get user by access token
-				Users user = usersService.GetUserByToken(access_token);
-				// Check whether post belongs to right user
-				if (post.getUser_id() == user.getId()) {
-					// Set post object by data
-					post.setTitle(data.getTitle());
-					post.setDescription(data.getDescription());
-					post.setContent(data.getContent());
-					post.setImage(data.getImage());
-					post.setModified_at(Calendar.getInstance().getTime());
-					// Update post
-					if (postsService.UpdatePost(post) == true) {
-						meta.setId(208);
-						meta.setMessage("Post updated success");
-						res.setMeta(meta);
-						res.setData(post);
+				if (tokensService.isCheckTokenValid(access_token) == true) {
+					// Get user by access token
+					Users user = usersService.getUserByToken(access_token);
+					// Check whether post belongs to right user
+					if (post.getUser_id() == user.getId()) {
+						// Set post object by data
+						post.setTitle(data.getTitle());
+						post.setDescription(data.getDescription());
+						post.setContent(data.getContent());
+						post.setImage(data.getImage());
+						post.setModified_at(Calendar.getInstance().getTime());
+						// Update post
+						if (postsService.UpdatePost(post) == true) {
+							meta.setId(208);
+							meta.setMessage("Post updated success");
+							res.setMeta(meta);
+							res.setData(post);
+						}
+						else {
+							meta.setId(9001);
+							meta.setMessage("Error.");
+							res.setMeta(meta);
+						}					
 					}
 					else {
-						meta.setId(9001);
-						meta.setMessage("Error.");
+						meta.setId(2505);
+						meta.setMessage("This post does not belong to the user with id: " + user.getId());
 						res.setMeta(meta);
-					}					
+					}
+					
 				}
 				else {
-					meta.setId(2505);
-					meta.setMessage("This post does not belong to the user with id: " + user.getId());
+					meta.setId(1002);
+					meta.setMessage("Access token has expired.");
 					res.setMeta(meta);
-				}			
+				}
 			}
 			else {
-				meta.setId(1002);
-				meta.setMessage("Access token has expired.");
-				res.setMeta(meta);	
-			}					
+				meta.setId(9002);
+				meta.setMessage("Missing token. Please login.");
+				res.setMeta(meta);
+			}
 		}
 		else {
 			meta.setId(1001);
@@ -188,41 +228,78 @@ public class PostsController {
 	@DELETE
 	@Path("{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response DeletePost(@PathParam("id") int id, @HeaderParam("access_token") String access_token) {
+	public Response deletePost(@PathParam("id") int id, @HeaderParam("access_token") String access_token) 
+	{
 		Response res = new Response();
 		Meta meta = new Meta();
 		
+		// Get post by id
 		Posts post = postsService.GetPostById(id);
-		
-		if (access_token != null) {
-			// Get user by access token
-			Users user = usersService.GetUserByToken(access_token);
-			// Check whether post belongs to right user
-			if (post.getUser_id() == user.getId()) {
-				if (postsService.DeletePost(id) == true) {
-					meta.setId(208);
-					meta.setMessage("Post deleted success");
-					res.setMeta(meta);
+		// Check whether this post is existed or not
+		if (post != null) {
+			if (access_token != null) {
+				if (tokensService.isCheckTokenValid(access_token) == true) {
+					// Get user by access token
+					Users user = usersService.getUserByToken(access_token);
+					// Check whether post belongs to right user
+					if (post.getUser_id() == user.getId()) {
+						if (postsService.DeletePost(id) == true) {
+							meta.setId(208);
+							meta.setMessage("Post deleted success");
+							res.setMeta(meta);
+						}
+						else {
+							meta.setId(9001);
+							meta.setMessage("Error");
+							res.setMeta(meta);
+						}
+					}
+					else {
+						meta.setId(2505);
+						meta.setMessage("This post does not belong to the user with id: " + user.getId());
+						res.setMeta(meta);
+					}					
 				}
 				else {
-					meta.setId(9001);
-					meta.setMessage("Error");
+					meta.setId(1002);
+					meta.setMessage("Access token has expired.");
 					res.setMeta(meta);
-				}
+				}							
 			}
 			else {
-				meta.setId(2505);
-				meta.setMessage("This post does not belong to the user with id: " + user.getId());
+				meta.setId(9002);
+				meta.setMessage("Missing token. Please login.");
 				res.setMeta(meta);
 			}
-			
 		}
 		else {
-			meta.setId(1002);
-			meta.setMessage("Access token has expired.");
+			meta.setId(2504);
+			meta.setMessage("Post is not existed.");
 			res.setMeta(meta);
-		}		
+		}
 		return res;
 	}
 	
+	@GET
+	@Path("getall")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getAllPosts() 
+	{
+		Meta meta = new Meta();
+		Response res = new Response();
+		
+		List<Posts> listPost = postsService.getAllPosts();
+		if (listPost != null) {
+			meta.setId(2506);
+			meta.setMessage("Post searched sucess.");
+			res.setMeta(meta);
+			res.setData(listPost);
+		}
+		else {
+			meta.setId(9001);
+			meta.setMessage("Error.");
+			res.setMeta(meta);
+		}
+		return res;
+	}
 }

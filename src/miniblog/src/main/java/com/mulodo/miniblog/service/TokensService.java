@@ -4,11 +4,11 @@ import java.util.List;
 
 import com.mulodo.miniblog.model.Tokens;
 
-public interface TokensService {
-
-	public boolean CreateToken (Tokens token);
-	public boolean DeleteToken (Tokens token);
-	public Tokens SearchToken (Tokens token);
-	public boolean CheckTokenValid(int user_id, String access_token);
-	public List<Tokens> GetTokenByUserId(int user_id);
+public interface TokensService 
+{
+	public boolean isCreateToken(Tokens token);
+	public boolean isDeleteToken(Tokens token);
+	public Tokens searchToken(Tokens token);
+	public boolean isCheckTokenValid(String access_token);
+	public List<Tokens> getTokenByUserId(int user_id);
 }

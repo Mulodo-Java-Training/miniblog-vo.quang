@@ -5,18 +5,18 @@ import java.util.List;
 import com.mulodo.miniblog.model.Tokens;
 import com.mulodo.miniblog.model.Users;
 
-public interface UsersService {
-	
-	public boolean ValidateUser(Users user);
-	public boolean CheckUserExist(String username);
-	public boolean CheckEmailExist(String email);
-	public boolean Register(Users user);
-	public boolean Login(String username, String password);
-	public Users GetUserByUsername(String username);
-	public Users GetUserById(int id);
-	public boolean Logout(Tokens token);
-	public boolean UpdateUserInfo (Users user);
-	public List<Users> GetListUserByName(String name);
-	public Users GetUserByToken(String access_token);
+public interface UsersService 
+{	
+	public boolean isValidateUser(Users user);
+	public boolean isCheckUserExist(String username);
+	public boolean isCheckEmailExist(String email);
+	public boolean register(Users user);
+	public boolean isLogin(String username, String password);
+	public Users getUserByUsername(String username);
+	public Users getUserById(int id);
+	public boolean isLogout(Tokens token);
+	public boolean isUpdateUserInfo (Users user);
+	public List<Users> getListUserByName(String name);
+	public Users getUserByToken(String access_token);
 	
 }

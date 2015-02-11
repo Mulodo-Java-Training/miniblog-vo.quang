@@ -13,7 +13,8 @@ import com.mulodo.miniblog.model.Users;
 import com.mulodo.miniblog.service.UsersService;
 
 @Service
-public class UsersServiceImpl implements UsersService {
+public class UsersServiceImpl implements UsersService 
+{
 
 	@Autowired
 	private UsersDao usersdao;
@@ -21,34 +22,30 @@ public class UsersServiceImpl implements UsersService {
 	private TokensDao tokensdao;
 	
 	@Transactional
-	public boolean ValidateUser(Users user) {
-		
-		if(
-			user.getUsername() != null && !user.getUsername().isEmpty() && 
-			user.getUsername().length() >= 2 && user.getUsername().length() <= 45 &&
-			user.getUsername().matches("[a-zA-Z0-9 ]*") &&
+	public boolean isValidateUser(Users user) 
+	{		
+		if (user.getUsername() != null && !user.getUsername().isEmpty() && 
+				user.getUsername().length() >= 2 && user.getUsername().length() <= 45 &&
+				user.getUsername().matches("[a-zA-Z0-9 ]*") &&
 	
-			user.getPassword() != null && !user.getPassword().isEmpty() && 
-			user.getPassword().length() >= 6 && user.getPassword().length() <= 45 &&
-			user.getPassword().matches("[a-zA-Z0-9 ]*") &&
+				user.getPassword() != null && !user.getPassword().isEmpty() && 
+				user.getPassword().length() >= 6 && user.getPassword().length() <= 45 &&
+				user.getPassword().matches("[a-zA-Z0-9 ]*") &&
 			
-			user.getLastname() != null && !user.getLastname().isEmpty() && 
-			user.getFirstname() != null && !user.getFirstname().isEmpty() && 
-			user.getFirstname().matches("[a-zA-Z0-9 ]*") &&
+				user.getLastname() != null && !user.getLastname().isEmpty() && 
+				user.getFirstname() != null && !user.getFirstname().isEmpty() && 
+				user.getFirstname().matches("[a-zA-Z0-9 ]*") &&
 			
-			user.getEmail() != null && !user.getFirstname().isEmpty() &&
-			user.getEmail().matches("^[\\w-_+]*[\\.]?[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$")
-			
-		) {
-			return true;
-		}
-		else {
-			return false;
-		}				
+				user.getEmail() != null && !user.getFirstname().isEmpty() &&
+				user.getEmail().matches("^[\\w-_+]*[\\.]?[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$"))
+			return true;		
+		else 
+			return false;				
 	}
 	
 	@Transactional
-	public boolean Register(Users user) {		
+	public boolean register(Users user) 
+	{		
 		try {
 			usersdao.addNewUser(user);
 			if (user != null)
@@ -63,7 +60,8 @@ public class UsersServiceImpl implements UsersService {
 	}
 
 	@Transactional
-	public boolean CheckUserExist(String username) {		
+	public boolean isCheckUserExist(String username) 
+	{		
 		try {
 			if (usersdao.getUserByUsername(username) != null)
 				return true;
@@ -73,12 +71,12 @@ public class UsersServiceImpl implements UsersService {
 		catch (Exception e) {
 			e.printStackTrace();
 			return false;
-		}
-		
+		}		
 	}
 
 	@Transactional
-	public boolean CheckEmailExist(String email) {	
+	public boolean isCheckEmailExist(String email) 
+	{	
 		try {
 			if (usersdao.get_user_by_email(email) != null)
 				return true;
@@ -92,7 +90,8 @@ public class UsersServiceImpl implements UsersService {
 	}
 
 	@Transactional
-	public boolean Login(String username, String password) {		
+	public boolean isLogin(String username, String password) 
+	{		
 		try {
 			if (usersdao.getUserLogin(username, password) != null)
 				return true;
@@ -106,12 +105,14 @@ public class UsersServiceImpl implements UsersService {
 	}
 
 	@Transactional
-	public Users GetUserByUsername(String username) {		
+	public Users getUserByUsername(String username) 
+	{		
 		return usersdao.getUserByUsername(username);
 	}
 
 	@Transactional
-	public Users GetUserById(int id) {	
+	public Users getUserById(int id) 
+	{	
 		try {
 			Users user = usersdao.getUserById(id);
 			return user;
@@ -124,9 +125,10 @@ public class UsersServiceImpl implements UsersService {
 	}
 
 	@Transactional
-	public boolean Logout(Tokens token) {
+	public boolean isLogout(Tokens token) 
+	{
 		try {
-			tokensdao.Delete(token);
+			tokensdao.isDelete(token);
 			return true;
 		}
 		catch (Exception e) {
@@ -136,9 +138,10 @@ public class UsersServiceImpl implements UsersService {
 	}
 
 	@Transactional
-	public boolean UpdateUserInfo(Users user) {
+	public boolean isUpdateUserInfo(Users user) 
+	{
 		try {
-			usersdao.UpdateUserInfo(user);
+			usersdao.isUpdateUserInfo(user);
 			return true;
 		}
 		catch (Exception e) {
@@ -148,9 +151,10 @@ public class UsersServiceImpl implements UsersService {
 	}
 
 	@Override
-	public List<Users> GetListUserByName(String name) {
+	public List<Users> getListUserByName(String name) 
+	{
 		try {
-			List<Users> listUser = usersdao.GetListUserByName(name);
+			List<Users> listUser = usersdao.getListUserByName(name);
 			if (listUser != null)
 				return listUser;
 			else 
@@ -163,9 +167,10 @@ public class UsersServiceImpl implements UsersService {
 	}
 
 	@Override
-	public Users GetUserByToken(String access_token) {
+	public Users getUserByToken(String access_token) 
+	{
 		try {
-			Users user = usersdao.GetUserByAccessToken(access_token);
+			Users user = usersdao.getUserByAccessToken(access_token);
 			if (user != null)
 				return user;
 			else
@@ -174,9 +179,6 @@ public class UsersServiceImpl implements UsersService {
 		catch (Exception e) {
 			e.printStackTrace();
 			return null;
-		}
-		
-	}
-
-	
+		}		
+	}	
 }
