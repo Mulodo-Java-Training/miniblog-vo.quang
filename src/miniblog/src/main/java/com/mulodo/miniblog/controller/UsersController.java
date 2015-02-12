@@ -139,8 +139,8 @@ public class UsersController
 			// Current time
 			token.setCreated_at(new Timestamp(System.currentTimeMillis()));
 			// Expired in 7 days
-			//token.setExpired(new Timestamp(System.currentTimeMillis() + 7*24*60*60*1000));
-			token.setExpired(new Timestamp(System.currentTimeMillis() + 5000));
+			token.setExpired(new Timestamp(System.currentTimeMillis() + 7*24*60*60*1000));
+			//token.setExpired(new Timestamp(System.currentTimeMillis() + 5000));
 			token.setAccess_token(access_token);
 			// Save token to db
 			tokensService.isCreateToken(token);
