@@ -7,9 +7,9 @@ import com.mulodo.miniblog.model.Posts;
 public interface PostsService 
 {
 	public boolean createPost(Posts post);
-	public Posts GetPostById(int id);
-	public boolean UpdatePost(Posts post);
-	public boolean DeletePost(int id);
+	public Posts getPostById(int id);
+	public boolean updatePost(Posts post);
+	public boolean deletePost(int id);
 	public List<Posts> getAllPosts();
 	public List<Posts> getPostsForUser(int user_id);
 	

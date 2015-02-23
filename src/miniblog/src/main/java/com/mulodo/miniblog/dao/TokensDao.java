@@ -8,7 +8,7 @@ public interface TokensDao
 {
 	public boolean isSave(Tokens token);
 	public boolean isDelete(Tokens token);
-	public Tokens search(Tokens token);
+//	public Tokens search(Tokens token);
 	public List<Tokens> getTokenByUserId(int user_id);
 	public Tokens getTokenByAccess_Token(String access_token);
 }

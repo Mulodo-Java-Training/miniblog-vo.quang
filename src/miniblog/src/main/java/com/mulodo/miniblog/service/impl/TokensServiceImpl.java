@@ -49,10 +49,10 @@ public class TokensServiceImpl implements TokensService
 	}
 
 	@Override
-	public Tokens searchToken(Tokens token) 
+	public Tokens searchToken(String access_token) 
 	{
 		try {
-			Tokens tokenSearch = tokensDao.search(token);
+			Tokens tokenSearch = tokensDao.getTokenByAccess_Token(access_token);
 			if (tokenSearch != null)
 				return tokenSearch;
 			else

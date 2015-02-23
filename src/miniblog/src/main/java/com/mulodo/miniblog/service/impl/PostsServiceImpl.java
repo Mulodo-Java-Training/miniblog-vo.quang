@@ -26,7 +26,7 @@ public class PostsServiceImpl implements PostsService
 	}
 
 	@Override
-	public Posts GetPostById(int id) 
+	public Posts getPostById(int id) 
 	{		
 		Posts post = postsdao.getPostById(id);
 		if (post != null)
@@ -36,7 +36,7 @@ public class PostsServiceImpl implements PostsService
 	}
 
 	@Override
-	public boolean UpdatePost(Posts post) 
+	public boolean updatePost(Posts post) 
 	{		
 		if (postsdao.isUpdatePost(post) == true)
 			return true;
@@ -45,7 +45,7 @@ public class PostsServiceImpl implements PostsService
 	}
 
 	@Override
-	public boolean DeletePost(int id) 
+	public boolean deletePost(int id) 
 	{		
 		if (postsdao.isDeletePost(id) == true)
 			return true;

@@ -2,18 +2,21 @@ package com.mulodo.miniblog.controller;
 
 import java.sql.Timestamp;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import javax.validation.Valid;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
+import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import org.jboss.resteasy.annotations.Form;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +25,7 @@ import org.springframework.stereotype.Controller;
 import com.mulodo.miniblog.encryption.Encryption;
 import com.mulodo.miniblog.model.Tokens;
 import com.mulodo.miniblog.model.Users;
-import com.mulodo.miniblog.responseformat.Meta;
-import com.mulodo.miniblog.responseformat.Response;
+import com.mulodo.miniblog.responseformat.ResponseFormat;
 import com.mulodo.miniblog.resteasy.form.LoginForm;
 import com.mulodo.miniblog.service.TokensService;
 import com.mulodo.miniblog.service.UsersService;
@@ -37,6 +39,7 @@ public class UsersController
 	@Autowired
 	TokensService tokensService;
 
+	
 	@POST
 	@Path("/register")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -44,8 +47,7 @@ public class UsersController
 	@Valid
 	public Response register(Users data) 
 	{		
-		Response res = new Response();
-		Meta meta = new Meta();
+		ResponseFormat rf = new ResponseFormat();
 
 		if (usersService.isValidateUser(data)) {
 			if (!usersService.isCheckUserExist(data.getUsername())) {
@@ -57,8 +59,10 @@ public class UsersController
 					user.setFirstname(data.getFirstname());
 					user.setEmail(data.getEmail());
 					user.setImage(data.getImage());
-					user.setCreated_at(Calendar.getInstance().getTime());
-					user.setModified_at(Calendar.getInstance().getTime());
+					//user.setCreated_at(Calendar.getInstance().getTime());
+					user.setCreated_at(new Date(2015-01-01));
+					//user.setModified_at(Calendar.getInstance().getTime());
+					user.setModified_at(new Date(2015-01-01));
 					
 					// Set encrypted password to user
 					String encryptPass = user.getPassword();
@@ -81,31 +85,30 @@ public class UsersController
 						// Save to db
 						tokensService.isCreateToken(token);
 												
-						meta.setId(200);
-						meta.setMessage("User created sucess");
-						res.setMeta(meta);
-						res.setData(data);
+						rf.meta.id = 200;
+						rf.meta.message = "User created sucess";
+						rf.data = user;
+						return Response.status(200).entity(rf).build();
 					} else {
-						meta.setId(9001);
-						meta.setMessage("Error");
-						res.setMeta(meta);
+						rf.meta.id = 9001;
+						rf.meta.message = "Error.";
+						return Response.status(9001).entity(rf).build();
 					}
 				} else {
-					meta.setId(2010);
-					meta.setMessage("Email is already existed");
-					res.setMeta(meta);
+					rf.meta.id = 2010;
+					rf.meta.message = "Email is already existed";
+					return Response.status(2010).entity(rf).build();
 				}
 			} else {
-				meta.setId(2009);
-				meta.setMessage("Username is already existed");
-				res.setMeta(meta);
+				rf.meta.id = 2009;
+				rf.meta.message = "Username is already existed";
+				return Response.status(2009).entity(rf).build();
 			}
 		} else {
-			meta.setId(1001);
-			meta.setMessage("Input failed.");
-			res.setMeta(meta);
+			rf.meta.id = 1001;
+			rf.meta.message = "Input failed.";
+			return Response.status(1001).entity(rf).build();
 		}
-		return res;
 	}
 	
 	@POST
@@ -114,14 +117,14 @@ public class UsersController
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	public Response login(@Form LoginForm data) 
 	{		
-		Response res = new Response();
-		Meta meta = new Meta();
-
+		ResponseFormat rf = new ResponseFormat();
+		
 		if (data.getUsername() == null || data.getUsername().isEmpty() ||
-				data.getPassword() == null || data.getPassword().isEmpty()) {			
-			meta.setId(1001);
-			meta.setMessage("Input failed.");
-			res.setMeta(meta);
+			data.getPassword() == null || data.getPassword().isEmpty()) {
+			
+			rf.meta.id = 1001;
+			rf.meta.message = "Input failed.";
+			return Response.status(1001).entity(rf).build();
 		}
 
 		/**
@@ -145,17 +148,16 @@ public class UsersController
 			// Save token to db
 			tokensService.isCreateToken(token);
 			
-			meta.setId(201);
-			meta.setMessage("Login Success");
-			res.setMeta(meta);
-			res.setData(data);
-
-		} else {
-			meta.setId(9001);
-			meta.setMessage("Error.");
-			res.setMeta(meta);
+			rf.meta.id = 201;
+			rf.meta.message = "Login Success";
+			rf.data = data;
+			return Response.status(201).entity(rf).build();
+		} 
+		else {
+			rf.meta.id = 9001;
+			rf.meta.message = "Error.";
+			return Response.status(9001).entity(rf).build();
 		}
-		return res;
 	}
 
 	@PUT
@@ -164,93 +166,78 @@ public class UsersController
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	public Response logout(@FormParam("access_token") String access_token ) 
 	{		
-		Response res = new Response();
-		Meta meta = new Meta();
+		ResponseFormat rf = new ResponseFormat();
 		
 		// Check access_token not null, no spacing
-		if (access_token != null && !access_token.isEmpty() && access_token.matches(".*\\w.*")) {
-		// Pass access_token to an token object
-		Tokens token = new Tokens();
-		token.setAccess_token(access_token);
-		// Search token in db that match token with access_token provided
-		Tokens tokenSearch = tokensService.searchToken(token);
-		
-		if (tokenSearch != null) {
-			tokensService.isDeleteToken(tokenSearch);
-			meta.setId(202);
-			meta.setMessage("Logout success");
-			res.setMeta(meta);
+		if (access_token != null && access_token.matches(".*\\w.*")) {
+			// Search token in db that matches token with access_token provided
+			Tokens tokenSearch = tokensService.searchToken(access_token);
+
+			if (tokenSearch != null) {
+				tokensService.isDeleteToken(tokenSearch);
+				rf.meta.id = 202;
+				rf.meta.message = "Logout success";
+				return Response.status(202).entity(rf).build();
+			}
+			else {
+				rf.meta.id = 9001;
+				rf.meta.message = "Error.";
+				return Response.status(9001).entity(rf).build();
+			}	
 		}
 		else {
-			meta.setId(9001);
-			meta.setMessage("Error.");
-			res.setMeta(meta);
-		}	
-		}
-		else {
-			meta.setId(11111);
-			meta.setMessage("Missing access token.");
-			res.setMeta(meta);
+			rf.meta.id = 9002;
+			rf.meta.message = "Missing token. Please login";
+			return Response.status(9002).entity(rf).build();
 		}			
-		return res;
 	}
 
 	@PUT
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response updateUserInfo(@PathParam("id") int id, Users data) 
+	public Response updateUserInfo(@PathParam("id") int id, @HeaderParam("access_token") String access_token, Users data) 
 	{ 		
-		Response res = new Response();
-		Meta meta = new Meta();
+		ResponseFormat rf = new ResponseFormat();
 
 		// Check whether token valid or not
-		if (tokensService.isCheckTokenValid(data.getAccess_token()) == false) {			
-			meta.setId(1002);
-			meta.setMessage("Access token has expired.");
-			res.setMeta(meta);
+		if (tokensService.isCheckTokenValid(access_token) == false) {	
+			rf.meta.id = 1002;
+			rf.meta.message = "Access token has expired.";
+			return Response.status(1002).entity(rf).build();
 		}
 		else {
 			// Validate user's input
 			if (data.getUsername() != null && data.getUsername().matches(".*\\w.*") && 
 				data.getLastname() != null && data.getLastname().matches(".*\\w.*") &&
 				data.getFirstname() != null && data.getFirstname().matches(".*\\w.*")) {
-				
-				if (!usersService.isCheckUserExist(data.getUsername())) {
+									
+				Users user = new Users();
+				user = usersService.getUserById(id);		
+				user.setUsername(data.getUsername());
+				user.setLastname(data.getLastname());
+				user.setFirstname(data.getFirstname());
+				user.setImage(data.getImage());
+				user.setModified_at(Calendar.getInstance().getTime());
 					
-					Users user = new Users();
-					user = usersService.getUserById(id);		
-					user.setUsername(data.getUsername());
-					user.setLastname(data.getLastname());
-					user.setFirstname(data.getFirstname());
-					user.setImage(data.getImage());
-					user.setModified_at(Calendar.getInstance().getTime());
-						
-					if (usersService.isUpdateUserInfo(user) == true) {
-						meta.setId(203);
-						meta.setMessage("Update success.");
-						res.setMeta(meta);
-						res.setData(user);
-					}
-					else {
-						meta.setId(9001);
-						meta.setMessage("Error.");
-						res.setMeta(meta);
-					}			
+				if (usersService.isUpdateUserInfo(user) == true) {
+					rf.meta.id = 203;
+					rf.meta.message = "Update success.";
+					rf.data = user;
+					return Response.status(203).entity(rf).build();					
 				}
 				else {
-					meta.setId(2009);
-					meta.setMessage("Username is already existed.");
-					res.setMeta(meta);
-				}
+					rf.meta.id = 9001;
+					rf.meta.message = "Error.";
+					return Response.status(9001).entity(rf).build();
+				}			
 			}
 			else {
-				meta.setId(1001);
-				meta.setMessage("Input failed.");
-				res.setMeta(meta);
+				rf.meta.id = 1001;
+				rf.meta.message = "Input failed.";
+				return Response.status(1001).entity(rf).build();
 			}
 		}
-		return res;
 	}
 	
 	@Path("/{id}")
@@ -258,24 +245,22 @@ public class UsersController
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getUserInfo(@PathParam("id") int id) 
 	{		
-		Response res = new Response();
-		Meta meta = new Meta();
+		ResponseFormat rf = new ResponseFormat();
 		
 		// Get user by id
 		Users user = usersService.getUserById(id);
 		
 		if (user != null) {
-			meta.setId(204);
-			meta.setMessage("Get user info success");
-			res.setData(user);
-			res.setMeta(meta);
+			rf.meta.id = 204;
+			rf.meta.message = "Get user info success";
+			rf.data = user;
+			return Response.status(204).entity(rf).build();
 		}
 		else {
-			meta.setId(9001);
-			meta.setMessage("Error.");
-			res.setMeta(meta);
+			rf.meta.id = 9001;
+			rf.meta.message = "Error.";
+			return Response.status(9001).entity(rf).build();
 		}		
-		return res;
 	}
 		
 	@PUT
@@ -285,54 +270,56 @@ public class UsersController
 	public Response changePassword(@FormParam("id") int id, @FormParam("currentPassword") String currentPassword,
 									@FormParam("newPassword") String newPassword) 
 	{		
-		Meta meta = new Meta();
-		Response res = new Response();
+		ResponseFormat rf = new ResponseFormat();
 		
-		if (id == 0 || currentPassword == null || currentPassword.isEmpty() || 
-				newPassword == null || newPassword.isEmpty()) {
+		if (id == 0 || currentPassword.matches(".*\\w.*") ||  
+			newPassword == null || newPassword.matches(".*\\w.*")) {
 			
-			meta.setId(1001);
-			meta.setMessage("Input failed.");
-			res.setMeta(meta);
+			rf.meta.id = 1001;
+			rf.meta.message = "Input failed.";
+			return Response.status(1001).entity(rf).build();
 		}
 		else {
 			// Get user info by ID
 			Users user = usersService.getUserById(id);
-			
-			// Encrypt password in order to compare with password in db
-			String passwordHash = Encryption.hashSHA256(currentPassword);
-			
-			// if two password are equal, allow changing to new password
-			if (user.getPassword().equals(passwordHash)) {
-		
-				//Encrypt new password and set to user's password
-				user.setPassword(Encryption.hashSHA256(newPassword));
-				user.setModified_at(Calendar.getInstance().getTime());
+			// Check user existed
+			if (user != null) {
+				// Encrypt password in order to compare with password in db
+				String passwordHash = Encryption.hashSHA256(currentPassword);
 				
-				// Update new password
-				usersService.isUpdateUserInfo(user);
+				// if two password are equal, allow changing to new password
+				if (user.getPassword().equals(passwordHash)) {		
+					//Encrypt new password and set to user's password
+					user.setPassword(Encryption.hashSHA256(newPassword));
+					user.setModified_at(Calendar.getInstance().getTime());				
+					// Update new password
+					usersService.isUpdateUserInfo(user);					
+					//Delete old tokens of previous password
+					List<Tokens> listToken = tokensService.getTokenByUserId(user.getId());
 					
-				//Delete old tokens of previous password
-				List<Tokens> listToken = tokensService.getTokenByUserId(user.getId());
-				
-				if (listToken != null) {				
-					for (Tokens item : listToken) {
-						tokensService.isDeleteToken(item);
-						//System.out.println("Delete success.");
-					}								
-				}			
-				meta.setId(205);
-				meta.setMessage("Change password success.");
-				res.setMeta(meta);
-				res.setData(user);
+					if (listToken != null) {				
+						for (Tokens item : listToken) {
+							tokensService.isDeleteToken(item);
+							//System.out.println("Delete success.");
+						}								
+					}	
+					rf.meta.id = 205;
+					rf.meta.message = "Change password success.";
+					rf.data = user;
+					return Response.status(205).entity(rf).build();
+				}
+				else {
+					rf.meta.id = 2007;
+					rf.meta.message = "Password id invalid.";
+					return Response.status(2007).entity(rf).build();
+				}		
 			}
 			else {
-				meta.setId(2007);
-				meta.setMessage("Password id invalid.");
-				res.setMeta(meta);
-			}		
+				rf.meta.id = 2012;
+				rf.meta.message = "User is not existed";
+				return Response.status(2012).entity(rf).build();
+			}
 		}
-		return res;
 	}
 	
 	@GET
@@ -341,30 +328,28 @@ public class UsersController
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	public Response searchUserByName(@PathParam("name") String name) 
 	{		
-		Meta meta = new Meta();
-		Response res = new Response();
-		System.out.println("---------" + name);		
-		if (name == null || name.isEmpty()) {
-			meta.setId(1001);
-			meta.setMessage("Input failed.");
-			res.setMeta(meta);
+		ResponseFormat rf = new ResponseFormat();
+				
+		if (name == null || name.matches(".*\\w.*")) {
+			rf.meta.id = 1001;
+			rf.meta.message = "Input failed.";
+			return Response.status(1001).entity(rf).build();
 		}
 		
 		//Get list user searched by firstname, lastname
 		List<Users> listUser = usersService.getListUserByName(name);
 		
-		if (listUser != null  && listUser.size() != 0) {		
-			meta.setId(205);
-			meta.setMessage("Search success.");
-			res.setMeta(meta);
-			res.setData(listUser);		
+		if (listUser != null  && listUser.size() != 0) {
+			rf.meta.id = 205;
+			rf.meta.message = "Search success.";
+			rf.data = listUser;
+			return Response.status(205).entity(rf).build();
 		}
 		else {
-			meta.setId(9001);
-			meta.setMessage("Error.");
-			res.setMeta(meta);
+			rf.meta.id = 9001;
+			rf.meta.message = "Error.";
+			return Response.status(9001).entity(rf).build();
 		}		
-		return res;
 	}
 }
 

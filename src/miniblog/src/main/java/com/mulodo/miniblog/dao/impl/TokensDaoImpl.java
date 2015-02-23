@@ -39,17 +39,17 @@ public class TokensDaoImpl implements TokensDao
 		return true;
 	}
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public Tokens search(Tokens token) 
-	{		
-		Session session = sessionFactory.getCurrentSession();
-		Transaction trans = session.beginTransaction();
-		List<Tokens> result = session.createCriteria(Tokens.class)
- 				.add(Restrictions.like("access_token", token.getAccess_token())).list();	
- 		trans.commit();
-		return result.get(0);
-	}
+//	@SuppressWarnings("unchecked")
+//	@Override
+//	public Tokens search(Tokens token) 
+//	{		
+//		Session session = sessionFactory.getCurrentSession();
+//		Transaction trans = session.beginTransaction();
+//		List<Tokens> result = session.createCriteria(Tokens.class)
+// 				.add(Restrictions.like("access_token", token.getAccess_token())).list();	
+// 		trans.commit();
+//		return result.get(0);
+//	}
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -64,6 +64,7 @@ public class TokensDaoImpl implements TokensDao
 		return listToken;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public Tokens getTokenByAccess_Token(String access_token) 
 	{
@@ -71,9 +72,13 @@ public class TokensDaoImpl implements TokensDao
 		Transaction trans = session.beginTransaction();
 		Criteria cr = session.createCriteria(Tokens.class);
 		cr.add(Restrictions.eq("access_token", access_token));
-		Tokens token = (Tokens) cr.list().get(0);
-		trans.commit();
-		return token;
+		List<Tokens> listToken = cr.list();
+		if (listToken.size() == 1) {
+			trans.commit();
+			return listToken.get(0);
+		}
+		else
+			return null;		
 	}
 
 
