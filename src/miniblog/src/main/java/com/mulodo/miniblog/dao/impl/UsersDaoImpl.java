@@ -32,10 +32,10 @@ public class UsersDaoImpl implements UsersDao
 	@Override
 	public Users getUserById(int id) 
 	{				
-		Session session = sessionFactory.getCurrentSession();
+		Session session = sessionFactory.openSession();
 		Transaction trans = session.beginTransaction();
-		Users user = (Users) sessionFactory.getCurrentSession().get(Users.class, id);
-		trans.commit();
+		Users user = (Users) session.get(Users.class,id);
+		trans.commit();	 
 		return user;		
 	}
 

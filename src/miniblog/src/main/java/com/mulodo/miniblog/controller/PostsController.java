@@ -61,13 +61,14 @@ public class PostsController
 			if (access_token != null) {
 				// Check whether token expired 
 				if (tokensService.isCheckTokenValid(access_token) == true) {
+					// Set user who create post
 					post.setUser_id(usersService.getUserByToken(access_token).getId());
 					// Check whether create post success
 					if (postsService.createPost(post) == true) {			
-						rf.meta.id = 206;
+						rf.meta.id = 200;
 						rf.meta.message = "New post is created success";
 						rf.data = post;
-						return Response.status(206).entity(rf).build();
+						return Response.status(200).entity(rf).build();
 					}
 					else {
 						rf.meta.id = 9001;
@@ -90,7 +91,7 @@ public class PostsController
 		else {
 			rf.meta.id = 1001;
 			rf.meta.message = "Input invalid";
-			return Response.status(206).entity(rf).build();		
+			return Response.status(1001).entity(rf).build();		
 		}
 	}
 		
@@ -119,10 +120,10 @@ public class PostsController
 							post.setStatus(true);
 							// Update post
 							if (postsService.updatePost(post) == true) {
-								rf.meta.id = 207;
+								rf.meta.id = 200;
 								rf.meta.message = "Post's status updated success";
 								rf.data = "Post id: " + post.getId() + "  " + "Status: " + post.isStatus();
-								return Response.status(207).entity(rf).build();
+								return Response.status(200).entity(rf).build();
 							}
 							else {
 								rf.meta.id = 9001;
@@ -187,10 +188,10 @@ public class PostsController
 							post.setStatus(false);
 							// Update post
 							if (postsService.updatePost(post) == true) {
-								rf.meta.id = 207;
+								rf.meta.id = 200;
 								rf.meta.message = "Post's status updated success";
 								rf.data = "Post id: " + post.getId() + "  " + "Status: " + post.isStatus();
-								return Response.status(207).entity(rf).build();
+								return Response.status(200).entity(rf).build();
 							}
 							else {
 								rf.meta.id = 9001;
@@ -231,7 +232,7 @@ public class PostsController
 	}
 
 	@PUT
-	@Path("{id}")
+	@Path("{id}/edit")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response editPost(@PathParam("id") int id, Posts data, @HeaderParam("access_token") String access_token) 
@@ -249,8 +250,9 @@ public class PostsController
 				data.getDescription() != null && data.getDescription().matches(".*\\w.*") &&
 				data.getContent() != null && data.getContent().matches(".*\\w.*")) {
 				
-				// Check whether token has expired or not
+				// Check token null
 				if (access_token != null) {
+					// Check whether token has expired or not
 					if (tokensService.isCheckTokenValid(access_token) == true) {
 						// Get user by access token
 						Users user = usersService.getUserByToken(access_token);
@@ -266,10 +268,10 @@ public class PostsController
 								post.setModified_at(Calendar.getInstance().getTime());
 								// Update post
 								if (postsService.updatePost(post) == true) {
-									rf.meta.id = 207;
+									rf.meta.id = 200;
 									rf.meta.message = "Post updated success";
 									rf.data = post;
-									return Response.status(207).entity(rf).build();
+									return Response.status(200).entity(rf).build();
 								}
 								else {
 									rf.meta.id = 9001;
@@ -315,7 +317,7 @@ public class PostsController
 	}
 	
 	@DELETE
-	@Path("{id}")
+	@Path("{id}/delete")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response deletePost(@PathParam("id") int id, @HeaderParam("access_token") String access_token) 
 	{
@@ -335,9 +337,9 @@ public class PostsController
 						// Check whether post belongs to right user
 						if (post.getUser_id() == user.getId()) {
 							if (postsService.deletePost(id) == true) {
-								rf.meta.id = 208;
+								rf.meta.id = 200;
 								rf.meta.message = "Post deleted success.";
-								return Response.status(208).entity(rf).build();
+								return Response.status(200).entity(rf).build();
 							}
 							else {
 								rf.meta.id = 9001;
@@ -385,10 +387,10 @@ public class PostsController
 		
 		List<Posts> listPost = postsService.getAllPosts();
 		if (listPost != null) {
-			rf.meta.id = 215;
+			rf.meta.id = 200;
 			rf.meta.message = "Post searched sucess.";
 			rf.data = listPost;
-			return Response.status(215).entity(rf).build();
+			return Response.status(200).entity(rf).build();
 		}
 		else {
 			rf.meta.id = 9001;
@@ -413,10 +415,10 @@ public class PostsController
 				if (user != null) {
 					List<Posts> listPost = postsService.getPostsForUser(user.getId());
 					if (listPost != null) {
-						rf.meta.id = 216;
+						rf.meta.id = 200;
 						rf.meta.message = "Post for user searched success";
 						rf.data = listPost;
-						return Response.status(216).entity(rf).build();
+						return Response.status(200).entity(rf).build();
 					}
 					else {
 						rf.meta.id = 9001;

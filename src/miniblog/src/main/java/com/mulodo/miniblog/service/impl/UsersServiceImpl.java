@@ -110,6 +110,7 @@ public class UsersServiceImpl implements UsersService
 		return usersdao.getUserByUsername(username);
 	}
 
+	
 	@Transactional
 	public Users getUserById(int id) 
 	{	

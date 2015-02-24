@@ -32,6 +32,7 @@ import com.mulodo.miniblog.service.UsersService;
 
 @Path("v1/users")
 @Controller
+@Produces(MediaType.APPLICATION_JSON)
 public class UsersController 
 {
 	@Autowired
@@ -41,7 +42,7 @@ public class UsersController
 
 	
 	@POST
-	@Path("/register")
+	@Path("register")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Valid
@@ -112,7 +113,7 @@ public class UsersController
 	}
 	
 	@POST
-	@Path("/login")
+	@Path("login")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	public Response login(@Form LoginForm data) 
@@ -148,10 +149,10 @@ public class UsersController
 			// Save token to db
 			tokensService.isCreateToken(token);
 			
-			rf.meta.id = 201;
+			rf.meta.id = 200;
 			rf.meta.message = "Login Success";
-			rf.data = data;
-			return Response.status(201).entity(rf).build();
+			rf.data = user;
+			return Response.status(200).entity(rf).build();
 		} 
 		else {
 			rf.meta.id = 9001;
@@ -161,7 +162,7 @@ public class UsersController
 	}
 
 	@PUT
-	@Path("/logout")
+	@Path("logout")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	public Response logout(@FormParam("access_token") String access_token ) 
@@ -175,9 +176,9 @@ public class UsersController
 
 			if (tokenSearch != null) {
 				tokensService.isDeleteToken(tokenSearch);
-				rf.meta.id = 202;
+				rf.meta.id = 200;
 				rf.meta.message = "Logout success";
-				return Response.status(202).entity(rf).build();
+				return Response.status(200).entity(rf).build();
 			}
 			else {
 				rf.meta.id = 9001;
@@ -193,7 +194,7 @@ public class UsersController
 	}
 
 	@PUT
-	@Path("/{id}")
+	@Path("{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response updateUserInfo(@PathParam("id") int id, @HeaderParam("access_token") String access_token, Users data) 
@@ -221,10 +222,10 @@ public class UsersController
 				user.setModified_at(Calendar.getInstance().getTime());
 					
 				if (usersService.isUpdateUserInfo(user) == true) {
-					rf.meta.id = 203;
+					rf.meta.id = 200;
 					rf.meta.message = "Update success.";
 					rf.data = user;
-					return Response.status(203).entity(rf).build();					
+					return Response.status(200).entity(rf).build();					
 				}
 				else {
 					rf.meta.id = 9001;
@@ -240,21 +241,21 @@ public class UsersController
 		}
 	}
 	
-	@Path("/{id}")
+	@Path("{id}")
 	@GET
-	@Produces(MediaType.APPLICATION_JSON)
+	
 	public Response getUserInfo(@PathParam("id") int id) 
 	{		
 		ResponseFormat rf = new ResponseFormat();
 		
 		// Get user by id
-		Users user = usersService.getUserById(id);
-		
+		Users user = usersService.getUserById(id);		
 		if (user != null) {
-			rf.meta.id = 204;
+			System.out.println(user.getUsername());
+			rf.meta.id = 200;
 			rf.meta.message = "Get user info success";
 			rf.data = user;
-			return Response.status(204).entity(rf).build();
+			return Response.status(200).entity(rf).build();
 		}
 		else {
 			rf.meta.id = 9001;
@@ -264,16 +265,16 @@ public class UsersController
 	}
 		
 	@PUT
-	@Path("/changepassword")
+	@Path("changepassword")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	public Response changePassword(@FormParam("id") int id, @FormParam("currentPassword") String currentPassword,
 									@FormParam("newPassword") String newPassword) 
 	{		
 		ResponseFormat rf = new ResponseFormat();
-		
-		if (id == 0 || currentPassword.matches(".*\\w.*") ||  
-			newPassword == null || newPassword.matches(".*\\w.*")) {
+		//currentPassword.matches(".*\\w.*")
+		if (id == 0 || currentPassword == null || !currentPassword.matches(".*\\w.*") ||  
+			newPassword == null || !newPassword.matches(".*\\w.*")) {
 			
 			rf.meta.id = 1001;
 			rf.meta.message = "Input failed.";
@@ -303,10 +304,10 @@ public class UsersController
 							//System.out.println("Delete success.");
 						}								
 					}	
-					rf.meta.id = 205;
+					rf.meta.id = 200;
 					rf.meta.message = "Change password success.";
 					rf.data = user;
-					return Response.status(205).entity(rf).build();
+					return Response.status(200).entity(rf).build();
 				}
 				else {
 					rf.meta.id = 2007;
@@ -323,14 +324,14 @@ public class UsersController
 	}
 	
 	@GET
-	@Path("/search/name={name}")
+	@Path("search/name={name}")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
 	public Response searchUserByName(@PathParam("name") String name) 
 	{		
 		ResponseFormat rf = new ResponseFormat();
-				
-		if (name == null || name.matches(".*\\w.*")) {
+		//name.matches(".*\\w.*")		
+		if (name == null || name.isEmpty()) {
 			rf.meta.id = 1001;
 			rf.meta.message = "Input failed.";
 			return Response.status(1001).entity(rf).build();
@@ -340,10 +341,10 @@ public class UsersController
 		List<Users> listUser = usersService.getListUserByName(name);
 		
 		if (listUser != null  && listUser.size() != 0) {
-			rf.meta.id = 205;
+			rf.meta.id = 200;
 			rf.meta.message = "Search success.";
 			rf.data = listUser;
-			return Response.status(205).entity(rf).build();
+			return Response.status(200).entity(rf).build();
 		}
 		else {
 			rf.meta.id = 9001;
