@@ -129,4 +129,15 @@ public class UsersDaoImpl implements UsersDao
 		else
 			return null;		
 	}
+
+	@Override
+	public boolean isDelete(String username) 
+	{
+		Session session = sessionFactory.getCurrentSession();
+		Transaction trans = session.beginTransaction();
+		Users user = getUserByUsername(username);
+		session.delete(user);
+		trans.commit();
+		return true;
+	}
 }

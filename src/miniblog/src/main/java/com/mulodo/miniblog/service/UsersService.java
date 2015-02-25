@@ -18,5 +18,5 @@ public interface UsersService
 	public boolean isUpdateUserInfo (Users user);
 	public List<Users> getListUserByName(String name);
 	public Users getUserByToken(String access_token);
-	
+	public boolean isDeleteUser(String username);
 }

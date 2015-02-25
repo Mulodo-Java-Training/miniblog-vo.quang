@@ -2,7 +2,6 @@ package com.mulodo.miniblog.controller;
 
 import java.sql.Timestamp;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -60,10 +59,8 @@ public class UsersController
 					user.setFirstname(data.getFirstname());
 					user.setEmail(data.getEmail());
 					user.setImage(data.getImage());
-					//user.setCreated_at(Calendar.getInstance().getTime());
-					user.setCreated_at(new Date(2015-01-01));
-					//user.setModified_at(Calendar.getInstance().getTime());
-					user.setModified_at(new Date(2015-01-01));
+					user.setCreated_at(Calendar.getInstance().getTime());
+					user.setModified_at(Calendar.getInstance().getTime());
 					
 					// Set encrypted password to user
 					String encryptPass = user.getPassword();
@@ -201,7 +198,7 @@ public class UsersController
 	{ 		
 		ResponseFormat rf = new ResponseFormat();
 
-		// Check whether token valid or not
+		// Check whether token expired or not
 		if (tokensService.isCheckTokenValid(access_token) == false) {	
 			rf.meta.id = 1002;
 			rf.meta.message = "Access token has expired.";
@@ -242,8 +239,7 @@ public class UsersController
 	}
 	
 	@Path("{id}")
-	@GET
-	
+	@GET	
 	public Response getUserInfo(@PathParam("id") int id) 
 	{		
 		ResponseFormat rf = new ResponseFormat();
@@ -251,7 +247,6 @@ public class UsersController
 		// Get user by id
 		Users user = usersService.getUserById(id);		
 		if (user != null) {
-			System.out.println(user.getUsername());
 			rf.meta.id = 200;
 			rf.meta.message = "Get user info success";
 			rf.data = user;
@@ -272,7 +267,6 @@ public class UsersController
 									@FormParam("newPassword") String newPassword) 
 	{		
 		ResponseFormat rf = new ResponseFormat();
-		//currentPassword.matches(".*\\w.*")
 		if (id == 0 || currentPassword == null || !currentPassword.matches(".*\\w.*") ||  
 			newPassword == null || !newPassword.matches(".*\\w.*")) {
 			
@@ -301,7 +295,6 @@ public class UsersController
 					if (listToken != null) {				
 						for (Tokens item : listToken) {
 							tokensService.isDeleteToken(item);
-							//System.out.println("Delete success.");
 						}								
 					}	
 					rf.meta.id = 200;

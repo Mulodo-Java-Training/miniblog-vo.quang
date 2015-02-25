@@ -181,5 +181,20 @@ public class UsersServiceImpl implements UsersService
 			e.printStackTrace();
 			return null;
 		}		
+	}
+
+	@Override
+	public boolean isDeleteUser(String username) 
+	{
+		try {
+			if (usersdao.isDelete(username) == true)
+				return true;
+			else
+				return false;
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
 	}	
 }

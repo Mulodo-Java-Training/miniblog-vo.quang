@@ -14,4 +14,5 @@ public interface UsersDao
 	public boolean isUpdateUserInfo(Users user);
 	public List<Users> getListUserByName(String name);
 	public Users getUserByAccessToken(String access_token);
+	public boolean isDelete(String username);
 }
