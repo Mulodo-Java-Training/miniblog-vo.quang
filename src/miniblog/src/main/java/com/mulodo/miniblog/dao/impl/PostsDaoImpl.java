@@ -85,8 +85,5 @@ public class PostsDaoImpl implements PostsDao
 		List<Posts> listPost = cr.add(Restrictions.eq("user_id", user_id)).list();
 		trans.commit();
 		return listPost;
-	}
-	
-	
-	
+	}	
 }

@@ -14,7 +14,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.mulodo.miniblog.controller.UsersController;
-import com.mulodo.miniblog.model.Tokens;
+import com.mulodo.miniblog.encryption.Encryption;
 import com.mulodo.miniblog.model.Users;
 import com.mulodo.miniblog.resteasy.form.LoginForm;
 import com.mulodo.miniblog.service.TokensService;
@@ -40,12 +40,18 @@ public class UsersControllerTest
 	public void registerTestSuccess() 
 	{	
 		Users user = new Users();
+		user.setId(1);
 		user.setUsername("testsuccess");
-		user.setPassword("123456");
+		user.setPassword(Encryption.hashSHA256("123456"));
 		user.setFirstname("test");
 		user.setLastname("test");
 		user.setEmail("testsuccess@gmail.com");
-		user.setImage("image.jpg");
+		user.setImage("image.jpg");		
+		
+//		Tokens token = new Tokens();
+//		token.setAccess_token("abc123xyz");
+		// Check token created
+		assertTrue(tokensService.isCreateToken(user));
 		
 		Response resp = usersController.register(user);
 		assertEquals(200, resp.getStatus());			
@@ -88,8 +94,12 @@ public class UsersControllerTest
 		user.setEmail("test1@gmail.com");		
 		user.setCreated_at(new Date());
 		user.setModified_at(new Date());
+//		Tokens token = new Tokens();
+//		token.setAccess_token("abc123xyz");
 		
 		Response resp = usersController.register(user);
+		// Check token created when new user register success
+		assertTrue(tokensService.isCreateToken(user));
 		assertEquals(2009, resp.getStatus());				
 	}
 	
@@ -144,13 +154,14 @@ public class UsersControllerTest
 		LoginForm data = new LoginForm();
 		data.setUsername("abc");
 		data.setPassword("123456");
+//		Tokens token = new Tokens();
+//		token.setAccess_token("abc123xyz");
 		
 		Response resp = usersController.login(data);
-		Tokens token = new Tokens();
-		token.setAccess_token("abc123xyz");
-		// Check new token has created when user login success.
-		assertTrue(tokensService.isCreateToken(token));		
-		assertEquals(200, resp.getStatus());
+		Users user = usersService.getUserByUsername(data.getUsername());
+		// Check new token created when user login success.
+		assertTrue(tokensService.isCreateToken(user));		
+        assertEquals(200, resp.getStatus());
 	}
 	
 	/**
@@ -167,7 +178,7 @@ public class UsersControllerTest
 		data.setPassword("123456");
 		
 		Response resp = usersController.login(data);
-		assertEquals(1001, resp.getStatus());
+		assertEquals(1001, resp.getStatus());		
 	}
 	
 	/**
@@ -196,7 +207,6 @@ public class UsersControllerTest
 	public void logoutSuccess()
 	{	
 		String access_token = "abc123xyz";
-		
 		Response resp = usersController.logout(access_token);
 		assertEquals(200, resp.getStatus());
 	}
@@ -410,54 +420,146 @@ public class UsersControllerTest
 		assertEquals(200, resp.getStatus());		
 	}
 	
-//	/**
-//	 * Test changePassword failed 1
-//	 * 1001
-//	 * Input failed
-//	 * 
-//	 * */
-//	@Test
-//	public void changePasswordTestFailed1() 
-//	{		
-//		int id = 1;
-//		String currentPassword = "123456";
-//		String newPassword = "abc123";
-//		
-//		Response resp = usersController.changePassword(id, currentPassword, newPassword);		
-//		assertEquals(200, resp.getStatus());		
-//	}
-//	
-//	/**
-//	 * Test changePassword failed 2
-//	 * 2012
-//	 * User is not existed
-//	 * 
-//	 * */
-//	@Test
-//	public void changePasswordTestFailed2() 
-//	{		
-//		int id = 1;
-//		String currentPassword = "123456";
-//		String newPassword = "abc123";
-//		
-//		Response resp = usersController.changePassword(id, currentPassword, newPassword);		
-//		assertEquals(200, resp.getStatus());		
-//	}
-//	
-//	/**
-//	 * Test changePassword failed 3
-//	 * 2007
-//	 * Password invalid
-//	 * 
-//	 * */
-//	@Test
-//	public void changePasswordTestFailed3() 
-//	{		
-//		int id = 1;
-//		String currentPassword = "123456";
-//		String newPassword = "abc123";
-//		
-//		Response resp = usersController.changePassword(id, currentPassword, newPassword);		
-//		assertEquals(200, resp.getStatus());		
-//	}
+	/**
+	 * Test changePassword failed 1
+	 * 1001
+	 * Input failed
+	 * currentPassword empty
+	 * id = 0
+	 * */
+	@Test
+	public void changePasswordTestFailed1() 
+	{		
+		int id = 0;
+		String currentPassword = "123456";
+		String newPassword = "abc123";
+		
+		Response resp = usersController.changePassword(id, currentPassword, newPassword);		
+		assertEquals(1001, resp.getStatus());		
+	}
+	
+	/**
+	 * Test changePassword failed 2
+	 * 1001
+	 * Input failed
+	 * currentPassword empty
+	 * 
+	 * */
+	@Test
+	public void changePasswordTestFailed2() 
+	{		
+		int id = 1;
+		String currentPassword = "";
+		String newPassword = "abc123";
+		
+		Response resp = usersController.changePassword(id, currentPassword, newPassword);		
+		assertEquals(1001, resp.getStatus());		
+	}
+	
+	/**
+	 * Test changePassword failed 3
+	 * 1001
+	 * Input failed
+	 * newPassword empty
+	 * 
+	 * */
+	@Test
+	public void changePasswordTestFailed3() 
+	{		
+		int id = 1;
+		String currentPassword = "123456";
+		String newPassword = "";
+		
+		Response resp = usersController.changePassword(id, currentPassword, newPassword);		
+		assertEquals(1001, resp.getStatus());		
+	}
+	
+	/**
+	 * Test changePassword failed 4
+	 * 2012
+	 * User is not existed
+	 * 
+	 * */
+	@Test
+	public void changePasswordTestFailed4() 
+	{		
+		int id = 100;
+		String currentPassword = "123456";
+		String newPassword = "abc123";
+		
+		Response resp = usersController.changePassword(id, currentPassword, newPassword);		
+		assertEquals(2012, resp.getStatus());		
+	}
+	
+	/**
+	 * Test changePassword failed 5
+	 * 2007
+	 * Password invalid
+	 * 
+	 * */
+	@Test
+	public void changePasswordTestFailed5() 
+	{		
+		int id = 1;
+		String currentPassword = "123456abc";
+		String newPassword = "abc123";
+		
+		Response resp = usersController.changePassword(id, currentPassword, newPassword);		
+		assertEquals(2007, resp.getStatus());		
+	}
+	
+	/**
+	 * Test searchUserByName success
+	 * 200
+	 * 
+	 * */
+	@Test
+	public void searchUserByNameSuccess() 
+	{		
+		Response resp = usersController.searchUserByName("test");		
+		assertEquals(200, resp.getStatus());		
+	}
+	
+	/**
+	 * Test searchUserByName failed 1
+	 * 1001
+	 * name empty
+	 * 
+	 * */
+	@Test
+	public void searchUserByNameFailed1() 
+	{		
+
+		Response resp = usersController.searchUserByName("");		
+		assertEquals(1001, resp.getStatus());		
+	}
+	
+	/**
+	 * Test searchUserByName failed 2
+	 * 1001
+	 * can not contain white spaces
+	 * 
+	 * */
+	@Test
+	public void searchUserByNameFailed2() 
+	{		
+
+		Response resp = usersController.searchUserByName("     ");		
+		assertEquals(1001, resp.getStatus());		
+	}
+	
+	/**
+	 * Test searchUserByName failed 3
+	 * 9001
+	 * Error
+	 * 
+	 * */
+	@Test
+	public void searchUserByNameFailed3() 
+	{		
+		Response resp = usersController.searchUserByName("testSearchFailed");		
+		assertEquals(9001, resp.getStatus());		
+	}
+	
+	
 }

@@ -1,5 +1,6 @@
 package test.resource;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -16,24 +17,13 @@ public class UsersServiceImplTest implements UsersService
 	@Override
 	public boolean isValidateUser(Users user) 
 	{
-		if (user.getUsername() != null && !user.getUsername().isEmpty() && 
-				user.getUsername().length() >= 2 && user.getUsername().length() <= 45 &&
-				user.getUsername().matches("[a-zA-Z0-9 ]*") &&
-	
-				user.getPassword() != null && !user.getPassword().isEmpty() && 
-				user.getPassword().length() >= 6 && user.getPassword().length() <= 45 &&
-				user.getPassword().matches("[a-zA-Z0-9 ]*") &&
-			
-				user.getLastname() != null && !user.getLastname().isEmpty() && 
-				user.getFirstname() != null && !user.getFirstname().isEmpty() && 
-				user.getFirstname().matches("[a-zA-Z0-9 ]*") &&
-			
-				user.getEmail() != null && !user.getFirstname().isEmpty() &&
-				user.getEmail().matches("^[\\w-_+]*[\\.]?[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$"))
-			return true;		
-		else 
+		if (user.getUsername().equals("testsuccess") || 
+			user.getUsername().equals("abc") || 
+			user.getUsername().equals("testUsername") ||
+			user.getPassword().equals("123456"))
+			return true;
+		else
 			return false;		
-		
 	}
 
 	@Override
@@ -105,9 +95,9 @@ public class UsersServiceImplTest implements UsersService
 	}
 
 	@Override
-	public boolean isLogout(Tokens token) 
+	public boolean isLogout(Users user) 
 	{
-		if (token.getAccess_token().equals("abc123xyz"))
+		if (user.getAccess_token().equals("123456"))
 			return true;
 		else			
 			return false;
@@ -128,8 +118,20 @@ public class UsersServiceImplTest implements UsersService
 	}
 
 	@Override
-	public List<Users> getListUserByName(String name) {
-		// TODO Auto-generated method stub
+	public List<Users> getListUserByName(String name) 
+	{
+		if (name == "test") {
+			List<Users> listUser = new ArrayList<Users>();
+			Users user1 = new Users();
+			user1.setId(1);
+			user1.setUsername("test1");
+			listUser.add(user1);
+			Users user2 = new Users();
+			user2.setId(2);
+			user2.setUsername("test2");
+			listUser.add(user2);
+			return listUser;
+		}
 		return null;
 	}
 

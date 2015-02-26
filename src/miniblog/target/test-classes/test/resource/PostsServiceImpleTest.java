@@ -11,7 +11,7 @@ import com.mulodo.miniblog.model.Posts;
 import com.mulodo.miniblog.service.PostsService;
 
 @Service
-public class PostsServicetest implements PostsService 
+public class PostsServiceImpleTest implements PostsService 
 {
 
 	@Override

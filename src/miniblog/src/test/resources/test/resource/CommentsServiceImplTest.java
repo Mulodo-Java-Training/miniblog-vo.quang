@@ -11,7 +11,7 @@ import com.mulodo.miniblog.model.Comments;
 import com.mulodo.miniblog.service.CommentsService;
 
 @Service
-public class CommentsServicetest implements CommentsService 
+public class CommentsServiceImplTest implements CommentsService 
 {
 
 	@Override

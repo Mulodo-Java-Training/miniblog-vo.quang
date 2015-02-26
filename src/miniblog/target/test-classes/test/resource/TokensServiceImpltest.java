@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.mulodo.miniblog.model.Tokens;
+import com.mulodo.miniblog.model.Users;
 import com.mulodo.miniblog.service.TokensService;
 
 @Service
@@ -14,12 +15,17 @@ public class TokensServiceImpltest implements TokensService
 {
 
 	@Override
-	public boolean isCreateToken(Tokens token) 
+	public boolean isCreateToken(Users user) 
 	{
-		if (token.getAccess_token() == "abc123xyz")
-			return true;
-		else
-			return false;
+//		token.setAccess_token("abc123xyz");
+//		return true;
+//		if (token.getAccess_token() == "abc123xyz")
+//			return true;
+//		else
+//			return false;
+		
+		user.setAccess_token("abc123xyz");
+		return true;
 	}
 
 	@Override
@@ -66,6 +72,12 @@ public class TokensServiceImpltest implements TokensService
 		}
 		else
 			return null;
+	}
+
+	@Override
+	public boolean isDeleteTokenByUserId(int user_id) 
+	{	
+		return true;
 	}
 
 }

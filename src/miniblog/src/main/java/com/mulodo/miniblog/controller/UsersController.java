@@ -1,6 +1,5 @@
 package com.mulodo.miniblog.controller;
 
-import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.List;
 
@@ -63,25 +62,25 @@ public class UsersController
 					user.setModified_at(Calendar.getInstance().getTime());
 					
 					// Set encrypted password to user
-					String encryptPass = user.getPassword();
-					user.setPassword(Encryption.hashSHA256(encryptPass));
+//					String encryptPass = user.getPassword();
+//					user.setPassword(Encryption.hashSHA256(encryptPass));
 					
 					// Register a new user account
 					if (usersService.register(user) == true) {						
-						// Create access_token when create account success.   
-						String access_token = Encryption.createToken(user.getId());
-						// Set access_token to user 
-						user.setAccess_token(access_token);
-						// Create token 
-						Tokens token = new Tokens();
-						// Current time
-						token.setCreated_at(new Timestamp(System.currentTimeMillis()));
-						// Expired in 7 days
-						token.setExpired(new Timestamp(System.currentTimeMillis() + 7*24*60*60*1000));
-						token.setAccess_token(access_token);
-						token.setUser_id(user.getId());						
+//						// Create access_token when create account success.   
+//						String access_token = Encryption.createToken(user.getId());
+//						// Set access_token to user 
+//						user.setAccess_token(access_token);
+//						// Create token 
+//						Tokens token = new Tokens();
+//						// Current time
+//						token.setCreated_at(new Timestamp(System.currentTimeMillis()));
+//						// Expired in 7 days
+//						token.setExpired(new Timestamp(System.currentTimeMillis() + 7*24*60*60*1000));
+//						token.setAccess_token(access_token);
+//						token.setUser_id(user.getId());						
 						// Save to db
-						tokensService.isCreateToken(token);
+						tokensService.isCreateToken(user);
 												
 						rf.meta.id = 200;
 						rf.meta.message = "User created sucess";
@@ -134,17 +133,17 @@ public class UsersController
 			// Get user by username 
 			Users user = usersService.getUserByUsername(data.getUsername());
 			// Create access_token for user
-			String access_token = Encryption.createToken(user.getId());
-			Tokens token = new Tokens();
-			token.setUser_id(user.getId());
-			// Current time
-			token.setCreated_at(new Timestamp(System.currentTimeMillis()));
-			// Expired in 7 days
-			token.setExpired(new Timestamp(System.currentTimeMillis() + 7*24*60*60*1000));
-			//token.setExpired(new Timestamp(System.currentTimeMillis() + 5000));
-			token.setAccess_token(access_token);
+//			String access_token = Encryption.createToken(user.getId());
+//			Tokens token = new Tokens();
+//			token.setUser_id(user.getId());
+//			// Current time
+//			token.setCreated_at(new Timestamp(System.currentTimeMillis()));
+//			// Expired in 7 days
+//			token.setExpired(new Timestamp(System.currentTimeMillis() + 7*24*60*60*1000));
+//			//token.setExpired(new Timestamp(System.currentTimeMillis() + 5000));
+//			token.setAccess_token(access_token);
 			// Save token to db
-			tokensService.isCreateToken(token);
+			tokensService.isCreateToken(user);
 			
 			rf.meta.id = 200;
 			rf.meta.message = "Login Success";
@@ -170,9 +169,10 @@ public class UsersController
 		if (access_token != null && access_token.matches(".*\\w.*")) {
 			// Search token in db that matches token with access_token provided
 			Tokens tokenSearch = tokensService.searchToken(access_token);
-
 			if (tokenSearch != null) {
-				tokensService.isDeleteToken(tokenSearch);
+				Users user = usersService.getUserByToken(tokenSearch.getAccess_token());
+//				tokensService.isDeleteToken(tokenSearch);
+				tokensService.isDeleteTokenByUserId(user.getId());
 				rf.meta.id = 200;
 				rf.meta.message = "Logout success";
 				return Response.status(200).entity(rf).build();
@@ -323,8 +323,7 @@ public class UsersController
 	public Response searchUserByName(@PathParam("name") String name) 
 	{		
 		ResponseFormat rf = new ResponseFormat();
-		//name.matches(".*\\w.*")		
-		if (name == null || name.isEmpty()) {
+		if (name == null || !name.matches(".*\\w.*")) {
 			rf.meta.id = 1001;
 			rf.meta.message = "Input failed.";
 			return Response.status(1001).entity(rf).build();

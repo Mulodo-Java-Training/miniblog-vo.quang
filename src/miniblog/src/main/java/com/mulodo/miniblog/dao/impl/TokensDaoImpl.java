@@ -3,6 +3,7 @@ package com.mulodo.miniblog.dao.impl;
 import java.util.List;
 
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import com.mulodo.miniblog.dao.TokensDao;
 import com.mulodo.miniblog.model.Tokens;
+import com.mulodo.miniblog.model.Users;
 
 @Repository
 public class TokensDaoImpl implements TokensDao 
@@ -37,6 +39,17 @@ public class TokensDaoImpl implements TokensDao
 		session.delete(token);
 		trans.commit();		
 		return true;
+	}
+	
+	@Override
+	public boolean isDeleteByUserId(int user_id) 
+	{	
+		Session session = sessionFactory.getCurrentSession();
+		Transaction trans = session.beginTransaction();
+		session.createQuery("DELETE FROM Tokens " + "WHERE user_id=:user_id").
+		setParameter("user_id", user_id).executeUpdate();
+		trans.commit();
+		return true;	
 	}
 
 //	@SuppressWarnings("unchecked")
@@ -71,14 +84,12 @@ public class TokensDaoImpl implements TokensDao
 		Session session = sessionFactory.getCurrentSession();
 		Transaction trans = session.beginTransaction();
 		Criteria cr = session.createCriteria(Tokens.class);
-		cr.add(Restrictions.eq("access_token", access_token));
-		List<Tokens> listToken = cr.list();
-		if (listToken.size() == 1) {
-			trans.commit();
+		List<Tokens> listToken = cr.add(Restrictions.eq("access_token", access_token)).list();
+		trans.commit();
+		if (listToken.size() != 0)
 			return listToken.get(0);
-		}
 		else
-			return null;		
+			return null;	
 	}
 
 

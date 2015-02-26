@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.mulodo.miniblog.dao.TokensDao;
 import com.mulodo.miniblog.dao.UsersDao;
+import com.mulodo.miniblog.encryption.Encryption;
 import com.mulodo.miniblog.model.Tokens;
 import com.mulodo.miniblog.model.Users;
 import com.mulodo.miniblog.service.UsersService;
@@ -47,11 +48,11 @@ public class UsersServiceImpl implements UsersService
 	public boolean register(Users user) 
 	{		
 		try {
+			String encryptPass = user.getPassword();
+			// Hash password
+			user.setPassword(Encryption.hashSHA256(encryptPass));
 			usersdao.addNewUser(user);
-			if (user != null)
-				return true;
-			else
-				return false;
+			return true;
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -93,6 +94,7 @@ public class UsersServiceImpl implements UsersService
 	public boolean isLogin(String username, String password) 
 	{		
 		try {
+			
 			if (usersdao.getUserLogin(username, password) != null)
 				return true;
 			else
@@ -126,10 +128,10 @@ public class UsersServiceImpl implements UsersService
 	}
 
 	@Transactional
-	public boolean isLogout(Tokens token) 
+	public boolean isLogout(Users user) 
 	{
 		try {
-			tokensdao.isDelete(token);
+			tokensdao.isDeleteByUserId(user.getId());
 			return true;
 		}
 		catch (Exception e) {
