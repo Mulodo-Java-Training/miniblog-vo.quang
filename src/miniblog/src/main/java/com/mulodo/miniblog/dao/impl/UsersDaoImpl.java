@@ -26,7 +26,7 @@ public class UsersDaoImpl implements UsersDao
 		Session session = sessionFactory.openSession();
 		Transaction trans = session.beginTransaction();
 		session.save(user);
-		trans.commit();	  		
+		trans.commit();	 
 	}
 
 	@Override
@@ -35,7 +35,7 @@ public class UsersDaoImpl implements UsersDao
 		Session session = sessionFactory.openSession();
 		Transaction trans = session.beginTransaction();
 		Users user = (Users) session.get(Users.class,id);
-		trans.commit();	 
+		trans.commit();	
 		return user;		
 	}
 
@@ -79,10 +79,13 @@ public class UsersDaoImpl implements UsersDao
 		cr.add(Restrictions.eq("username", username));
 		cr.add(Restrictions.eq("password", password));
 		List<Users> listUser = cr.list();
-		if (listUser.size() == 1)
-			return listUser.get(0);	
-		else
-			return null;		
+		if (listUser.size() == 1) {
+			session.close();
+			return listUser.get(0);
+		}
+		else {
+			return null;
+		}
 	}
 
 	@Override
@@ -126,8 +129,9 @@ public class UsersDaoImpl implements UsersDao
 			trans.commit();
 			return user;
 		}
-		else
-			return null;		
+		else {
+			return null;
+		}		
 	}
 
 	@Override

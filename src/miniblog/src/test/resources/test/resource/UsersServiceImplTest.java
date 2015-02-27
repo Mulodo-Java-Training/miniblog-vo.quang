@@ -6,7 +6,6 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.mulodo.miniblog.encryption.Encryption;
-import com.mulodo.miniblog.model.Tokens;
 import com.mulodo.miniblog.model.Users;
 import com.mulodo.miniblog.service.UsersService;
 
@@ -94,14 +93,6 @@ public class UsersServiceImplTest implements UsersService
 			return null;
 	}
 
-	@Override
-	public boolean isLogout(Users user) 
-	{
-		if (user.getAccess_token().equals("123456"))
-			return true;
-		else			
-			return false;
-	}
 
 	@Override
 	public boolean isUpdateUserInfo(Users user) 
@@ -136,9 +127,15 @@ public class UsersServiceImplTest implements UsersService
 	}
 
 	@Override
-	public Users getUserByToken(String access_token) {
-		// TODO Auto-generated method stub
-		return null;
+	public Users getUserByToken(String access_token) 
+	{
+		if (access_token == "abc123xyz") {
+			Users user = new Users();
+			user.setId(1);
+			return user;
+		}
+		else
+			return null;		
 	}
 
 	@Override

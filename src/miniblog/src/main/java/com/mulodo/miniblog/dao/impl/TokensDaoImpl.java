@@ -3,7 +3,6 @@ package com.mulodo.miniblog.dao.impl;
 import java.util.List;
 
 import org.hibernate.Criteria;
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Repository;
 
 import com.mulodo.miniblog.dao.TokensDao;
 import com.mulodo.miniblog.model.Tokens;
-import com.mulodo.miniblog.model.Users;
 
 @Repository
 public class TokensDaoImpl implements TokensDao 
@@ -37,7 +35,7 @@ public class TokensDaoImpl implements TokensDao
 		Session session = sessionFactory.getCurrentSession();
 		Transaction trans = session.beginTransaction();
 		session.delete(token);
-		trans.commit();		
+		trans.commit();
 		return true;
 	}
 	
@@ -61,6 +59,7 @@ public class TokensDaoImpl implements TokensDao
 //		List<Tokens> result = session.createCriteria(Tokens.class)
 // 				.add(Restrictions.like("access_token", token.getAccess_token())).list();	
 // 		trans.commit();
+//		session.close();
 //		return result.get(0);
 //	}
 
@@ -86,10 +85,12 @@ public class TokensDaoImpl implements TokensDao
 		Criteria cr = session.createCriteria(Tokens.class);
 		List<Tokens> listToken = cr.add(Restrictions.eq("access_token", access_token)).list();
 		trans.commit();
-		if (listToken.size() != 0)
+		if (listToken.size() != 0) {
 			return listToken.get(0);
-		else
-			return null;	
+		}
+		else {
+			return null;
+		}
 	}
 
 

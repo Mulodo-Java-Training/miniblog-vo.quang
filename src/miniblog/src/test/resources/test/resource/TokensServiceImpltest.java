@@ -43,6 +43,7 @@ public class TokensServiceImpltest implements TokensService
 		if (access_token == "abc123xyz") {
 			Tokens token = new Tokens();
 			token.setId(1);
+			token.setAccess_token("abc123xyz");
 			return token;
 		}
 		else
@@ -77,7 +78,10 @@ public class TokensServiceImpltest implements TokensService
 	@Override
 	public boolean isDeleteTokenByUserId(int user_id) 
 	{	
-		return true;
+		if (user_id == 1)
+			return true;
+		else
+			return false;			
 	}
 
 }

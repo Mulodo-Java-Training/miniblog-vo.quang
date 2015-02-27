@@ -9,8 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.mulodo.miniblog.dao.TokensDao;
 import com.mulodo.miniblog.dao.UsersDao;
 import com.mulodo.miniblog.encryption.Encryption;
-import com.mulodo.miniblog.model.Tokens;
 import com.mulodo.miniblog.model.Users;
+import com.mulodo.miniblog.service.TokensService;
 import com.mulodo.miniblog.service.UsersService;
 
 @Service
@@ -21,8 +21,10 @@ public class UsersServiceImpl implements UsersService
 	private UsersDao usersdao;
 	@Autowired
 	private TokensDao tokensdao;
+	@Autowired
+	private TokensService tokensService;
 	
-	@Transactional
+	@Override
 	public boolean isValidateUser(Users user) 
 	{		
 		if (user.getUsername() != null && !user.getUsername().isEmpty() && 
@@ -113,7 +115,7 @@ public class UsersServiceImpl implements UsersService
 	}
 
 	
-	@Transactional
+	@Override
 	public Users getUserById(int id) 
 	{	
 		try {
@@ -123,21 +125,7 @@ public class UsersServiceImpl implements UsersService
 		catch (Exception e) {
 			e.printStackTrace();
 			return null;
-		}
-		
-	}
-
-	@Transactional
-	public boolean isLogout(Users user) 
-	{
-		try {
-			tokensdao.isDeleteByUserId(user.getId());
-			return true;
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-			return false;
-		}	
+		}		
 	}
 
 	@Transactional
