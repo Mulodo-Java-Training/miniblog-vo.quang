@@ -129,13 +129,31 @@ public class UsersServiceImplTest implements UsersService
 	@Override
 	public Users getUserByToken(String access_token) 
 	{
-		if (access_token == "abc123xyz") {
+		switch (access_token) {
+		case "abc123xyz":
 			Users user = new Users();
 			user.setId(1);
 			return user;
+		case "token_invalid":			
+			return null;
+		case "missed_match_token":
+			Users user2 = new Users();
+			user2.setId(2);
+			return user2;
+		case "access_token":
+			Users user3 = new Users();
+			user3.setId(3);
+			return user3;
+			
+		default: return null;	
 		}
-		else
-			return null;		
+		
+//		if (access_token == "abc123xyz") {
+//			Users user = new Users();
+//			user.setId(1);
+//		}
+//		else
+//			return null;		
 	}
 
 	@Override

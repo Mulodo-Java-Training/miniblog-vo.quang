@@ -28,51 +28,6 @@ public class UsersServiceTest
 	TokensService tokensService;
 	
 	
-//	public void registerGetUserInfoTest() 
-//	{	
-//		// Register
-//		Users user = new Users();
-//		user.setUsername("testRegister");
-//		user.setPassword("123456");
-//		user.setLastname("testRegister");
-//		user.setFirstname("testRegister");
-//		user.setEmail("testRegister@gmail.com");
-//		user.setImage("image.jpg");
-//		user.setCreated_at(new Date());
-//		user.setModified_at(new Date());
-//		
-//		assertTrue(usersService.isValidateUser(user));
-//		assertTrue(!usersService.isCheckUserExist(user.getUsername()));
-//		assertTrue(!usersService.isCheckEmailExist(user.getEmail()));
-//		assertTrue(usersService.register(user));
-//		assertTrue(tokensService.isCreateToken(user));
-//		
-//		// Get User Info
-//		Users user1 = new Users();
-//		user1.setUsername("testGetUser");
-//		user1.setPassword("123456");
-//		user1.setLastname("testGetUser");
-//		user1.setFirstname("testGetUser");
-//		user1.setEmail("testGetUser@gmail.com");
-//		// Create user1
-//		assertTrue(usersService.register(user1));
-//		
-//		// Get User by Id
-//		Users getUser1 = usersService.getUserById(user1.getId());		
-//		// Test user1	
-//		assertEquals("testGetUser", getUser1.getUsername());
-//		assertEquals("testGetUser", getUser1.getLastname());
-//		assertEquals("testGetUser", getUser1.getFirstname());
-//		assertEquals("testGetUser@gmail.com", getUser1.getEmail());	
-//		// Delete user1
-//		assertTrue(usersService.isDeleteUser(user1.getUsername()));
-//		
-//		// Delete token 
-//		assertTrue(tokensService.isDeleteTokenByUserId(user.getId()));
-//		// Delete user
-//		assertTrue(usersService.isDeleteUser(user.getUsername()));		
-//	}
-	
 	@Test
 	public void userTest()
 	{
@@ -142,7 +97,6 @@ public class UsersServiceTest
 		assertEquals(userLogin.getFirstname(), getUser1.getFirstname());
 		assertEquals(userLogin.getEmail(), getUser1.getEmail());
 		assertEquals(userLogin.getCreated_at(), getUser1.getCreated_at());
-//		assertEquals(userLogin.getModified_at(), getUser1.getModified_at());
 		
 		// Search user by name				
 		String nameSearch = "test";
@@ -155,11 +109,4 @@ public class UsersServiceTest
 		// Delete user
 		assertTrue(usersService.isDeleteUser("testUserUpdate"));			
 	}
-	
-	
-//	public void delete()
-//	{
-//		usersService.isDeleteUser("testRegister");
-//		usersService.isDeleteUser("testUserUpdate");
-//	}
 }
