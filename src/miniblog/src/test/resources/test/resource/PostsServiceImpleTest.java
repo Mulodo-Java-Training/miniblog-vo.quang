@@ -1,12 +1,10 @@
 package test.resource;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import com.mulodo.miniblog.dao.PostsDao;
 import com.mulodo.miniblog.model.Posts;
 import com.mulodo.miniblog.service.PostsService;
 
@@ -43,21 +41,8 @@ public class PostsServiceImpleTest implements PostsService
 			post1.setUser_id(3);
 			return post1;
 		
-		default: return null;
-		
+		default: return null;		
 		}
-		
-//		if (id == 1) {
-//			Posts post = new Posts();
-//			post.setId(1);
-//			post.setTitle("Title");
-//			post.setDescription("Description");
-//			post.setContent("Content");
-//			post.setUser_id(1);
-//			return post;
-//		}
-//		else	
-//			return null;
 	}
 
 	@Override
@@ -72,21 +57,30 @@ public class PostsServiceImpleTest implements PostsService
 	}
 
 	@Override
-	public boolean deletePost(int id) {
-		// TODO Auto-generated method stub
-		return false;
+	public boolean deletePost(int id) 
+	{
+		if (id == 1)
+			return true;
+		else
+			return false;
 	}
 
 	@Override
-	public List<Posts> getAllPosts() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Posts> getAllPosts() 
+	{
+		List<Posts> listPost = new ArrayList<Posts>();
+		return listPost;
 	}
 
 	@Override
-	public List<Posts> getPostsForUser(int user_id) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Posts> getPostsForUser(int user_id) 
+	{
+		if (user_id == 1) {
+			List<Posts> listPost = new ArrayList<Posts>();		
+			return listPost;
+		}
+		else
+			return null;
 	}
 
 }

@@ -146,18 +146,12 @@ public class UsersServiceImplTest implements UsersService
 			return user3;
 			
 		default: return null;	
-		}
-		
-//		if (access_token == "abc123xyz") {
-//			Users user = new Users();
-//			user.setId(1);
-//		}
-//		else
-//			return null;		
+		}	
 	}
 
 	@Override
-	public boolean isDeleteUser(String username) {
+	public boolean isDeleteUser(String username) 
+	{
 		// TODO Auto-generated method stub
 		return false;
 	}
