@@ -144,6 +144,14 @@ public class UsersServiceImplTest implements UsersService
 			Users user3 = new Users();
 			user3.setId(3);
 			return user3;
+		case "token4":
+			Users user4 = new Users();
+			user4.setId(4);
+			return user4;
+		case "token5":
+			Users user5 = new Users();
+			user5.setId(5);
+			return user5;
 			
 		default: return null;	
 		}	

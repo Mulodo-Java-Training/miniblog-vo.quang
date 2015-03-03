@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.Date;
 import java.util.List;
 
+import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,9 +28,8 @@ public class UsersServiceTest
 	@Autowired
 	TokensService tokensService;
 	
-	
 	@Test
-	public void userTest()
+	public void usersTest()
 	{
 		// Register		
 		Users user = new Users();
@@ -85,7 +85,10 @@ public class UsersServiceTest
 		assertEquals("testUserUpdate", getUserUpdate.getLastname());
 		assertEquals("testUserUpdate", getUserUpdate.getFirstname());
 		
-						
+		// Logout
+		assertTrue(tokensService.isDeleteTokenByUserId(userLogin.getId()));
+		
+								
 		// Get User Info
 		// Get userLogin info and assign to getUser1 obj
 		Users getUser1 = usersService.getUserById(userLogin.getId());
@@ -103,10 +106,13 @@ public class UsersServiceTest
 		List<Users> listUser = usersService.getListUserByName(nameSearch);
 		// Check listuser contains user(s)
 		assertTrue(listUser.size() > 0);
-				
-		// Logout
-		assertTrue(tokensService.isDeleteTokenByUserId(userLogin.getId()));
+		
 		// Delete user
-		assertTrue(usersService.isDeleteUser("testUserUpdate"));			
+		//assertTrue(usersService.isDeleteUser("testUserUpdate"));
+						
+	}
+	
+	public void delete() {		
+		assertTrue(usersService.isDeleteUser("testUserUpdate"));
 	}
 }

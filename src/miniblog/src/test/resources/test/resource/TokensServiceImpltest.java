@@ -16,14 +16,7 @@ public class TokensServiceImpltest implements TokensService
 
 	@Override
 	public boolean isCreateToken(Users user) 
-	{
-//		token.setAccess_token("abc123xyz");
-//		return true;
-//		if (token.getAccess_token() == "abc123xyz")
-//			return true;
-//		else
-//			return false;
-		
+	{		
 		user.setAccess_token("abc123xyz");
 		return true;
 	}
@@ -62,7 +55,10 @@ public class TokensServiceImpltest implements TokensService
 			return true;
 		case "access_token":
 			return true;
-		
+		case "token4":
+			return true;
+		case "token5":
+			return true;
 		default: return false;	
 		}		
 	}

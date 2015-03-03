@@ -37,9 +37,20 @@ public class PostsServiceImpleTest implements PostsService
 			return post;
 		case 2: return null;
 		case 3: 
-			Posts post1 = new Posts();
-			post1.setUser_id(3);
-			return post1;
+			Posts post3 = new Posts();
+			post3.setId(3);
+			post3.setUser_id(3);
+			return post3;
+		case 4: 
+			Posts post4 = new Posts();
+			post4.setId(4);
+			post4.setUser_id(4);
+			return post4;
+		case 5: 
+			Posts post5 = new Posts();
+			post5.setId(5);
+			post5.setUser_id(5);
+			return post5;
 		
 		default: return null;		
 		}
