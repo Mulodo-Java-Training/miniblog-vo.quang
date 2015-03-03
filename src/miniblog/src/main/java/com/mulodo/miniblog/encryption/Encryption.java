@@ -52,7 +52,8 @@ public class Encryption
 		MessageDigest md;
 		try {
 		    md = MessageDigest.getInstance("SHA-256");
-		} catch (NoSuchAlgorithmException e) {
+		} 
+		catch (NoSuchAlgorithmException e) {
 		    // Log exception
 		    logger.error("HASH_ALGORITHM=SHA-256", e);
 		    return null;
@@ -75,7 +76,7 @@ public class Encryption
 		for (int i = 0; i < byteData.length; i++) {
 		    String hex = Integer.toHexString(0xff & byteData[i]);
 		    if (hex.length() == 1)
-			hexString.append('0');
+		    	hexString.append('0');
 		    hexString.append(hex);
 		}
 	

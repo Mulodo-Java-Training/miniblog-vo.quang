@@ -113,8 +113,5 @@ public class Comments implements Serializable
 	public void setPost_id(int post_id) 
 	{
 		this.post_id = post_id;
-	}
-	
-	
-	
+	}	
 }

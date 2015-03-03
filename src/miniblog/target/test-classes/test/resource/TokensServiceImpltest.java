@@ -16,14 +16,7 @@ public class TokensServiceImpltest implements TokensService
 
 	@Override
 	public boolean isCreateToken(Users user) 
-	{
-//		token.setAccess_token("abc123xyz");
-//		return true;
-//		if (token.getAccess_token() == "abc123xyz")
-//			return true;
-//		else
-//			return false;
-		
+	{		
 		user.setAccess_token("abc123xyz");
 		return true;
 	}
@@ -53,15 +46,27 @@ public class TokensServiceImpltest implements TokensService
 	@Override
 	public boolean isCheckTokenValid(String access_token) 
 	{
-		if (access_token == "abc123xyz")
+		switch(access_token) {
+		case "abc123xyz":
 			return true;
-		else
-			return false;
+		case "token_invalid":
+			return true;
+		case "missed_match_token":
+			return true;
+		case "access_token":
+			return true;
+		case "token4":
+			return true;
+		case "token5":
+			return true;
+		default: return false;	
+		}		
 	}
 
 	@Override
 	public List<Tokens> getTokenByUserId(int user_id) 
 	{
+		
 		if (user_id == 1) {
 			List<Tokens> listToken = new ArrayList<Tokens>();
 			Tokens token1 = new Tokens();

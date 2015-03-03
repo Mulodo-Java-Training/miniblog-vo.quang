@@ -129,17 +129,37 @@ public class UsersServiceImplTest implements UsersService
 	@Override
 	public Users getUserByToken(String access_token) 
 	{
-		if (access_token == "abc123xyz") {
+		switch (access_token) {
+		case "abc123xyz":
 			Users user = new Users();
 			user.setId(1);
 			return user;
-		}
-		else
-			return null;		
+		case "token_invalid":			
+			return null;
+		case "missed_match_token":
+			Users user2 = new Users();
+			user2.setId(2);
+			return user2;
+		case "access_token":
+			Users user3 = new Users();
+			user3.setId(3);
+			return user3;
+		case "token4":
+			Users user4 = new Users();
+			user4.setId(4);
+			return user4;
+		case "token5":
+			Users user5 = new Users();
+			user5.setId(5);
+			return user5;
+			
+		default: return null;	
+		}	
 	}
 
 	@Override
-	public boolean isDeleteUser(String username) {
+	public boolean isDeleteUser(String username) 
+	{
 		// TODO Auto-generated method stub
 		return false;
 	}

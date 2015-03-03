@@ -18,6 +18,7 @@ import javax.ws.rs.core.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
+import com.mulodo.miniblog.constants.Constants;
 import com.mulodo.miniblog.model.Posts;
 import com.mulodo.miniblog.model.Users;
 import com.mulodo.miniblog.responseformat.ResponseFormat;
@@ -45,9 +46,9 @@ public class PostsController
 		ResponseFormat rf = new ResponseFormat();
 		
 		// Check input
-		if (data.getTitle() != null && data.getTitle().matches(".*\\w.*") && 
-			data.getDescription() != null && data.getDescription().matches(".*\\w.*") &&
-			data.getContent() != null && data.getContent().matches(".*\\w.*")) {
+		if (data.getTitle() != null && data.getTitle().matches(Constants.REGEX_WHITE_SPACE) && 
+			data.getDescription() != null && data.getDescription().matches(Constants.REGEX_WHITE_SPACE) &&
+			data.getContent() != null && data.getContent().matches(Constants.REGEX_WHITE_SPACE)) {
 						
 			Posts post = new Posts();
 			post.setTitle(data.getTitle());
@@ -65,33 +66,33 @@ public class PostsController
 					post.setUser_id(usersService.getUserByToken(access_token).getId());
 					// Check whether create post success
 					if (postsService.createPost(post) == true) {			
-						rf.meta.id = 200;
-						rf.meta.message = "New post is created success";
+						rf.meta.id = Constants.CODE_200;
+						rf.meta.message = Constants.POST_CREATE_SUCCESS;
 						rf.data = post;
-						return Response.status(200).entity(rf).build();
+						return Response.status(Constants.CODE_200).entity(rf).build();
 					}
 					else {
-						rf.meta.id = 9001;
-						rf.meta.message = "Error";
-						return Response.status(9001).entity(rf).build();
+						rf.meta.id = Constants.CODE_9001;
+						rf.meta.message = Constants.ERROR_MESSAGE;
+						return Response.status(Constants.CODE_9001).entity(rf).build();
 					}					
 				}
 				else {
-					rf.meta.id = 1002;
-					rf.meta.message = "Access token has expired.";
-					return Response.status(1002).entity(rf).build();
+					rf.meta.id = Constants.CODE_1002;
+					rf.meta.message = Constants.TOKEN_EXPIRED;
+					return Response.status(Constants.CODE_1002).entity(rf).build();
 				}	
 			}
 			else {
-				rf.meta.id = 9002;
-				rf.meta.message = "Missing token.Please login.";
-				return Response.status(9002).entity(rf).build();
+				rf.meta.id = Constants.CODE_9002;
+				rf.meta.message = Constants.TOKEN_MISSING;
+				return Response.status(Constants.CODE_9002).entity(rf).build();
 			}							
 		}
 		else {
-			rf.meta.id = 1001;
-			rf.meta.message = "Input invalid";
-			return Response.status(1001).entity(rf).build();		
+			rf.meta.id = Constants.CODE_1001;
+			rf.meta.message = Constants.INPUT_FAILED;
+			return Response.status(Constants.CODE_1001).entity(rf).build();		
 		}
 	}
 		
@@ -120,45 +121,45 @@ public class PostsController
 							post.setStatus(true);
 							// Update post
 							if (postsService.updatePost(post) == true) {
-								rf.meta.id = 200;
-								rf.meta.message = "Post's status updated success";
+								rf.meta.id = Constants.CODE_200;
+								rf.meta.message = Constants.POST_ACTIVE_SUCCESS;
 								rf.data = "Post id: " + post.getId() + "  " + "Status: " + post.isStatus();
-								return Response.status(200).entity(rf).build();
+								return Response.status(Constants.CODE_200).entity(rf).build();
 							}
 							else {
-								rf.meta.id = 9001;
-								rf.meta.message = "Error.";
-								return Response.status(9001).entity(rf).build();
+								rf.meta.id = Constants.CODE_9001;
+								rf.meta.message = Constants.ERROR_MESSAGE;
+								return Response.status(Constants.CODE_9001).entity(rf).build();
 							}					
 						}
 						else {
-							rf.meta.id = 2505;
-							rf.meta.message = "This post does not belong to the user with id: " + user.getId();
-							return Response.status(2505).entity(rf).build();
+							rf.meta.id = Constants.CODE_2505;
+							rf.meta.message = Constants.POST_NOT_BELONG_USER;
+							return Response.status(Constants.CODE_2505).entity(rf).build();
 						}			
 					}
 					else {
-						rf.meta.id = 1003;
-						rf.meta.message = "Access token invalid";
-						return Response.status(1003).entity(rf).build();
+						rf.meta.id = Constants.CODE_1003;
+						rf.meta.message =  Constants.TOKEN_INVALID;
+						return Response.status(Constants.CODE_1003).entity(rf).build();
 					}			
 				}
 				else {
-					rf.meta.id = 1002;
-					rf.meta.message = "Access token has expired.";
-					return Response.status(1002).entity(rf).build();
+					rf.meta.id = Constants.CODE_1002;
+					rf.meta.message = Constants.TOKEN_EXPIRED;
+					return Response.status(Constants.CODE_1002).entity(rf).build();
 				}
 			} 
 			else {
-				rf.meta.id = 9002;
-				rf.meta.message = "Missing access token. Please login.";
-				return Response.status(9002).entity(rf).build();
+				rf.meta.id = Constants.CODE_9002;
+				rf.meta.message = Constants.TOKEN_MISSING;
+				return Response.status(Constants.CODE_9002).entity(rf).build();
 			}	
 		}
 		else {
-			rf.meta.id = 2504;
-			rf.meta.message = "Post is not existed.";
-			return Response.status(2504).entity(rf).build();
+			rf.meta.id = Constants.CODE_2504;
+			rf.meta.message = Constants.POST_NOT_EXISTED;
+			return Response.status(Constants.CODE_2504).entity(rf).build();
 		}
 	}
 	
@@ -188,45 +189,45 @@ public class PostsController
 							post.setStatus(false);
 							// Update post
 							if (postsService.updatePost(post) == true) {
-								rf.meta.id = 200;
-								rf.meta.message = "Post's status updated success";
+								rf.meta.id = Constants.CODE_200;
+								rf.meta.message = Constants.POST_DEACTIVE_SUCCESS;
 								rf.data = "Post id: " + post.getId() + "  " + "Status: " + post.isStatus();
 								return Response.status(200).entity(rf).build();
 							}
 							else {
-								rf.meta.id = 9001;
-								rf.meta.message = "Error";
-								return Response.status(9001).entity(rf).build();
+								rf.meta.id = Constants.CODE_9001;
+								rf.meta.message = Constants.ERROR_MESSAGE;
+								return Response.status(Constants.CODE_9001).entity(rf).build();
 							}					
 						}
 						else {
-							rf.meta.id = 2505;
-							rf.meta.message = "This post does not belong to the user with id: " + user.getId();
-							return Response.status(2505).entity(rf).build();
+							rf.meta.id = Constants.CODE_2505;
+							rf.meta.message = Constants.POST_NOT_BELONG_USER;
+							return Response.status(Constants.CODE_2505).entity(rf).build();
 						}			
 					}
 					else {
-						rf.meta.id = 1003;
-						rf.meta.message = "Access token invalid";
-						return Response.status(1003).entity(rf).build();
+						rf.meta.id = Constants.CODE_1003;
+						rf.meta.message = Constants.TOKEN_INVALID;
+						return Response.status(Constants.CODE_1003).entity(rf).build();
 					}			
 				}
 				else {
-					rf.meta.id = 1002;
-					rf.meta.message = "Access token has expired.";
-					return Response.status(1002).entity(rf).build();
+					rf.meta.id = Constants.CODE_1002;
+					rf.meta.message = Constants.TOKEN_EXPIRED;
+					return Response.status(Constants.CODE_1002).entity(rf).build();
 				}
 			} 
 			else {
-				rf.meta.id = 9002;
-				rf.meta.message = "Missing access token. Please login.";
-				return Response.status(9002).entity(rf).build();
+				rf.meta.id = Constants.CODE_9002;
+				rf.meta.message = Constants.TOKEN_MISSING;
+				return Response.status(Constants.CODE_9002).entity(rf).build();
 			}
 		}
 		else {
-			rf.meta.id = 2504;
-			rf.meta.message = "Post is not existed.";
-			return Response.status(2504).entity(rf).build();
+			rf.meta.id = Constants.CODE_2504;
+			rf.meta.message = Constants.POST_NOT_EXISTED;
+			return Response.status(Constants.CODE_2504).entity(rf).build();
 		}
 		
 	}
@@ -246,9 +247,9 @@ public class PostsController
 		// Check post existed
 		if (post != null) {
 			// Check input
-			if (data.getTitle() != null && data.getTitle().matches(".*\\w.*") &&
-				data.getDescription() != null && data.getDescription().matches(".*\\w.*") &&
-				data.getContent() != null && data.getContent().matches(".*\\w.*")) {
+			if (data.getTitle() != null && data.getTitle().matches(Constants.REGEX_WHITE_SPACE) &&
+				data.getDescription() != null && data.getDescription().matches(Constants.REGEX_WHITE_SPACE) &&
+				data.getContent() != null && data.getContent().matches(Constants.REGEX_WHITE_SPACE)) {
 				
 				// Check token null
 				if (access_token != null) {
@@ -268,51 +269,51 @@ public class PostsController
 								post.setModified_at(Calendar.getInstance().getTime());
 								// Update post
 								if (postsService.updatePost(post) == true) {
-									rf.meta.id = 200;
-									rf.meta.message = "Post updated success";
+									rf.meta.id = Constants.CODE_200;
+									rf.meta.message = Constants.POST_UPDATE_SUCCESS;
 									rf.data = post;
-									return Response.status(200).entity(rf).build();
+									return Response.status(Constants.CODE_200).entity(rf).build();
 								}
 								else {
-									rf.meta.id = 9001;
-									rf.meta.message = "Error.";
-									return Response.status(9001).entity(rf).build();
+									rf.meta.id = Constants.CODE_9001;
+									rf.meta.message = Constants.ERROR_MESSAGE;
+									return Response.status(Constants.CODE_9001).entity(rf).build();
 								}					
 							}
 							else {
-								rf.meta.id = 2505;
-								rf.meta.message = "This post does not belong to the user with id: " + user.getId();
-								return Response.status(2505).entity(rf).build();
+								rf.meta.id = Constants.CODE_2505;
+								rf.meta.message = Constants.POST_NOT_BELONG_USER;
+								return Response.status(Constants.CODE_2505).entity(rf).build();
 							}
 						}
 						else {
-							rf.meta.id = 1003;
-							rf.meta.message = "Access token invalid.";
-							return Response.status(1003).entity(rf).build();
+							rf.meta.id = Constants.CODE_1003;
+							rf.meta.message = Constants.TOKEN_INVALID;
+							return Response.status(Constants.CODE_1003).entity(rf).build();
 						}
 					}
 					else {
-						rf.meta.id = 1002;
-						rf.meta.message = "Access token has expired.";
-						return Response.status(1002).entity(rf).build();
+						rf.meta.id = Constants.CODE_1002;
+						rf.meta.message = Constants.TOKEN_EXPIRED;
+						return Response.status(Constants.CODE_1002).entity(rf).build();
 					}
 				}
 				else {
-					rf.meta.id = 9002;
-					rf.meta.message = "Missing token. Please login.";
-					return Response.status(9002).entity(rf).build();
+					rf.meta.id = Constants.CODE_9002;
+					rf.meta.message = Constants.TOKEN_MISSING;
+					return Response.status(Constants.CODE_9002).entity(rf).build();
 				}
 			}
 			else {
-				rf.meta.id = 1001;
-				rf.meta.message = "Input failed.";
-				return Response.status(1001).entity(rf).build();
+				rf.meta.id = Constants.CODE_1001;
+				rf.meta.message = Constants.INPUT_FAILED;
+				return Response.status(Constants.CODE_1001).entity(rf).build();
 			}
 		}
 		else {
-			rf.meta.id = 2504;
-			rf.meta.message = "Post is not existed.";
-			return Response.status(2504).entity(rf).build();
+			rf.meta.id = Constants.CODE_2504;
+			rf.meta.message = Constants.POST_NOT_EXISTED;
+			return Response.status(Constants.CODE_2504).entity(rf).build();
 		}
 	}
 	
@@ -337,44 +338,44 @@ public class PostsController
 						// Check whether post belongs to right user
 						if (post.getUser_id() == user.getId()) {
 							if (postsService.deletePost(id) == true) {
-								rf.meta.id = 200;
-								rf.meta.message = "Post deleted success.";
-								return Response.status(200).entity(rf).build();
+								rf.meta.id = Constants.CODE_200;
+								rf.meta.message = Constants.POST_DELETE_SUCCESS;
+								return Response.status(Constants.CODE_200).entity(rf).build();
 							}
 							else {
-								rf.meta.id = 9001;
-								rf.meta.message = "Error.";
-								return Response.status(9001).entity(rf).build();
+								rf.meta.id = Constants.CODE_9001;
+								rf.meta.message = Constants.ERROR_MESSAGE;
+								return Response.status(Constants.CODE_9001).entity(rf).build();
 							}
 						}
 						else {
-							rf.meta.id = 2505;
-							rf.meta.message = "This post does not belong to the user with id: " + user.getId();
-							return Response.status(2505).entity(rf).build();
+							rf.meta.id = Constants.CODE_2505;
+							rf.meta.message = Constants.POST_NOT_BELONG_USER;
+							return Response.status(Constants.CODE_2505).entity(rf).build();
 						}	
 					}
 					else {
-						rf.meta.id = 1003;
-						rf.meta.message = "Access token invalid";
-						return Response.status(1003).entity(rf).build();
+						rf.meta.id = Constants.CODE_1003;
+						rf.meta.message = Constants.TOKEN_INVALID;
+						return Response.status(Constants.CODE_1003).entity(rf).build();
 					}
 				}
 				else {
-					rf.meta.id = 1002;
-					rf.meta.message = "Access token has expired.";
-					return Response.status(1002).entity(rf).build();
+					rf.meta.id = Constants.CODE_1002;
+					rf.meta.message = Constants.TOKEN_EXPIRED;
+					return Response.status(Constants.CODE_1002).entity(rf).build();
 				}							
 			}
 			else {
-				rf.meta.id = 9002;
-				rf.meta.message = "Missing token. Please login.";
-				return Response.status(9002).entity(rf).build();
+				rf.meta.id = Constants.CODE_9002;
+				rf.meta.message = Constants.TOKEN_MISSING;
+				return Response.status(Constants.CODE_9002).entity(rf).build();
 			}
 		}
 		else {
-			rf.meta.id = 2504;
-			rf.meta.message = "Post is not existed.";
-			return Response.status(2504).entity(rf).build();
+			rf.meta.id = Constants.CODE_2504;
+			rf.meta.message = Constants.POST_NOT_EXISTED;
+			return Response.status(Constants.CODE_2504).entity(rf).build();
 		}
 	}
 	
@@ -387,15 +388,15 @@ public class PostsController
 		
 		List<Posts> listPost = postsService.getAllPosts();
 		if (listPost != null) {
-			rf.meta.id = 200;
-			rf.meta.message = "Post searched sucess.";
+			rf.meta.id = Constants.CODE_200;
+			rf.meta.message = Constants.POST_GETALL_SUCCESS;
 			rf.data = listPost;
-			return Response.status(200).entity(rf).build();
+			return Response.status(Constants.CODE_200).entity(rf).build();
 		}
 		else {
-			rf.meta.id = 9001;
-			rf.meta.message = "Error.";
-			return Response.status(9001).entity(rf).build();
+			rf.meta.id = Constants.CODE_9001;
+			rf.meta.message = Constants.ERROR_MESSAGE;
+			return Response.status(Constants.CODE_9001).entity(rf).build();
 		}
 	}
 	
@@ -415,33 +416,33 @@ public class PostsController
 				if (user != null) {
 					List<Posts> listPost = postsService.getPostsForUser(user.getId());
 					if (listPost != null) {
-						rf.meta.id = 200;
-						rf.meta.message = "Post for user searched success";
+						rf.meta.id = Constants.CODE_200;
+						rf.meta.message = Constants.POST_GET_FOR_USER_SUCCESS;
 						rf.data = listPost;
-						return Response.status(200).entity(rf).build();
+						return Response.status(Constants.CODE_200).entity(rf).build();
 					}
 					else {
-						rf.meta.id = 9001;
-						rf.meta.message = "Error.";
-						return Response.status(9001).entity(rf).build();
+						rf.meta.id = Constants.CODE_9001;
+						rf.meta.message = Constants.ERROR_MESSAGE;
+						return Response.status(Constants.CODE_9001).entity(rf).build();
 					}
 				}
 				else {
-					rf.meta.id = 1003;
-					rf.meta.message = "Access token invalid";
-					return Response.status(1003).entity(rf).build();
+					rf.meta.id = Constants.CODE_1003;
+					rf.meta.message = Constants.TOKEN_INVALID;
+					return Response.status(Constants.CODE_1003).entity(rf).build();
 				}
 			}
 			else {
-				rf.meta.id = 1002;
-				rf.meta.message = "Access token has expired.";
-				return Response.status(1002).entity(rf).build();
+				rf.meta.id = Constants.CODE_1002;
+				rf.meta.message = Constants.TOKEN_EXPIRED;
+				return Response.status(Constants.CODE_1002).entity(rf).build();
 			}
 		}
 		else {
-			rf.meta.id = 9002;
-			rf.meta.message = "Missing token. Please login.";
-			return Response.status(9002).entity(rf).build();
+			rf.meta.id = Constants.CODE_9002;
+			rf.meta.message = Constants.TOKEN_MISSING;
+			return Response.status(Constants.CODE_9002).entity(rf).build();
 		}	
 	}
 }

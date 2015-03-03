@@ -48,8 +48,6 @@ public class UsersControllerTest
 		user.setEmail("testsuccess@gmail.com");
 		user.setImage("image.jpg");		
 		
-//		Tokens token = new Tokens();
-//		token.setAccess_token("abc123xyz");
 		// Check token created
 		assertTrue(tokensService.isCreateToken(user));
 		
@@ -94,8 +92,6 @@ public class UsersControllerTest
 		user.setEmail("test1@gmail.com");		
 		user.setCreated_at(new Date());
 		user.setModified_at(new Date());
-//		Tokens token = new Tokens();
-//		token.setAccess_token("abc123xyz");
 		
 		Response resp = usersController.register(user);
 		// Check token created when new user register success
@@ -154,8 +150,6 @@ public class UsersControllerTest
 		LoginForm data = new LoginForm();
 		data.setUsername("abc");
 		data.setPassword("123456");
-//		Tokens token = new Tokens();
-//		token.setAccess_token("abc123xyz");
 		
 		Response resp = usersController.login(data);
 		Users user = usersService.getUserByUsername(data.getUsername());

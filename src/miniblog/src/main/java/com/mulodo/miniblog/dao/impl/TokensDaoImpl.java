@@ -44,8 +44,7 @@ public class TokensDaoImpl implements TokensDao
 	{	
 		Session session = sessionFactory.getCurrentSession();
 		Transaction trans = session.beginTransaction();
-		session.createQuery("DELETE FROM Tokens " + "WHERE user_id=:user_id").
-		setParameter("user_id", user_id).executeUpdate();
+		session.createQuery("DELETE FROM Tokens WHERE user_id=:user_id").setParameter("user_id", user_id).executeUpdate();
 		trans.commit();
 		return true;	
 	}

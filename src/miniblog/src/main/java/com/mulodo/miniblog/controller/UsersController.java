@@ -20,6 +20,7 @@ import org.jboss.resteasy.annotations.Form;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
+import com.mulodo.miniblog.constants.Constants;
 import com.mulodo.miniblog.encryption.Encryption;
 import com.mulodo.miniblog.model.Tokens;
 import com.mulodo.miniblog.model.Users;
@@ -82,29 +83,33 @@ public class UsersController
 						// Save to db
 						tokensService.isCreateToken(user);
 												
-						rf.meta.id = 200;
-						rf.meta.message = "User created sucess";
+						rf.meta.id = Constants.CODE_200;
+						rf.meta.message = Constants.USER_CREATE_SUCCESS;
 						rf.data = user;
-						return Response.status(200).entity(rf).build();
-					} else {
-						rf.meta.id = 9001;
-						rf.meta.message = "Error.";
-						return Response.status(9001).entity(rf).build();
+						return Response.status(Constants.CODE_200).entity(rf).build();
+					} 
+					else {
+						rf.meta.id = Constants.CODE_9001;
+						rf.meta.message = Constants.ERROR_MESSAGE;
+						return Response.status(Constants.CODE_9001).entity(rf).build();
 					}
-				} else {
-					rf.meta.id = 2010;
-					rf.meta.message = "Email is already existed";
-					return Response.status(2010).entity(rf).build();
+				} 
+				else {
+					rf.meta.id = Constants.CODE_2010;
+					rf.meta.message = Constants.USER_EMAIL_EXISTED;
+					return Response.status(Constants.CODE_2010).entity(rf).build();
 				}
-			} else {
-				rf.meta.id = 2009;
-				rf.meta.message = "Username is already existed";
-				return Response.status(2009).entity(rf).build();
+			} 
+			else {
+				rf.meta.id = Constants.CODE_2009;
+				rf.meta.message = Constants.USERNAME_EXISTED;
+				return Response.status(Constants.CODE_2009).entity(rf).build();
 			}
-		} else {
-			rf.meta.id = 1001;
-			rf.meta.message = "Input failed.";
-			return Response.status(1001).entity(rf).build();
+		} 
+		else {
+			rf.meta.id = Constants.CODE_1001;
+			rf.meta.message = Constants.INPUT_FAILED;
+			return Response.status(Constants.CODE_1001).entity(rf).build();
 		}
 	}
 	
@@ -116,12 +121,12 @@ public class UsersController
 	{		
 		ResponseFormat rf = new ResponseFormat();
 		
-		if (data.getUsername() == null || data.getUsername().isEmpty() ||
-			data.getPassword() == null || data.getPassword().isEmpty()) {
+		if (data.getUsername() == null || !data.getUsername().matches(Constants.REGEX_WHITE_SPACE) ||
+			data.getPassword() == null || !data.getPassword().matches(Constants.REGEX_WHITE_SPACE)) {
 			
-			rf.meta.id = 1001;
-			rf.meta.message = "Input failed.";
-			return Response.status(1001).entity(rf).build();
+			rf.meta.id = Constants.CODE_1001;
+			rf.meta.message = Constants.INPUT_FAILED;
+			return Response.status(Constants.CODE_1001).entity(rf).build();
 		}
 
 		/**
@@ -145,15 +150,15 @@ public class UsersController
 			// Save token to db
 			tokensService.isCreateToken(user);
 			
-			rf.meta.id = 200;
-			rf.meta.message = "Login Success";
+			rf.meta.id = Constants.CODE_200;
+			rf.meta.message = Constants.USER_LOGIN_SUCCESS;
 			rf.data = user;
-			return Response.status(200).entity(rf).build();
+			return Response.status(Constants.CODE_200).entity(rf).build();
 		} 
 		else {
-			rf.meta.id = 9001;
-			rf.meta.message = "Error.";
-			return Response.status(9001).entity(rf).build();
+			rf.meta.id = Constants.CODE_9001;
+			rf.meta.message = Constants.ERROR_MESSAGE;
+			return Response.status(Constants.CODE_9001).entity(rf).build();
 		}
 	}
 
@@ -166,27 +171,27 @@ public class UsersController
 		ResponseFormat rf = new ResponseFormat();
 		
 		// Check access_token not null, no spacing
-		if (access_token != null && access_token.matches(".*\\w.*")) {
+		if (access_token != null && access_token.matches(Constants.REGEX_WHITE_SPACE)) {
 			// Search token in db that matches token with access_token provided
 			Tokens tokenSearch = tokensService.searchToken(access_token);
 			if (tokenSearch != null) {
 				Users user = usersService.getUserByToken(tokenSearch.getAccess_token());
 //				tokensService.isDeleteToken(tokenSearch);
 				tokensService.isDeleteTokenByUserId(user.getId());
-				rf.meta.id = 200;
-				rf.meta.message = "Logout success";
-				return Response.status(200).entity(rf).build();
+				rf.meta.id = Constants.CODE_200;
+				rf.meta.message = Constants.USER_LOGOUT_SUCCESS;
+				return Response.status(Constants.CODE_200).entity(rf).build();
 			}
 			else {
-				rf.meta.id = 9001;
-				rf.meta.message = "Error.";
-				return Response.status(9001).entity(rf).build();
+				rf.meta.id = Constants.CODE_9001;
+				rf.meta.message = Constants.ERROR_MESSAGE;
+				return Response.status(Constants.CODE_9001).entity(rf).build();
 			}	
 		}
 		else {
-			rf.meta.id = 9002;
-			rf.meta.message = "Missing token. Please login";
-			return Response.status(9002).entity(rf).build();
+			rf.meta.id = Constants.CODE_9002;
+			rf.meta.message = Constants.TOKEN_MISSING;
+			return Response.status(Constants.CODE_9002).entity(rf).build();
 		}			
 	}
 
@@ -200,15 +205,15 @@ public class UsersController
 
 		// Check whether token expired or not
 		if (tokensService.isCheckTokenValid(access_token) == false) {	
-			rf.meta.id = 1002;
-			rf.meta.message = "Access token has expired.";
-			return Response.status(1002).entity(rf).build();
+			rf.meta.id = Constants.CODE_1002;
+			rf.meta.message = Constants.TOKEN_EXPIRED;
+			return Response.status(Constants.CODE_1002).entity(rf).build();
 		}
 		else {
 			// Validate user's input
-			if (data.getUsername() != null && data.getUsername().matches(".*\\w.*") && 
-				data.getLastname() != null && data.getLastname().matches(".*\\w.*") &&
-				data.getFirstname() != null && data.getFirstname().matches(".*\\w.*")) {
+			if (data.getUsername() != null && data.getUsername().matches(Constants.REGEX_WHITE_SPACE) && 
+				data.getLastname() != null && data.getLastname().matches(Constants.REGEX_WHITE_SPACE) &&
+				data.getFirstname() != null && data.getFirstname().matches(Constants.REGEX_WHITE_SPACE)) {
 									
 				Users user = new Users();
 				user = usersService.getUserById(id);		
@@ -219,21 +224,21 @@ public class UsersController
 				user.setModified_at(Calendar.getInstance().getTime());
 					
 				if (usersService.isUpdateUserInfo(user) == true) {
-					rf.meta.id = 200;
-					rf.meta.message = "Update success.";
+					rf.meta.id = Constants.CODE_200;
+					rf.meta.message = Constants.USER_UPDATE_SUCCESS;
 					rf.data = user;
-					return Response.status(200).entity(rf).build();					
+					return Response.status(Constants.CODE_200).entity(rf).build();					
 				}
 				else {
-					rf.meta.id = 9001;
-					rf.meta.message = "Error.";
-					return Response.status(9001).entity(rf).build();
+					rf.meta.id = Constants.CODE_9001;
+					rf.meta.message = Constants.ERROR_MESSAGE;
+					return Response.status(Constants.CODE_9001).entity(rf).build();
 				}			
 			}
 			else {
-				rf.meta.id = 1001;
-				rf.meta.message = "Input failed.";
-				return Response.status(1001).entity(rf).build();
+				rf.meta.id = Constants.CODE_1001;
+				rf.meta.message = Constants.INPUT_FAILED;
+				return Response.status(Constants.CODE_1001).entity(rf).build();
 			}
 		}
 	}
@@ -247,15 +252,15 @@ public class UsersController
 		// Get user by id
 		Users user = usersService.getUserById(id);		
 		if (user != null) {
-			rf.meta.id = 200;
-			rf.meta.message = "Get user info success";
+			rf.meta.id = Constants.CODE_200;
+			rf.meta.message = Constants.USER_GET_USER_INFO_SUCCESS;
 			rf.data = user;
-			return Response.status(200).entity(rf).build();
+			return Response.status(Constants.CODE_200).entity(rf).build();
 		}
 		else {
-			rf.meta.id = 9001;
-			rf.meta.message = "Error.";
-			return Response.status(9001).entity(rf).build();
+			rf.meta.id = Constants.CODE_9001;
+			rf.meta.message = Constants.ERROR_MESSAGE;
+			return Response.status(Constants.CODE_9001).entity(rf).build();
 		}		
 	}
 		
@@ -267,12 +272,12 @@ public class UsersController
 									@FormParam("newPassword") String newPassword) 
 	{		
 		ResponseFormat rf = new ResponseFormat();
-		if (id == 0 || currentPassword == null || !currentPassword.matches(".*\\w.*") ||  
-			newPassword == null || !newPassword.matches(".*\\w.*")) {
+		if (id == 0 || currentPassword == null || !currentPassword.matches(Constants.REGEX_WHITE_SPACE) ||  
+			newPassword == null || !newPassword.matches(Constants.REGEX_WHITE_SPACE)) {
 			
-			rf.meta.id = 1001;
-			rf.meta.message = "Input failed.";
-			return Response.status(1001).entity(rf).build();
+			rf.meta.id = Constants.CODE_1001;
+			rf.meta.message = Constants.INPUT_FAILED;
+			return Response.status(Constants.CODE_1001).entity(rf).build();
 		}
 		else {
 			// Get user info by ID
@@ -297,21 +302,21 @@ public class UsersController
 							tokensService.isDeleteToken(item);
 						}								
 					}	
-					rf.meta.id = 200;
-					rf.meta.message = "Change password success.";
+					rf.meta.id = Constants.CODE_200;
+					rf.meta.message = Constants.USER_CHANGE_PASS_SUCCESS;
 					rf.data = user;
-					return Response.status(200).entity(rf).build();
+					return Response.status(Constants.CODE_200).entity(rf).build();
 				}
 				else {
-					rf.meta.id = 2007;
-					rf.meta.message = "Password id invalid.";
-					return Response.status(2007).entity(rf).build();
+					rf.meta.id = Constants.CODE_2007;
+					rf.meta.message = Constants.USER_PASS_INVALID;
+					return Response.status(Constants.CODE_2007).entity(rf).build();
 				}		
 			}
 			else {
-				rf.meta.id = 2012;
-				rf.meta.message = "User is not existed";
-				return Response.status(2012).entity(rf).build();
+				rf.meta.id = Constants.CODE_2012;
+				rf.meta.message = Constants.USER_NOT_EXIST;
+				return Response.status(Constants.CODE_2012).entity(rf).build();
 			}
 		}
 	}
@@ -323,25 +328,25 @@ public class UsersController
 	public Response searchUserByName(@PathParam("name") String name) 
 	{		
 		ResponseFormat rf = new ResponseFormat();
-		if (name == null || !name.matches(".*\\w.*")) {
-			rf.meta.id = 1001;
-			rf.meta.message = "Input failed.";
-			return Response.status(1001).entity(rf).build();
+		if (name == null || !name.matches(Constants.REGEX_WHITE_SPACE)) {
+			rf.meta.id = Constants.CODE_1001;
+			rf.meta.message = Constants.INPUT_FAILED;
+			return Response.status(Constants.CODE_1001).entity(rf).build();
 		}
 		
 		//Get list user searched by firstname, lastname
 		List<Users> listUser = usersService.getListUserByName(name);
 		
 		if (listUser != null  && listUser.size() != 0) {
-			rf.meta.id = 200;
-			rf.meta.message = "Search success.";
+			rf.meta.id = Constants.CODE_200;
+			rf.meta.message = Constants.USER_SEARCH_SUCCESS;
 			rf.data = listUser;
-			return Response.status(200).entity(rf).build();
+			return Response.status(Constants.CODE_200).entity(rf).build();
 		}
 		else {
-			rf.meta.id = 9001;
-			rf.meta.message = "Error.";
-			return Response.status(9001).entity(rf).build();
+			rf.meta.id = Constants.CODE_9001;
+			rf.meta.message = Constants.ERROR_MESSAGE;
+			return Response.status(Constants.CODE_9001).entity(rf).build();
 		}		
 	}
 }

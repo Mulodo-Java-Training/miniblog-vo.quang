@@ -16,7 +16,6 @@ import com.mulodo.miniblog.service.UsersService;
 @Service
 public class UsersServiceImpl implements UsersService 
 {
-
 	@Autowired
 	private UsersDao usersdao;
 	@Autowired
@@ -95,8 +94,7 @@ public class UsersServiceImpl implements UsersService
 	@Transactional
 	public boolean isLogin(String username, String password) 
 	{		
-		try {
-			
+		try {			
 			if (usersdao.getUserLogin(username, password) != null)
 				return true;
 			else
@@ -110,10 +108,19 @@ public class UsersServiceImpl implements UsersService
 
 	@Transactional
 	public Users getUserByUsername(String username) 
-	{		
-		return usersdao.getUserByUsername(username);
+	{	
+		try {
+			Users user = usersdao.getUserByUsername(username);
+			if ( user != null)
+				return user;
+			else
+				return null;
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}		
 	}
-
 	
 	@Override
 	public Users getUserById(int id) 

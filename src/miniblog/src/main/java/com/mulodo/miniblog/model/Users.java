@@ -21,8 +21,8 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 @Entity
 @Table(name="Users")
-public class Users implements Serializable {
-	
+public class Users implements Serializable 
+{	
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -74,10 +74,13 @@ public class Users implements Serializable {
 	@Transient
 	private String access_token;
 
-	public Users(){}
+	public Users()
+	{		
+	}
 	
 	public Users(int id, String username, String password, String firstname, String lastname, String email, 
-			String image, Date created_at, Date modified_at, String access_token) {
+			String image, Date created_at, Date modified_at, String access_token) 
+	{
 		this.id = id;
 		this.username = username;
 		this.password = password;
@@ -90,83 +93,103 @@ public class Users implements Serializable {
 		this.access_token = access_token;
 	}
 
-	public int getId() {
+	public int getId() 
+	{
 		return id;
 	}
 	
-	public void setId(int id) {
+	public void setId(int id) 
+	{
 		this.id = id;
 	}
 	
-	public String getUsername() {
+	public String getUsername() 
+	{
 		return username;
 	}
 	
-	public void setUsername(String username) {
+	public void setUsername(String username) 
+	{
 		this.username = username;
 	}
 	
-	public String getPassword() {
+	public String getPassword() 
+	{
 		return password;
 	}
 	
-	public void setPassword(String password) {
+	public void setPassword(String password) 
+	{
 		this.password = password;
 	}
 	
-	public String getLastname() {
+	public String getLastname() 
+	{
 		return lastname;
 	}
 	
-	public void setLastname(String lastname) {
+	public void setLastname(String lastname) 
+	{
 		this.lastname = lastname;
 	}
 	
-	public String getFirstname() {
+	public String getFirstname() 
+	{
 		return firstname;
 	}
 	
-	public void setFirstname(String firstname) {
+	public void setFirstname(String firstname) 
+	{
 		this.firstname = firstname;
 	}
 	
-	public String getEmail() {
+	public String getEmail() 
+	{
 		return email;
 	}
 	
-	public void setEmail(String email) {
+	public void setEmail(String email) 
+	{
 		this.email = email;
 	}
 	
-	public String getImage() {
+	public String getImage() 
+	{
 		return image;
 	}
 	
-	public void setImage(String image) {
+	public void setImage(String image) 
+	{
 		this.image = image;
 	}
 	
-	public Date getCreated_at() {
+	public Date getCreated_at() 
+	{
 		return created_at;
 	}
 	
-	public void setCreated_at(Date created_at) {
+	public void setCreated_at(Date created_at) 
+	{
 		this.created_at = created_at;
 	}
 	
-	public Date getModified_at() {
+	public Date getModified_at() 
+	{
 		return modified_at;
 	}
 	
-	public void setModified_at(Date modified_at) {
+	public void setModified_at(Date modified_at) 
+	{
 		this.modified_at = modified_at;
 	}
 	
-	public String getAccess_token() {
+	public String getAccess_token() 
+	{
 		return access_token;
 	}
 
-	public void setAccess_token(String access_token) {
+	public void setAccess_token(String access_token) 
+	{
 		this.access_token = access_token;
 	}
 

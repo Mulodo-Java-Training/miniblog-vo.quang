@@ -17,8 +17,8 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 @Entity
 @Table(name="Tokens")
-public class Tokens implements Serializable {
-
+public class Tokens implements Serializable 
+{
 	/**
 	 * 
 	 */
@@ -52,56 +52,65 @@ public class Tokens implements Serializable {
 	private Date expired;
 	
 	
-	public Tokens(){}	
+	public Tokens()
+	{	
+	}	
 	
-	public Tokens(int id, String access_token, Date created_at, Date expired) {
+	public Tokens(int id, String access_token, Date created_at, Date expired) 
+	{
 		this.id = id;
 		this.access_token = access_token;
 		this.created_at = created_at;
 		this.expired = expired;
 	}
 	
-	public int getUser_id() {
+	public int getUser_id() 
+	{
 		return user_id;
 	}
 
-	public void setUser_id(int user_id) {
+	public void setUser_id(int user_id) 
+	{
 		this.user_id = user_id;
 	}
 
-	public int getId() {
+	public int getId() 
+	{
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(int id) 
+	{
 		this.id = id;
 	}
 
-	public String getAccess_token() {
+	public String getAccess_token() 
+	{
 		return access_token;
 	}
 
-	public void setAccess_token(String access_token) {
+	public void setAccess_token(String access_token) 
+	{
 		this.access_token = access_token;
 	}
 
-	public Date getCreated_at() {
+	public Date getCreated_at() 
+	{
 		return created_at;
 	}
 
-	public void setCreated_at(Date created_at) {
+	public void setCreated_at(Date created_at) 
+	{
 		this.created_at = created_at;
 	}
 
-	public Date getExpired() {
+	public Date getExpired() 
+	{
 		return expired;
 	}
 
-	public void setExpired(Date expired) {
+	public void setExpired(Date expired) 
+	{
 		this.expired = expired;
-	}
-	
-	
-	
-		
+	}		
 }

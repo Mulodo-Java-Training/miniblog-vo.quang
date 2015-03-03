@@ -6,7 +6,6 @@ import static org.junit.Assert.assertTrue;
 import java.util.Date;
 import java.util.List;
 
-import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +30,7 @@ public class UsersServiceTest
 	@Test
 	public void usersTest()
 	{
-		// Register		
+		// Register	
 		Users user = new Users();
 		user.setUsername("testRegister");
 		user.setPassword("123456");
@@ -48,9 +47,8 @@ public class UsersServiceTest
 		assertTrue(usersService.register(user));
 		assertTrue(tokensService.isCreateToken(user));
 		// Delete token
-		tokensService.isDeleteTokenByUserId(user.getId());
-		
-		
+		tokensService.isDeleteTokenByUserId(user.getId());		
+				
 		// Login
 		LoginForm form = new LoginForm();
 		form.setUsername("testRegister");
@@ -58,7 +56,7 @@ public class UsersServiceTest
 		Users userLogin = new Users();
 		userLogin = usersService.getUserByUsername(form.getUsername());
 		assertTrue(tokensService.isCreateToken(userLogin));			
-		assertTrue(usersService.isLogin(userLogin.getUsername(), userLogin.getPassword()));
+		assertTrue(usersService.isLogin(userLogin.getUsername(), userLogin.getPassword()));	
 		
 		
 		// Change Password
@@ -68,8 +66,7 @@ public class UsersServiceTest
 		// Check changed password matches actual password
 		String passChange = Encryption.hashSHA256("abc123");
 		assertEquals(passChange, userLogin.getPassword());
-		
-		
+			
 		// Update User Info
 		// Check token expired
 		assertTrue(tokensService.isCheckTokenValid(userLogin.getAccess_token()));
@@ -88,7 +85,6 @@ public class UsersServiceTest
 		// Logout
 		assertTrue(tokensService.isDeleteTokenByUserId(userLogin.getId()));
 		
-								
 		// Get User Info
 		// Get userLogin info and assign to getUser1 obj
 		Users getUser1 = usersService.getUserById(userLogin.getId());
@@ -99,20 +95,20 @@ public class UsersServiceTest
 		assertEquals(userLogin.getLastname(), getUser1.getLastname());
 		assertEquals(userLogin.getFirstname(), getUser1.getFirstname());
 		assertEquals(userLogin.getEmail(), getUser1.getEmail());
-		assertEquals(userLogin.getCreated_at(), getUser1.getCreated_at());
-		
+											
 		// Search user by name				
 		String nameSearch = "test";
-		List<Users> listUser = usersService.getListUserByName(nameSearch);
+		List<Users> listUser = usersService.getListUserByName(nameSearch);			
 		// Check listuser contains user(s)
 		assertTrue(listUser.size() > 0);
-		
+														
 		// Delete user
-		//assertTrue(usersService.isDeleteUser("testUserUpdate"));
-						
+//		assertTrue(usersService.isDeleteUser("testUserUpdate"));						
 	}
 	
-	public void delete() {		
+	public void delete()
+	{
 		assertTrue(usersService.isDeleteUser("testUserUpdate"));
 	}
+	
 }

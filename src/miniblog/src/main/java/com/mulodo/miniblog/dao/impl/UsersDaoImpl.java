@@ -80,7 +80,6 @@ public class UsersDaoImpl implements UsersDao
 		cr.add(Restrictions.eq("password", password));
 		List<Users> listUser = cr.list();
 		if (listUser.size() == 1) {
-			session.close();
 			return listUser.get(0);
 		}
 		else {
