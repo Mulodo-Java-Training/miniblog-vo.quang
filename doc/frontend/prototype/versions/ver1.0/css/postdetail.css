@@ -1,0 +1,154 @@
+body {
+		background-color: #f5f5f5;
+	}
+
+	.group1 {
+		max-width: 900px;
+		height: 120px;
+	}
+
+	.miniblog {
+		max-width: 200px;
+		max-height: 65px; 
+		background-color: white;
+		color: rgb(41, 94, 33);
+		text-align: center;
+		font-size: 36px;
+		border: 3px solid #C0C0C0;
+		padding-left: 5px;
+	}
+
+	.logo-color {
+		color: #337ab7;
+	}
+
+	@media (max-width: 755px) {
+		.miniblog {
+			width: 180px;
+			height: 50px;
+			font-size: 28px;	
+		}
+
+		.group1 {
+			height: 110px;
+			width: auto;
+		}
+
+		.group2 {
+			height: 60px;
+			width: auto;
+		}
+
+		.latest-post {
+			font-size: 14px;
+		}	
+	}
+	.group2 {
+		max-width: 800px;
+		height: 50px;
+	}
+
+	.group3 {
+		max-width: 600px ;
+		height: auto;
+	}
+
+	.move-left {
+		margin-left: 173px;
+	}
+
+	#submit {
+		background-color: #E5E4E4;
+		color: white;
+		border: 1px solid #C0C0C0;		
+	}
+
+	.register {
+		display: inline;
+		padding-left: 20px;
+	}
+
+	a {
+		text-decoration: underline;
+		color: rgb(46, 100, 38);
+	}
+
+	.inline-block {
+		display: inline-block;
+	}
+
+	span {
+		color: rgb(46, 100, 38);
+	}
+
+	hr { 
+    display: block;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+    margin-left: auto;
+    margin-right: auto;
+    border-style: inset;
+    border-width: 1px;
+    max-width: 800px;
+	}
+
+	img {
+		width: 100px;
+	}	
+
+	.latest-post {
+		font-size: 20px;
+		margin-bottom: 5px;
+		padding-left: 30px;
+	}
+
+	.blog-main {
+		font-size: 18px;
+		line-height: 1.4;
+		margin-bottom: 10px;
+		max-width: 800px;
+	}
+
+	.blog-post-meta {
+		color: #999;
+	}
+
+	.justify {
+		margin-bottom: -5px;
+		margin-top: -7px;
+	}
+
+	.remove-underline {
+		text-decoration: none;
+	}
+
+	.nav-area {
+		background-color: #f5f5f5;
+		border: none;
+	}
+
+	.navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:focus {
+		color: rgb(46, 100, 38);
+	}
+
+	.navbar-default .navbar-nav > li > a {
+		color: rgb(162, 205, 156);
+	}
+
+	.move-down {
+		margin-top: 2px;
+	}
+
+	.comment-content {
+		/*margin-top: 10px;*/
+		margin-left: 10px;
+	}
+
+	.img-small {
+		width: 50px;
+		height: 50px;
+	}
+
+	.img-padd-left {
+		padding-left: 20px;
+	}
