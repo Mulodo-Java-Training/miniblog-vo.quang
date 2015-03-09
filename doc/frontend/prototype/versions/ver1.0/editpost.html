@@ -31,6 +31,10 @@
 		padding-left: 5px;
 	}
 
+	.logo-color {
+		color: #337ab7;
+	}
+
 	@media (max-width: 755px) {
 		.miniblog {
 			width: 180px;
@@ -62,7 +66,7 @@
 		height: auto;
 	}
 
-	.move-left {
+	.move-right{
 		padding-left: 15px;
 	}
 
@@ -161,12 +165,14 @@
 	<div class="container">
 		<div class="group1">
 			<div classs="row">
-				<div class="col-xs-3 col-sm-3 col-md-3 miniblog">Mini Blog</div>
+				<div class="col-xs-3 col-sm-3 col-md-3 miniblog">
+					<a class="remove-underline" href="home.html"><span class="logo-color">Mini Blog</span></a>
+				</div>
 				<div class="col-xs-3 col-sm-3 col-md-3 pull-right">	
-					<span>Hi <a href="#">Quang</a><span>
-					<span><a href="#">Logout</a></span>
+					<span>Hi <a href="updateuser.html">Quang</a><span>
+					<span><a href="welcome.html">Logout</a></span>
 					<br/>
-					<span><a href="#">Change password</a></span>	
+					<span><a href="changepass.html">Change password</a></span>	
 				</div>				
 			</div>
 		</div>
@@ -184,10 +190,10 @@
 					</div>
 					<div class="collapse navbar-collapse  mynavbar-content">
 						<ul class=" navbar-nav breadcrumb">
-							<li><a class="remove-underline" href="#">Home</a></li>
-							<li><a class="remove-underline" href="#">New post</a></li>
-							<li><a class="remove-underline" href="#">User's posts</a></li>
-							<li><a class="remove-underline" href="#">All posts</a></li>
+							<li><a class="remove-underline" href="home.html">Home</a></li>
+							<li><a class="remove-underline" href="addpost.html">New post</a></li>
+							<li><a class="remove-underline" href="userpost.html">User's posts</a></li>
+							<li><a class="remove-underline" href="allpost.html">All posts</a></li>
 						</ul>
 					</div>
 				</div>
@@ -236,7 +242,7 @@
 					<div class="col-xs-9 inline-block  move-down">
 						<textarea class="form-control" rows="5" id="content">Lorem Ipsum is simply dummy text of the print …Lorem Ipsum is simply dummy text of the print … Lorem Ipsum is simply dummy text of the print … Lorem Ipsum is simply dummy text of the print …Lorem Ipsum is simply dummy text of the print … Lorem Ipsum is simply dummy text of the print … Lorem Ipsum is simply dummy text of the print … Lorem Ipsum is simply dummy text of the print … </textarea>
 					</div>
-					<div class="col-xs-offset-3 inline-block move-down move-left">
+					<div class="col-xs-offset-3 inline-block move-down move-right">
 						<button id="submit" type="submit" class="btn btn-default">Edit</button>
 					</div>
 					<div class="inline-block">

@@ -32,6 +32,10 @@
 		text-align: center;
 	}
 
+	.logo-color {
+		color: #337ab7;
+	}
+
 	@media (max-width: 755px) {
 		.miniblog {
 			width: 180px;
@@ -44,10 +48,6 @@
 			width: auto;
 		}
 
-		.group3 {
-			width: auto;
-		}
-
 		h2 {
 			font-size: 22px;
 		}
@@ -55,13 +55,12 @@
 
 	@media (max-width: 520px) {
 		h2 {
-			font-size: 15px;
+			font-size: 20px;
 		}
 	}
 
 	.group3 {
 		max-width: 600px;
-		height: auto;
 	}
 
 	a {
@@ -122,8 +121,8 @@
 		height:	auto;
 	}
 
-	.move-left {
-		margin-left: 135px;
+	.move-right {
+		padding-left: 33px;
 	}
 
 	.remove-underline {
@@ -147,15 +146,17 @@
 	<div class="container">
 		<div class="group1">
 			<div classs="row">
-				<div class="col-xs-3 col-sm-3 col-md-3 miniblog">Mini Blog</div>
+				<div class="col-xs-3 col-sm-3 col-md-3 miniblog">
+					<a class="remove-underline" href="home.html"><span class="logo-color">Mini Blog</span></a>
+				</div>
 				<div class="col-xs-3 col-sm-3 col-md-3 pull-right">	
-					<span>Hi <a href="#">Quang</a><span>
-					<span><a href="#">Logout</a></span>
+					<span>Hi <a href="updateuser.html">Quang</a><span>
+					<span><a href="welcome.html">Logout</a></span>
 				</div>				
 			</div>
 		</div>
 		<!-- Navigator -->
-		<div class="navbar navbar-default nav-area">
+		<div class="group2 navbar navbar-default nav-area">
 			<div class="container-fluid">
 				<div class="navbar-header">
 					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".mynavbar-content">
@@ -167,7 +168,7 @@
 				</div>
 				<div class="collapse navbar-collapse mynavbar-content">
 					<ul class=" navbar-nav breadcrumb">
-						<li><a class="remove-underline" href="#">Welcome</a></li>
+						<li><a class="remove-underline" href="welcome.html">Welcome</a></li>
 					</ul>
 				</div>
 			</div>
@@ -182,18 +183,18 @@
 				</div>
 			</div>
 			<div class="row">
-				<div class="col-xs-5 col-xs-offset-3">
+				<div class="col-xs-5 col-xs-offset-2">
 					(Error message goes here)
 					<br/>
 					<br/>
 				</div>
 			</div>
-			<div class="row col-xs-offset-1">
-				<form id="frm-change-pass" class="form-group ">
+			<div class="row">
+				<form id="frm-change-pass" class="form-group">
 					<div class="col-xs-4 inline-block move-down">
 						<span>Username</span>
 					</div>
-					<div class="col-xs-8 col-sm-8 col-md-8 inline-block  move-down">
+					<div class="col-xs-8 inline-block  move-down">
 						<input type="text" class="form-control" placeholder="Enter username..." required />
 					</div>
 					<div class="col-xs-4  inline-block move-down">
@@ -226,10 +227,10 @@
 					<div class="col-xs-8  inline-block  move-down">
 						<input type="password" class="form-control" placeholder="Enter confirm pass..." required />
 					</div>
-					<div class="col-xs-4  inline-block move-down">
-						<span>Avatar</span>
+					<div class="col-xs-4 inline-block move-down">
+						<span>Image</span>
 					</div>
-					<div class="col-xs-8  inline-block  move-down">
+					<div class="col-xs-8 inline-block  move-down">
 						<div class="row">
 							<div class="col-xs-10">
 								<input type="text" class="form-control" placeholder="url..." />
@@ -240,7 +241,7 @@
 						</div>
 					</div>
 
-					<div class="inline-block move-left ">
+					<div class="col-xs-offset-3 inline-block move-right">
 						<button type="submit" class="btn btn-default">OK</button>
 					</div>
 					<div class="inline-block">
