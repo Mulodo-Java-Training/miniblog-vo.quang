@@ -36,7 +36,7 @@ public class UsersServiceImpl implements UsersService
 			
 				user.getLastname() != null && !user.getLastname().isEmpty() && 
 				user.getFirstname() != null && !user.getFirstname().isEmpty() && 
-				user.getFirstname().matches("[a-zA-Z0-9 ]*") &&
+				user.getFirstname().matches("[a-zA-Z0-9 ]*") && user.getLastname().matches("[a-zA-Z0-9 ]*") &&
 			
 				user.getEmail() != null && !user.getFirstname().isEmpty() &&
 				user.getEmail().matches("^[\\w-_+]*[\\.]?[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$"))

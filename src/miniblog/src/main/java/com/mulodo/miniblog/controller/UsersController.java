@@ -162,11 +162,11 @@ public class UsersController
 		}
 	}
 
-	@PUT
+	@POST
 	@Path("logout")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-	public Response logout(@FormParam("access_token") String access_token ) 
+	public Response logout(@HeaderParam("access_token") String access_token ) 
 	{		
 		ResponseFormat rf = new ResponseFormat();
 		

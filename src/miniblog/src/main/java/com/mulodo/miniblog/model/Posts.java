@@ -13,6 +13,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.annotations.Type;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -26,7 +27,7 @@ public class Posts implements Serializable
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
+	
 	@NotEmpty
 	@NotNull
 	@Column(name="user_id", nullable = false)
@@ -51,17 +52,25 @@ public class Posts implements Serializable
 	@Column(name="content", nullable = false)
 	private String content;
 	
+	@JsonIgnore
 	@NotEmpty
 	@NotNull
 	@Column(name="created_at", nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date created_at;
 	
+	@SuppressWarnings("unused")
+	private String created_at_fm; 
+	
+	@JsonIgnore
 	@NotEmpty
 	@NotNull
 	@Column(name="modified_at", nullable = false)
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date modified_at;
+	
+	@SuppressWarnings("unused")
+	private String modified_at_fm;
 	
 	@NotEmpty
 	@NotNull
@@ -180,7 +189,24 @@ public class Posts implements Serializable
 	{
 		this.user_id = user_id;
 	}
-	
-	
+
+	@SuppressWarnings("deprecation")
+	public String getCreated_at_fm() {
+		return created_at.toGMTString();
+	}
+
+	public void setCreated_at_fm(String created_at_fm) {
+		this.created_at_fm = created_at_fm;
+	}
+
+	@SuppressWarnings("deprecation")
+	public String getModified_at_fm() {
+		return modified_at.toGMTString();
+	}
+
+	public void setModified_at_fm(String modified_at_fm) {
+		this.modified_at_fm = modified_at_fm;
+	}
+
 	
 }

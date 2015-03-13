@@ -13,6 +13,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.validator.constraints.NotEmpty;
 
 @Entity
@@ -39,18 +40,25 @@ public class Tokens implements Serializable
 	@Column(name="access_token", unique=true)
 	private String access_token;
 	
+	@JsonIgnore
 	@NotEmpty
 	@NotNull
 	@Column(name="created_at")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date created_at;
+		
+	@SuppressWarnings("unused")
+	private String created_at_fm;
 	
+	@JsonIgnore
 	@NotEmpty
 	@NotNull
 	@Column(name="expired")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date expired;
 	
+	@SuppressWarnings("unused")
+	private String expired_fm;
 	
 	public Tokens()
 	{	
@@ -112,5 +120,23 @@ public class Tokens implements Serializable
 	public void setExpired(Date expired) 
 	{
 		this.expired = expired;
+	}
+
+	@SuppressWarnings("deprecation")
+	public String getCreated_at_fm() {
+		return created_at.toGMTString();
+	}
+
+	public void setCreated_at_fm(String created_at_fm) {
+		this.created_at_fm = created_at_fm;
+	}
+
+	@SuppressWarnings("deprecation")
+	public String getExpired_fm() {
+		return expired.toGMTString();
+	}
+
+	public void setExpired_fm(String expired_fm) {
+		this.expired_fm = expired_fm;
 	}		
 }

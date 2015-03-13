@@ -40,6 +40,7 @@ public class Constants
 	public static final String POST_DELETE_SUCCESS = "Post deleted success";
 	public static final String POST_GETALL_SUCCESS = "Get all posts success";
 	public static final String POST_GET_FOR_USER_SUCCESS = "Post for user searched success";
+	public static final String POST_GET_POST_BY_ID_SUCCESS = "Get post by id success";
 		
 	public static final String COMMENT_ADD_SUCCESS = "Comment created success";
 	public static final String COMMENT_EDIT_SUCCESS = "Comment edited success";

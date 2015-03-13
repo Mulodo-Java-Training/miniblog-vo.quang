@@ -445,4 +445,28 @@ public class PostsController
 			return Response.status(Constants.CODE_9002).entity(rf).build();
 		}	
 	}
+	
+	@GET
+	@Path("{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getPostById(@HeaderParam("access_token") String access_token, @PathParam("id") int id) 
+	{
+		ResponseFormat rf = new ResponseFormat();
+		
+		// Get user by id
+		Posts post = postsService.getPostById(id);		
+		if (post != null) {
+			rf.meta.id = Constants.CODE_200;
+			rf.meta.message = Constants.POST_GET_POST_BY_ID_SUCCESS;
+			rf.data = post;
+			return Response.status(Constants.CODE_200).entity(rf).build();
+		}
+		else {
+			rf.meta.id = Constants.CODE_2504;
+			rf.meta.message = Constants.POST_NOT_EXISTED;
+			return Response.status(Constants.CODE_2504).entity(rf).build();
+		}		
+		
+	}
+	
 }

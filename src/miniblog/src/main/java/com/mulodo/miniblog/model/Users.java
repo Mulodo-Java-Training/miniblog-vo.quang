@@ -16,6 +16,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.validator.constraints.NotEmpty;
 
 
@@ -61,15 +62,23 @@ public class Users implements Serializable
 	@Column(name="image")
 	private String image;
 	
+	@JsonIgnore
 	@NotNull
 	@Column(name="created_at")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date created_at;
 	
+	@SuppressWarnings("unused")
+	private String created_at_fm;
+	
+	@JsonIgnore
 	@NotNull
 	@Column(name="modified_at")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date modified_at;
+	
+	@SuppressWarnings("unused")
+	private String modified_at_fm;
 	
 	@Transient
 	private String access_token;
@@ -191,6 +200,24 @@ public class Users implements Serializable
 	public void setAccess_token(String access_token) 
 	{
 		this.access_token = access_token;
+	}
+
+	@SuppressWarnings("deprecation")
+	public String getCreated_at_fm() {
+		return created_at.toGMTString();
+	}
+
+	public void setCreated_at_fm(String created_at_fm) {
+		this.created_at_fm = created_at_fm;
+	}
+
+	@SuppressWarnings("deprecation")
+	public String getModified_at_fm() {
+		return modified_at.toGMTString();
+	}
+
+	public void setModified_at_fm(String modified_at_fm) {
+		this.modified_at_fm = modified_at_fm;
 	}
 
 }

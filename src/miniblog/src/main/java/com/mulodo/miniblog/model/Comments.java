@@ -12,6 +12,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 @Entity
 @Table(name="Comments")
 public class Comments implements Serializable 
@@ -35,13 +37,21 @@ public class Comments implements Serializable
 	@Column(name="content", nullable=false)
 	private String content;
 	
+	@JsonIgnore
 	@Column(name="created_at", nullable=false)
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date created_at;
 	
+	@SuppressWarnings("unused")
+	private String created_at_fm;
+	
+	@JsonIgnore
 	@Column(name="modified_at", nullable=false)
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date modified_at;
+	
+	@SuppressWarnings("unused")
+	private String modified_at_fm;
 	
 	public Comments()
 	{		
@@ -113,5 +123,23 @@ public class Comments implements Serializable
 	public void setPost_id(int post_id) 
 	{
 		this.post_id = post_id;
+	}
+
+	@SuppressWarnings("deprecation")
+	public String getCreated_at_fm() {
+		return created_at.toGMTString();
+	}
+
+	public void setCreated_at_fm(String created_at_fm) {
+		this.created_at_fm = created_at_fm;
+	}
+
+	@SuppressWarnings("deprecation")
+	public String getModified_at_fm() {
+		return modified_at.toGMTString();
+	}
+
+	public void setModified_at_fm(String modified_at_fm) {
+		this.modified_at_fm = modified_at_fm;
 	}	
 }
