@@ -94,5 +94,11 @@ public class PostsServiceImpleTest implements PostsService
 			return null;
 	}
 
+	@Override
+	public List<Posts> get10LatestPost() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
 

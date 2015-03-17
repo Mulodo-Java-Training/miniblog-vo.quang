@@ -337,17 +337,17 @@ public class UsersController
 		//Get list user searched by firstname, lastname
 		List<Users> listUser = usersService.getListUserByName(name);
 		
-		if (listUser != null  && listUser.size() != 0) {
+//		if (listUser != null  && listUser.size() != 0) {
 			rf.meta.id = Constants.CODE_200;
 			rf.meta.message = Constants.USER_SEARCH_SUCCESS;
 			rf.data = listUser;
 			return Response.status(Constants.CODE_200).entity(rf).build();
-		}
-		else {
-			rf.meta.id = Constants.CODE_9001;
-			rf.meta.message = Constants.ERROR_MESSAGE;
-			return Response.status(Constants.CODE_9001).entity(rf).build();
-		}		
+//		}
+//		else {
+//			rf.meta.id = Constants.CODE_9001;
+//			rf.meta.message = Constants.ERROR_MESSAGE;
+//			return Response.status(Constants.CODE_9001).entity(rf).build();
+//		}		
 	}
 }
 

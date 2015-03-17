@@ -12,5 +12,6 @@ public interface PostsService
 	public boolean deletePost(int id);
 	public List<Posts> getAllPosts();
 	public List<Posts> getPostsForUser(int user_id);
+	public List<Posts> get10LatestPost();
 	
 }

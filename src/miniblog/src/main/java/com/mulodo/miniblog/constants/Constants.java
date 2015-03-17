@@ -41,12 +41,14 @@ public class Constants
 	public static final String POST_GETALL_SUCCESS = "Get all posts success";
 	public static final String POST_GET_FOR_USER_SUCCESS = "Post for user searched success";
 	public static final String POST_GET_POST_BY_ID_SUCCESS = "Get post by id success";
+	public static final String POST_GET_LATEST_SUCCESS = "Get 10 latest posts success";
 		
 	public static final String COMMENT_ADD_SUCCESS = "Comment created success";
 	public static final String COMMENT_EDIT_SUCCESS = "Comment edited success";
 	public static final String COMMENT_DELETE_SUCCESS = "Comment deleted success";
 	public static final String COMMENT_GET_FOR_POST_SUCCESS = "Get comments for post success";
 	public static final String COMMENT_GET_FOR_USER_SUCCESS = "Get comments for user success";
+	public static final String COMMENT_GET_BY_ID_SUCCESS = "Get comment by Id success";
 	
 	
 	public static final String USER_EMAIL_EXISTED = "Email is already existed";

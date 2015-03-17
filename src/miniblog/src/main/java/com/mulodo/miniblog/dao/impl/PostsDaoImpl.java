@@ -3,6 +3,7 @@ package com.mulodo.miniblog.dao.impl;
 import java.util.List;
 
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -83,6 +84,19 @@ public class PostsDaoImpl implements PostsDao
 		Transaction trans = session.beginTransaction();
 		Criteria cr = session.createCriteria(Posts.class);
 		List<Posts> listPost = cr.add(Restrictions.eq("user_id", user_id)).list();
+		trans.commit();
+		return listPost;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Posts> get10LatestPost() 
+	{
+		Session session = sessionFactory.getCurrentSession();
+		Transaction trans = session.beginTransaction();
+		String queryStr = "from Posts order by created_at desc";
+		Query query = session.createQuery(queryStr).setMaxResults(10);
+		List<Posts> listPost = query.list();
 		trans.commit();
 		return listPost;
 	}	

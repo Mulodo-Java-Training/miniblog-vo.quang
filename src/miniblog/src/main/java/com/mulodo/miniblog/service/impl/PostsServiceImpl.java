@@ -71,5 +71,15 @@ public class PostsServiceImpl implements PostsService
 		else
 			return null;
 	}
+
+	@Override
+	public List<Posts> get10LatestPost() 
+	{
+		List<Posts> listPost = postsdao.get10LatestPost();
+		if (listPost != null)
+			return listPost;
+		else
+			return null;
+	}
 }
 

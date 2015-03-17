@@ -105,8 +105,12 @@ public class UsersDaoImpl implements UsersDao
 		Session session = sessionFactory.getCurrentSession();
 		Transaction trans = session.beginTransaction();
 		Criteria cr = session.createCriteria(Users.class);
-		List<Users> listUser = cr.add(Restrictions.or(Restrictions.ilike("firstname", rename), 
-				Restrictions.ilike("lastname", rename))).list();				
+//		List<Users> listUser = cr.add(Restrictions.or(Restrictions.ilike("firstname", rename), 
+//				Restrictions.ilike("lastname", rename))).list();
+		List<Users> listUser = cr.add(Restrictions.disjunction()
+		        .add(Restrictions.ilike("firstname", rename))
+		        .add(Restrictions.ilike("lastname", rename))
+		        .add(Restrictions.ilike("username", rename))).list();
 		trans.commit();
 		return listUser;
 	}

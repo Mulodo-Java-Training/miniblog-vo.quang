@@ -36,9 +36,32 @@
   p:location="/WEB-INF/jdbc.properties">
   </bean>
 
- <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+ <!-- <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
   destroy-method="close" p:driverClassName="${jdbc.driverClassName}"
-  p:url="${jdbc.databaseurl}" p:username="${jdbc.username}" p:password="${jdbc.password}" />
+  p:url="${jdbc.databaseurl}" p:username="${jdbc.username}" p:password="${jdbc.password}" /> -->
+
+<bean id="dataSource" destroy-method="close"
+  		class="org.apache.commons.dbcp.BasicDataSource">
+    	<property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+    	<property name="url" value="jdbc:mysql://192.168.56.2:3306/miniblog"/>
+    	<property name="username" value="root"/>
+    	<property name="password" value="pass"/>
+    	
+    	<!-- <property name="initialSize" value="3"/> -->
+       	<property name="maxActive" value="40"/>
+       	<property name="maxIdle" value="25"/>
+       	<property name="minIdle" value="6"/>
+       	
+    	<property name="testWhileIdle" value="true"/>
+       	<property name="timeBetweenEvictionRunsMillis" value="30000"/>
+       	<property name="minEvictableIdleTimeMillis" value="45000"/>
+       	
+       	<property name="removeAbandoned" value="true"/>
+    	<property name="removeAbandonedTimeout" value="50"/>
+
+    	<!-- <property name="validationQuery" value="SELECT 1"/> -->
+    	<!-- <property name="validationQueryTimeout" value="60"/> -->
+	</bean>
 
 
  <bean id="sessionFactory"

@@ -2,6 +2,8 @@
 <%@ page session="false" %>
 <html>
 <head>
+<link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+
 	<title>Home</title>
 </head>
 <body>

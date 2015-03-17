@@ -287,17 +287,17 @@ public class CommentsController
 		if (post != null) {
 			List<Comments> listComment = commentsService.getCommentsByPostId(post_id);
 			// Check whether post have comment(s) or not
-			if (listComment != null) {
+//			if (listComment != null) {
 				rf.meta.id = Constants.CODE_200;
 				rf.meta.message = Constants.COMMENT_GET_FOR_POST_SUCCESS;
 				rf.data = listComment;
 				return Response.status(Constants.CODE_200).entity(rf).build();
-			}
-			else {
-				rf.meta.id = Constants.CODE_3005;
-				rf.meta.message = Constants.COMMENT_GET_FOR_POST_FAILED;
-				return Response.status(Constants.CODE_3005).entity(rf).build();
-			}			
+//				}
+//			else {
+//				rf.meta.id = Constants.CODE_3005;
+//				rf.meta.message = Constants.COMMENT_GET_FOR_POST_FAILED;
+//				return Response.status(Constants.CODE_3005).entity(rf).build();
+//			}			
 		}
 		else {
 			rf.meta.id = Constants.CODE_2504;
@@ -352,5 +352,19 @@ public class CommentsController
 			return Response.status(Constants.CODE_9002).entity(rf).build();
 		}
 		
-	}						
+	}
+	
+	@GET
+	@Path("comments/getcommentbyid/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getCommentById(@PathParam("id") int id)
+	{
+		ResponseFormat rf = new ResponseFormat();
+		Comments cmt = commentsService.getComment(id);
+		rf.meta.id = Constants.CODE_200;
+		rf.meta.message = Constants.COMMENT_GET_BY_ID_SUCCESS;
+		rf.data = cmt;
+		return Response.status(Constants.CODE_200).entity(rf).build();
+
+	}
 }

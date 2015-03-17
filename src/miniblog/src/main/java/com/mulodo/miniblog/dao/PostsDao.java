@@ -12,4 +12,5 @@ public interface PostsDao
 	public boolean isDeletePost(int id);
 	public List<Posts> getAllPost();
 	public List<Posts> getPostByUserId(int user_id);
+	public List<Posts> get10LatestPost();
 }

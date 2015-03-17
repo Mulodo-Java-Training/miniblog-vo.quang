@@ -46,10 +46,12 @@ public class PostsController
 		ResponseFormat rf = new ResponseFormat();
 		
 		// Check input
-		if (data.getTitle() != null && data.getTitle().matches(Constants.REGEX_WHITE_SPACE) && 
-			data.getDescription() != null && data.getDescription().matches(Constants.REGEX_WHITE_SPACE) &&
-			data.getContent() != null && data.getContent().matches(Constants.REGEX_WHITE_SPACE)) {
-						
+//		if (data.getTitle() != null && data.getTitle().matches(Constants.REGEX_WHITE_SPACE) && 
+//			data.getDescription() != null && data.getDescription().matches(Constants.REGEX_WHITE_SPACE) &&
+//			data.getContent() != null && data.getContent().matches(Constants.REGEX_WHITE_SPACE)) {
+		if (data.getTitle() != null &&  !data.getTitle().isEmpty() &&
+				data.getDescription() != null  && !data.getDescription().isEmpty() &&
+				data.getContent() != null && !data.getContent().isEmpty()) {		
 			Posts post = new Posts();
 			post.setTitle(data.getTitle());
 			post.setDescription(data.getDescription());
@@ -247,9 +249,9 @@ public class PostsController
 		// Check post existed
 		if (post != null) {
 			// Check input
-			if (data.getTitle() != null && data.getTitle().matches(Constants.REGEX_WHITE_SPACE) &&
-				data.getDescription() != null && data.getDescription().matches(Constants.REGEX_WHITE_SPACE) &&
-				data.getContent() != null && data.getContent().matches(Constants.REGEX_WHITE_SPACE)) {
+			if (data.getTitle() != null && !data.getTitle().isEmpty() &&
+				data.getDescription() != null && !data.getDescription().isEmpty() &&
+				data.getContent() != null && !data.getContent().isEmpty()) {
 				
 				// Check token null
 				if (access_token != null) {
@@ -467,6 +469,27 @@ public class PostsController
 			return Response.status(Constants.CODE_2504).entity(rf).build();
 		}		
 		
+	}
+	
+	@GET
+	@Path("getlatestpost")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getLatestPost() 
+	{
+		ResponseFormat rf= new ResponseFormat();
+		
+		List<Posts> listPost = postsService.get10LatestPost();
+		if (listPost != null) {
+			rf.meta.id = Constants.CODE_200;
+			rf.meta.message = Constants.POST_GET_LATEST_SUCCESS;
+			rf.data = listPost;
+			return Response.status(Constants.CODE_200).entity(rf).build();
+		}
+		else {
+			rf.meta.id = Constants.CODE_9001;
+			rf.meta.message = Constants.ERROR_MESSAGE;
+			return Response.status(Constants.CODE_9001).entity(rf).build();
+		}
 	}
 	
 }
