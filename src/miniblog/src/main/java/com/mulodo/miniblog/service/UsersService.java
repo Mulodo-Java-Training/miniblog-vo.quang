@@ -13,8 +13,9 @@ public interface UsersService
 	public boolean isLogin(String username, String password);
 	public Users getUserByUsername(String username);
 	public Users getUserById(int id);
-	public boolean isUpdateUserInfo (Users user);
+	public boolean isUpdateUserInfo(Users user);
 	public List<Users> getListUserByName(String name);
 	public Users getUserByToken(String access_token);
+	public Users getUserByUserId(int user_id);
 	public boolean isDeleteUser(String username);
 }

@@ -23,7 +23,7 @@ public class UsersDaoImpl implements UsersDao
 	@Override
 	public void addNewUser(Users user) 
 	{		
-		Session session = sessionFactory.openSession();
+		Session session = sessionFactory.getCurrentSession();
 		Transaction trans = session.beginTransaction();
 		session.save(user);
 		trans.commit();	 
@@ -32,7 +32,7 @@ public class UsersDaoImpl implements UsersDao
 	@Override
 	public Users getUserById(int id) 
 	{				
-		Session session = sessionFactory.openSession();
+		Session session = sessionFactory.getCurrentSession();
 		Transaction trans = session.beginTransaction();
 		Users user = (Users) session.get(Users.class,id);
 		trans.commit();	
@@ -43,7 +43,7 @@ public class UsersDaoImpl implements UsersDao
 	@Override
 	public Users getUserByUsername(String username) 
 	{		
-		Session session = sessionFactory.openSession();
+		Session session = sessionFactory.getCurrentSession();
 		Transaction trans = session.beginTransaction();
 		Criteria cr = session.createCriteria(Users.class);
 		cr.add(Restrictions.eq("username", username));
@@ -58,7 +58,7 @@ public class UsersDaoImpl implements UsersDao
 	@Override
 	public Users get_user_by_email(String email) 
 	{		
-		Session session = sessionFactory.openSession();
+		Session session = sessionFactory.getCurrentSession();
 		Transaction trans = session.beginTransaction();
 		Criteria cr = session.createCriteria(Users.class);
 		cr.add(Restrictions.eq("email", email));
@@ -73,7 +73,7 @@ public class UsersDaoImpl implements UsersDao
 	@Override
 	public Users getUserLogin(String username, String password) 
 	{		
-		Session session = sessionFactory.openSession();
+		Session session = sessionFactory.getCurrentSession();
 		Transaction trans = session.beginTransaction();
 		Criteria cr = session.createCriteria(Users.class);
 		cr.add(Restrictions.eq("username", username));
@@ -146,5 +146,19 @@ public class UsersDaoImpl implements UsersDao
 		session.delete(user);
 		trans.commit();
 		return true;
+	}
+
+	@SuppressWarnings({ "unchecked", "unused" })
+	@Override
+	public Users getUserByUserId(int user_id) 
+	{
+		Session session = sessionFactory.getCurrentSession();
+		Transaction trans = session.beginTransaction();
+		Criteria cr = session.createCriteria(Users.class);
+		List<Users> listUser = cr.add(Restrictions.eq("id", user_id)).list();
+		if (listUser.size() == 1)
+			return listUser.get(0);
+		else
+			return null;
 	}
 }

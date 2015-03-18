@@ -62,7 +62,7 @@ public class PostsServiceTest
 		post.setContent("TestCreatePost");
 		post.setCreated_at(new Date());
 		post.setModified_at(new Date());
-		post.setUser_id(userLogin.getId());
+		post.getUser().setId(userLogin.getId());
 				
 		assertTrue(postsService.createPost(post));
 		Posts actual = postsService.getPostById(post.getId());
@@ -109,11 +109,11 @@ public class PostsServiceTest
 		
 		
 		// Get all post for user
-		List<Posts> listPostUser = postsService.getPostsForUser(post.getUser_id());
+		List<Posts> listPostUser = postsService.getPostsForUser(post.getUser());
 		assertTrue(listPostUser.size() > 0);
 		// Check posts belong to one user
 		for (Posts p : listPostUser) {
-			assertEquals(p.getUser_id(), post.getUser_id());
+			assertEquals(p.getUser().getId(), post.getUser().getId());
 		}					
 	}
 }

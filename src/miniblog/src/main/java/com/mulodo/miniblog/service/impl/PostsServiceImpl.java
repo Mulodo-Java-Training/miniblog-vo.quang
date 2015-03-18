@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.mulodo.miniblog.dao.PostsDao;
 import com.mulodo.miniblog.model.Posts;
+import com.mulodo.miniblog.model.Users;
 import com.mulodo.miniblog.service.PostsService;
 
 @Service
@@ -63,9 +64,9 @@ public class PostsServiceImpl implements PostsService
 	}
 
 	@Override
-	public List<Posts> getPostsForUser(int user_id) 
+	public List<Posts> getPostsForUser(Users user) 
 	{
-		List<Posts> listPost = postsdao.getPostByUserId(user_id);
+		List<Posts> listPost = postsdao.getPostByUserId(user);
 		if (listPost != null)
 			return listPost;
 		else

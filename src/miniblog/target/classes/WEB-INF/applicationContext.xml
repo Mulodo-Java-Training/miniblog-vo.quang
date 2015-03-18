@@ -63,9 +63,9 @@
     	<!-- <property name="validationQueryTimeout" value="60"/> -->
 	</bean>
 
-
+ <!-- class="org.springframework.orm.hibernate3.LocalSessionFactoryBean"> -->
  <bean id="sessionFactory"
-  class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+ class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
   <property name="dataSource" ref="dataSource" />
   <property name="configLocation">
    <value>classpath:hibernate.cfg.xml</value>
@@ -82,10 +82,11 @@
   </property>
  </bean>
 
+<!-- class="org.springframework.orm.hibernate3.HibernateTransactionManager"> -->
  <tx:annotation-driven />
  <bean id="transactionManager"
-  class="org.springframework.orm.hibernate3.HibernateTransactionManager">
-  <property name="sessionFactory" ref="sessionFactory" />
+  class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+  <property name="dataSource" ref="dataSource" />
  </bean>
 
 		

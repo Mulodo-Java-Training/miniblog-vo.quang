@@ -32,6 +32,7 @@ public class Constants
 	public static final String USER_GET_USER_INFO_SUCCESS = "Get user's info sucess";
 	public static final String USER_CHANGE_PASS_SUCCESS = "Change password success";
 	public static final String USER_SEARCH_SUCCESS = "Search user success";
+	public static final String USER_GET_USER_BY_USERID = "Get user by userId success";
 	
 	public static final String POST_CREATE_SUCCESS = "New post created success";
 	public static final String POST_ACTIVE_SUCCESS = "Active post status success";

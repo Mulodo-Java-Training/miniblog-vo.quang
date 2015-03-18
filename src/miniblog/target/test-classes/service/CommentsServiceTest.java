@@ -57,7 +57,7 @@ public class CommentsServiceTest
 		post.setContent("TestPost");
 		post.setCreated_at(new Date());
 		post.setModified_at(new Date());
-		post.setUser_id(userLogin.getId());
+		post.getUser().setId(userLogin.getId());
 		postsService.createPost(post);
 		
 	}

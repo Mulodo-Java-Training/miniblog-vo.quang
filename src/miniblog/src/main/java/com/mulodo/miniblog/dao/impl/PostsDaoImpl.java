@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import com.mulodo.miniblog.dao.PostsDao;
 import com.mulodo.miniblog.model.Posts;
+import com.mulodo.miniblog.model.Users;
 
 @Repository
 public class PostsDaoImpl implements PostsDao 
@@ -78,12 +79,12 @@ public class PostsDaoImpl implements PostsDao
 
 	@SuppressWarnings({ "unchecked" })
 	@Override
-	public List<Posts> getPostByUserId(int user_id) 
+	public List<Posts> getPostByUserId(Users user) 
 	{
 		Session session = sessionFactory.getCurrentSession();
 		Transaction trans = session.beginTransaction();
 		Criteria cr = session.createCriteria(Posts.class);
-		List<Posts> listPost = cr.add(Restrictions.eq("user_id", user_id)).list();
+		List<Posts> listPost = cr.add(Restrictions.eq("user.id", user.getId())).list();
 		trans.commit();
 		return listPost;
 	}

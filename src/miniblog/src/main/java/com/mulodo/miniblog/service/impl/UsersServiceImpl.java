@@ -135,7 +135,7 @@ public class UsersServiceImpl implements UsersService
 		}		
 	}
 
-	@Transactional
+	@Override
 	public boolean isUpdateUserInfo(Users user) 
 	{
 		try {
@@ -192,6 +192,22 @@ public class UsersServiceImpl implements UsersService
 		catch (Exception e) {
 			e.printStackTrace();
 			return false;
+		}
+	}
+
+	@Override
+	public Users getUserByUserId(int user_id) 
+	{
+		try {
+			Users user = usersdao.getUserByUserId(user_id);
+			if (user != null)
+				return user;
+			else
+				return null;
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			return null;
 		}
 	}	
 }

@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.mulodo.miniblog.model.Posts;
+import com.mulodo.miniblog.model.Users;
 import com.mulodo.miniblog.service.PostsService;
 
 @Service
@@ -33,23 +34,23 @@ public class PostsServiceImpleTest implements PostsService
 			post.setTitle("Title");
 			post.setDescription("Description");
 			post.setContent("Content");
-			post.setUser_id(1);
+			post.getUser().setId(1);
 			return post;
 		case 2: return null;
 		case 3: 
 			Posts post3 = new Posts();
 			post3.setId(3);
-			post3.setUser_id(3);
+			post3.getUser().setId(3);
 			return post3;
 		case 4: 
 			Posts post4 = new Posts();
 			post4.setId(4);
-			post4.setUser_id(4);
+			post4.getUser().setId(4);
 			return post4;
 		case 5: 
 			Posts post5 = new Posts();
 			post5.setId(5);
-			post5.setUser_id(5);
+			post5.getUser().setId(5);
 			return post5;
 		
 		default: return null;		
@@ -84,9 +85,9 @@ public class PostsServiceImpleTest implements PostsService
 	}
 
 	@Override
-	public List<Posts> getPostsForUser(int user_id) 
+	public List<Posts> getPostsForUser(Users user) 
 	{
-		if (user_id == 1) {
+		if (user.getId() == 1) {
 			List<Posts> listPost = new ArrayList<Posts>();		
 			return listPost;
 		}

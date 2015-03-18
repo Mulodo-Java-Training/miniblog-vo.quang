@@ -65,7 +65,9 @@ public class PostsController
 				// Check whether token expired 
 				if (tokensService.isCheckTokenValid(access_token) == true) {
 					// Set user who create post
-					post.setUser_id(usersService.getUserByToken(access_token).getId());
+					//post.setUser_id(usersService.getUserByToken(access_token).getId());
+					post.setUsername(usersService.getUserByToken(access_token).getUsername());
+					post.setUser(usersService.getUserByToken(access_token));
 					// Check whether create post success
 					if (postsService.createPost(post) == true) {			
 						rf.meta.id = Constants.CODE_200;
@@ -119,8 +121,10 @@ public class PostsController
 					// Check whether access_token is valid
 					if (user != null) {
 						// Check whether post belongs to right user
-						if (post.getUser_id() == user.getId()) {
+//						if (post.getUser_id() == user.getId()) {
+						if (post.getUser().getId() == user.getId()) {
 							post.setStatus(true);
+							post.setUsername(user.getUsername());
 							// Update post
 							if (postsService.updatePost(post) == true) {
 								rf.meta.id = Constants.CODE_200;
@@ -187,8 +191,10 @@ public class PostsController
 					// Check whether access_token is valid
 					if (user != null) {
 						// Check whether post belongs to right user
-						if (post.getUser_id() == user.getId()) {
+//						if (post.getUser_id() == user.getId()) {
+						if (post.getUser().getId() == user.getId()) {
 							post.setStatus(false);
+							post.setUsername(user.getUsername());
 							// Update post
 							if (postsService.updatePost(post) == true) {
 								rf.meta.id = Constants.CODE_200;
@@ -262,13 +268,15 @@ public class PostsController
 						// Check token valid
 						if (user != null) {
 							// Check whether post belongs to right user
-							if (post.getUser_id() == user.getId()) {
+//							if (post.getUser_id() == user.getId()) {
+							if (post.getUser().getId() == user.getId()) {
 								// Set post object by data
 								post.setTitle(data.getTitle());
 								post.setDescription(data.getDescription());
 								post.setContent(data.getContent());
 								post.setImage(data.getImage());
 								post.setModified_at(Calendar.getInstance().getTime());
+								post.setUsername(user.getUsername());
 								// Update post
 								if (postsService.updatePost(post) == true) {
 									rf.meta.id = Constants.CODE_200;
@@ -338,7 +346,8 @@ public class PostsController
 					// Check token valid
 					if (user != null) {
 						// Check whether post belongs to right user
-						if (post.getUser_id() == user.getId()) {
+//						if (post.getUser_id() == user.getId()) {
+						if (post.getUser().getId() == user.getId()) {
 							if (postsService.deletePost(id) == true) {
 								rf.meta.id = Constants.CODE_200;
 								rf.meta.message = Constants.POST_DELETE_SUCCESS;
@@ -416,7 +425,7 @@ public class PostsController
 				Users user = usersService.getUserByToken(access_token);
 				// Check token valid
 				if (user != null) {
-					List<Posts> listPost = postsService.getPostsForUser(user.getId());
+					List<Posts> listPost = postsService.getPostsForUser(user);
 					if (listPost != null) {
 						rf.meta.id = Constants.CODE_200;
 						rf.meta.message = Constants.POST_GET_FOR_USER_SUCCESS;

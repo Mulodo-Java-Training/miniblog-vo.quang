@@ -100,19 +100,20 @@
 		<artifactId>commons-pool</artifactId>
 		<version>20030825.183949</version>
 	</dependency>
+	
 	<!-- MySQL -->
 	<dependency>
 		<groupId>mysql</groupId>
 		<artifactId>mysql-connector-java</artifactId>
 		<version>5.1.6</version>
 	</dependency>
+	
 	<!-- RestEasy -->
 		<dependency>
-		   <groupId>com.google.code.gson</groupId>
-		   <artifactId>gson</artifactId>
-		   <version>2.2.4</version>
-		  </dependency>
-		
+			<groupId>org.jboss.resteasy</groupId>
+			<artifactId>resteasy-jaxrs</artifactId>
+			<version>3.0.6.Final</version>
+		</dependency>
 		<dependency>
             <groupId>org.jboss.resteasy</groupId>
             <artifactId>resteasy-spring</artifactId>

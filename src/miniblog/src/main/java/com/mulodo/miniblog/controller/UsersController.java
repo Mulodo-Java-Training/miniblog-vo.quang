@@ -349,5 +349,25 @@ public class UsersController
 //			return Response.status(Constants.CODE_9001).entity(rf).build();
 //		}		
 	}
+	
+	@GET
+	@Path("getuserbyuserid/{user_id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getUserByUserId(@PathParam("user_id") int user_id)
+	{
+		ResponseFormat rf = new ResponseFormat();
+		Users user = usersService.getUserByUserId(user_id);
+		if (user != null) {
+			rf.meta.id = Constants.CODE_200;
+			rf.meta.message = Constants.USER_GET_USER_BY_USERID;
+			rf.data = user;
+			return Response.status(Constants.CODE_200).entity(rf).build();
+		}
+		else {
+			rf.meta.id = Constants.CODE_9001;
+			rf.meta.message = Constants.ERROR_MESSAGE;
+			return Response.status(Constants.CODE_9001).entity(rf).build();
+		}
+	}
 }
 

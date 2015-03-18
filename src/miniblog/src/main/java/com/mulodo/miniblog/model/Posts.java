@@ -8,12 +8,15 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
+import org.hibernate.annotations.ForeignKey;
 import org.hibernate.annotations.Type;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -28,11 +31,19 @@ public class Posts implements Serializable
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	@NotEmpty
-	@NotNull
-	@Column(name="user_id", nullable = false)
-	private int user_id;
+//	@NotEmpty
+//	@NotNull
+//	@Column(name="user_id", nullable = false)
+//	private int user_id;
 	
+    @JsonIgnore
+    private String username;
+	
+    @ManyToOne
+    @JoinColumn(nullable = false)
+    @ForeignKey(name = "fk_post_user_idx")
+    private Users user;
+    
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private int id;
@@ -180,15 +191,15 @@ public class Posts implements Serializable
 		this.image = image;
 	}
 
-	public int getUser_id() 
-	{
-		return user_id;
-	}
-
-	public void setUser_id(int user_id) 
-	{
-		this.user_id = user_id;
-	}
+//	public int getUser_id() 
+//	{
+//		return user_id;
+//	}
+//
+//	public void setUser_id(int user_id) 
+//	{
+//		this.user_id = user_id;
+//	}
 
 	@SuppressWarnings("deprecation")
 	public String getCreated_at_fm() {
@@ -206,6 +217,22 @@ public class Posts implements Serializable
 
 	public void setModified_at_fm(String modified_at_fm) {
 		this.modified_at_fm = modified_at_fm;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public Users getUser() {
+		return user;
+	}
+
+	public void setUser(Users user) {
+		this.user = user;
 	}
 
 	

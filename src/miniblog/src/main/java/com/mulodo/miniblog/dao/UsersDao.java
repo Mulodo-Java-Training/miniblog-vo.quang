@@ -10,6 +10,7 @@ public interface UsersDao
 	public Users get_user_by_email(String email);
 	public void addNewUser(Users user);
 	public Users getUserById(int id);
+	public Users getUserByUserId(int user_id);
 	public Users getUserLogin(String username, String password);
 	public boolean isUpdateUserInfo(Users user);
 	public List<Users> getListUserByName(String name);

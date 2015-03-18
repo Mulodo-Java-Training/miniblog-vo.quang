@@ -2,12 +2,15 @@ package com.mulodo.miniblog.model;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -83,9 +86,14 @@ public class Users implements Serializable
 	@Transient
 	private String access_token;
 
+	@OneToMany(targetEntity = Posts.class, mappedBy = "user", fetch = FetchType.LAZY)
+    @JsonIgnore
+	public List<Posts> listPost;
+	
 	public Users()
 	{		
 	}
+	
 	
 	public Users(int id, String username, String password, String firstname, String lastname, String email, 
 			String image, Date created_at, Date modified_at, String access_token) 

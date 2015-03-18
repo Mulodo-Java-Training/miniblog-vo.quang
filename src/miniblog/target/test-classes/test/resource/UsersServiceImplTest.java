@@ -164,5 +164,11 @@ public class UsersServiceImplTest implements UsersService
 		return false;
 	}
 
+	@Override
+	public Users getUserByUserId(int user_id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 		
 }
