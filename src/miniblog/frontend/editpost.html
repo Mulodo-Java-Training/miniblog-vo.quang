@@ -1,0 +1,252 @@
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="css/editpost.css">
+
+<script src="js/jquery-1.11.2.min.js"></script>
+<script src="js/getCookie.js"></script>
+<script src="js/displayuser.js"></script>
+<script src="js/logout.js"></script>
+<script src="js/tinymce.min.js"></script>
+<script src="js/tinymce.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/bootstrap.js"></script>
+
+</head>
+<body>
+	<div class="container">
+		<div class="group1">
+			<div classs="row">
+				<div class="col-xs-3 col-sm-3 col-md-3 miniblog">
+					<a class="remove-underline" href="home.html"><span class="logo-color">Mini Blog</span></a>
+				</div>
+				<div class="col-xs-3 col-sm-3 col-md-3 pull-right">	
+					<span>Hi <a href="updateuser.html" id="user></a><span>
+					<span><a href="#" onclick="logout()">Logout</a></span>
+					<br/>
+					<span><a href="changepass.html">Change password</a></span>	
+				</div>				
+			</div>
+		</div>
+		<div class="group2">
+			<!-- Navigation -->
+			<div class="navbar navbar-default nav-area">
+				<div class="container-fluid">
+					<div class="navbar-header">
+						<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".mynavbar-content">
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+						</button>
+						<!-- <a class="remove-underline navbar-brand" href="#"><span>Miniblog</span></a> -->
+					</div>
+					<div class="collapse navbar-collapse  mynavbar-content">
+						<ul class=" navbar-nav breadcrumb">
+							<li><a class="remove-underline" href="home.html">Home</a></li>
+							<li><a class="remove-underline" href="addpost.html">New post</a></li>
+							<li><a class="remove-underline" href="userpost.html">User's posts</a></li>
+							<li><a class="remove-underline" href="allpost.html">All posts</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<hr>
+
+		<div class="group3 col-xs-offset-1">
+			<div class="row">
+				<div class="col-xs-4 col-xs-offset-4">
+					<h2><span>Edit Post</span></h2>
+					<br/>
+				</div>
+			</div>
+			<div class="row" id="display">
+
+				<div id="frm-change-pass" class="form-group">
+					<div class="col-xs-3 inline-block move-down">
+						<span>Image</span>
+					</div>
+					<div class="col-xs-9 inline-block  move-down">
+						<div class="row">
+							<div class="col-xs-10">
+								<input id="image" type="text" class="form-control" />
+							</div>
+							<div class="col-xs-1 cog">
+								<a href="#"><span class="glyphicon glyphicon-cog"></span></a>
+							</div>
+						</div>
+					</div>
+					<div class="col-xs-3 inline-block move-down">
+						<span>Title</span>
+					</div>
+					<div class="col-xs-9 inline-block  move-down">
+						<input id="title" type="text" class="form-control" />
+					</div>
+					<div class="col-xs-3 inline-block move-down">
+						<span>Description</span>
+					</div>
+					<div class="col-xs-9 inline-block  move-down">
+						<input class="form-control" id="description" />
+					</div>
+					<div class="col-xs-3 inline-block move-down">
+						<span>Content</span>
+					</div>
+					<div class="col-xs-9 inline-block  move-down">
+						<textarea class="form-control" rows="5" id="content" name="content"></textarea>
+					</div>
+					<div class="col-xs-offset-3 inline-block move-down move-right">
+						<button id="edit" class="btn btn-default">Edit</button>
+					</div>
+					<div class="inline-block">
+						<button id="cancel" class="btn btn-default" onclick="cancel();">Cancel</button>
+					</div>
+				</div>
+
+
+			</div>
+			
+		</div>		
+	</div>
+
+            
+<script type="text/javascript">
+
+    // Display post
+    $(document).ready(function() {
+    
+        var id = window.name;
+        
+        $.ajax({
+            type: "GET",
+            beforeSend: function(request) {
+                request.setRequestHeader("access_function", getCookie('token'));
+            },
+            url: "http://localhost:8080/miniblog/v1/posts/" + id,
+            statusCode: {
+                2504: function() {
+                    alert("Post is not  exsited");
+                    window.location.reload();
+                    return;
+                }
+            },
+            success: function(response, status, xhr) {
+                if (status == "success") {
+                    var image = response['data']['image'];
+                    var title = response['data']['title'];
+                    var description = response['data']['description'];
+                    var content = response['data']['content'];
+                    
+                    $("#image").val(image);
+                    $("#title").val(title);
+                    $("#description").val(description);
+                    $("#content").val(content);
+                }
+            }    
+        })
+    })
+    
+    
+        $("#edit").click(function() {
+            
+            var opt = confirm("Do you finish editing post?");
+            if (opt == true) {
+                var id = window.name;
+                var image = $("#image").val();
+                var title = $("#title").val();
+                var description = $("#description").val();
+                var content = tinyMCE.get('content').getContent();
+
+                title = $.trim(title);
+                description = $.trim(description);
+                content = $.trim(content);
+
+                // Validate
+                $(".error").hide();
+                var hasError = false;
+
+                if (title == '') {
+                    $("#title").after('<span class="error">Enter title of post.</span>');
+                    hasError = true;
+                }
+                else if (description == '') {
+                        $("#description").after('<span class="error">Enter description of post.</span>');
+                        hasError = true;
+                    }
+                    else if (content == '') {
+                        $("#content").after('<span class="error">Enter content of post</span>');
+                        hasError = true;
+                    }
+                if (hasError == true) {
+                    return false;
+                }
+
+
+                $.ajax({
+                    type: "PUT",
+                    beforeSend: function(request) {
+                        request.setRequestHeader("access_token", getCookie('token'));
+                    },
+                    url: "http://localhost:8080/miniblog/v1/posts/"+id+"/edit",
+                    contentType: "application/json",
+                    data: JSON.stringify({'title': title, 'description': description, 'content': content, 'image': image}), 
+                    statusCode: {
+                        2504: function() {
+                            alert("Post is not existed");
+                            window.location.reload();
+                        },
+                        1001: function() {
+                            alert("Input failed");
+                        },
+                        9002: function() {
+                            alert("Token missing. Please login.");
+                            window.location = 'welcome.html';
+                        },
+                        1002: function() {
+                            alert("Token has expired.");
+                            window.location = 'welcome.html';
+                        },
+                        1003: function() {
+                            alert("Token is invalid.");
+                            window.location = 'welcome.html';
+                        },
+                        2505: function() {
+                            alert("Can not edit post that does not belong to you.");
+                            window.location = 'userpost.html';
+                        },
+                        9001: function() {
+                            alert("Error");
+                            window.location.reload();
+                        },
+                    },
+                    success: function(response, status, xhr) {
+                        if (status == "success") {
+                            alert("Post edited success");
+                            window.location = "postdetail.html";
+                        }
+
+                    }
+
+                })
+            }
+            else {
+                return;
+            }
+        })
+           
+    function cancel() {
+        $("cancel").click(function() {
+            window.location = "userpost.html";
+        })        
+    }
+    
+    
+</script>            
+            
+
+</body>
+</html>

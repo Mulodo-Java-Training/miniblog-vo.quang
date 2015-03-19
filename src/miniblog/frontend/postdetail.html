@@ -1,0 +1,407 @@
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="css/postdetail.css">
+
+<script src="js/jquery-1.11.2.min.js"></script>
+<script src="js/getCookie.js"></script>
+<script src="js/displayuser.js"></script>
+<script src="js/deletePost.js"></script>
+<script src="js/logout.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/bootstrap.js"></script>
+
+</head>
+<body>
+	<div class="container">
+		<div class="group1">
+			<div classs="row">
+				<div class="col-xs-3 col-sm-3 col-md-3 miniblog">
+					<a class="remove-underline" href="home.html"><span class="logo-color">Mini Blog</span></a>
+				</div>
+				<div class="col-xs-3 col-sm-3 col-md-3 pull-right">	
+					<span>Hi <a href="updateuser.html" id="user"></a><span>
+					<span><a href="#" onclick="logout()">Logout</a></span>
+					<br/>
+					<span><a href="changepass.html">Change password</a></span>	
+				</div>				
+			</div>
+		</div>
+		<div class="group2">
+			<!-- Navigation -->
+			<div class="navbar navbar-default nav-area">
+				<div class="container-fluid">
+					<div class="navbar-header">
+						<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".mynavbar-content">
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+						</button>
+						<!-- <a class="remove-underline navbar-brand" href="#"><span>Miniblog</span></a> -->
+					</div>
+					<div class="collapse navbar-collapse  mynavbar-content">
+						<ul class=" navbar-nav breadcrumb">
+							<li><a class="remove-underline" href="home.html">Home</a></li>
+							<li><a class="remove-underline" href="addpost.html">New post</a></li>
+							<li><a class="remove-underline" href="userpost.html">User's posts</a></li>
+							<li><a class="remove-underline" href="allpost.html">All posts</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<hr>
+
+		<div class="group3">
+			<div class="row">
+				<div class="col-xs-4 col-xs-offset-4">
+					<h2><span>Post Detail</span></h2>
+					<br/>
+				</div>
+			</div>
+			<div id="display">
+
+			</div>
+<!--            Comment-input-area-->
+            <div class='row'>
+                <div class='col-xs-2 img-padd-left '>
+                </div>
+                <div class='col-xs-10'>
+                    <div class= 'row comment-content'>    
+                        <input id="content" onclick="addComment();" type='text' class='form-control' placeholder='Write your comment...' />
+                    </div>
+                </div>
+            </div>
+		</div>		
+	</div>
+
+<script type="text/javascript">
+    
+    // Display post detail
+    $(document).ready(function() {
+        var id = window.name;
+        $.ajax({
+            type: "GET",
+            beforeSend: function(request) {
+                request.setRequestHeader("access_token", getCookie("token"));
+            },
+            url: "http://localhost:8080/miniblog/v1/posts/"+id,
+            statusCode: {
+                2504: function() {
+                    alert("Post is not  exsited");
+                    window.location.reload();
+                    return;
+                }
+            },
+            success: function(response, status, xhr) {
+                if (status == "success") {
+                    
+					$('#display').append("\
+                    <div class='row' id='post'>\
+                        <div class='col-xs-12 col-sm-12 col-md-12'>\
+                            <div class='col-xs-2 col-sm-2 col-md-2 inline-block'>\
+                                <a href='postdetail.html'><img src='image/image3.jpg' class='img-responsive' alt='Cinque Terre'></a>\
+                            </div>\
+                            <div class='col-xs-10 col-sm-10 col-md-10 inline-block blog-main'>\
+                                <div class=' justify'>\
+                                    <a href='postdetail.html'><span id='title'>"+response['data']['title']+"</span></a>\
+                                    <a href='#' onclick='editPost("+response['data']['id']+")'><span class='glyphicon glyphicon-edit'></span></a>\
+                                    <a href='#' onclick='deletePost("+response['data']['id']+");'><span class='glyphicon glyphicon-trash'></span></a>\
+                                </div>\
+                                <div class=' blog-post-meta justify' id='created_at'><small>Created at: "+response['data']['created_at_fm']+" | Author: <b>"+response['data']['user']['username']+"</b></small>\
+                                </div>\
+                                <div class=' justify post' id='post-content'>"+response['data']['content']+"</div>\
+                            </div>\
+                        </div>\
+                    </div>\
+                    <div class='row' id='comment' >\
+                    </div>"
+                                        );
+                    loadComment();
+                }        
+            }        
+        })
+    
+        
+    })
+    
+    // Add Comment function
+    function loadComment() {
+        
+        var id = window.name;
+        $.ajax({
+            type: "GET",
+            beforeSend: function(request) {
+                request.setRequestHeader("access_token", getCookie("token"));
+            },
+            url: "http://localhost:8080/miniblog/v1/posts/"+id+"/comments/getcommentsofpost",
+            statusCode: {
+                2504: function() {
+                    alert("Post is not  exsited");
+                    window.location.reload();
+                    return;
+                }
+            },
+            success: function(response, status, xhr) {
+                if (status == "success") {
+                    $.each(response['data'], function(key,value) {
+                        $status="inactive";
+				        if(value['status']){$status="active";}
+				        $('#comment').append("\
+                        <div class='col-xs-12'>\
+                            <div class='form-group'>\
+                                <div class='row'>\
+                                    <div class='col-xs-2 img-padd-left'>\
+                                        <img class='img-small img-responsive' src='image/avatar2.jpg' alt='Cinque Terre'>\
+                                    </div>\
+                                    <div class='col-xs-10'>\
+                                        <div class= 'row comment-content'>\
+                                            <div class='col-xs-10'>\
+                                                <div class='comment'>\
+                                                    <p><b>"+value['user']['username']+"</b></p/>\
+                                                    <p id='comment-content'><i> "+value['content']+"</i></p>\
+                                                </div>\
+                                            </div>\
+                                            <div class='col-xs-2' id='a'>\
+                                                <a href='#' id='editComment' onclick='getComment("+value['id']+", "+value['post_id']+")'><span id='editspan' class='glyphicon glyphicon-edit'></span></a>\
+                                                <a href='#' onclick='deleteComment("+value['id']+", "+value['post_id']+")'><span class='glyphicon glyphicon-trash'></span></a>\
+                                            </div>\
+                                        </div>\
+                                    </div>\
+                                </div>\
+                            </div>\
+                        </div>"
+                                            );
+				    });
+                
+                }
+            }                               
+                               
+        })   
+    }
+    
+    // Pass id of post in order to load post detail on postdetail.html page
+    function editPost(id) {
+        window.name = id;
+        window.location = 'editpost.html';
+    }
+    
+    
+    // Write comment
+    function addComment() {
+        // Enter to create new comment
+        $("#content").bind("enterKey", function(e) {
+            var post_id = window.name;
+            var content = $("#content").val();
+
+            content = $.trim(content);
+
+            if (content != '') {
+                $.ajax({
+                    type: "POST",
+                    beforeSend: function(request) {
+                        request.setRequestHeader("access_token", getCookie('token'));
+                    },
+                    contentType: "application/json",
+                    data: JSON.stringify({"content": content}),
+                    url: "http://localhost:8080/miniblog/v1/posts/"+post_id+"/comments/add",
+                    statusCode: {
+                        9002: function() {
+                            alert('Token is missing. Please login');
+                            window.location = 'welcome.html';
+                        },
+                        1002: function() {
+                            alert('Token has expired.');
+                            window.location = 'welcome.html';
+                        },
+                        1001: function() {
+                            alert('Input failed.');
+                            window.location.reload();
+                        },
+                        3009: function() {
+                            alert('Comment added failed.');
+                            window.location.reload();
+                        }
+                    },
+                    success: function(response, status, xhr) {
+                        if (status == "success") {
+                            console.log("Comment created success");
+                            window.location.reload();
+                        }
+                    }
+                })
+            }
+            else {
+                return;
+            }        
+        })
+    }
+    
+    // trigger event enter
+    $("#content").keyup(function(e){
+        if(e.keyCode == 13)
+        {
+          $(this).trigger("enterKey");
+        }
+    });
+    
+    
+    // Edit comment
+    function getComment(id, post_id) {
+        // Get comment and display in input content -> user can edit comment
+        $.ajax({
+            type: "GET",
+            beforeSend : function(request) {request.setRequestHeader("access_token", getCookie('token'));
+            },
+            url: "http://localhost:8080/miniblog/v1/posts/comments/getcommentbyid/"+id,
+            success: function(response, status, xhr) {
+                var content = response['data']['content'];
+                $("#content").val(content);
+                if ($("#content").focus()) {
+                    $("#a > #editComment > span").removeClass("glyphicon-edit");
+                    // Call edit Comment function
+                    editComment(id, post_id);
+                }
+//                $("#content").focusout(function() {
+//                    $("#content").html("");
+//                    $("#a > #editComment > span").addClass("glyphicon-edit");
+//                    
+//                })                
+            }
+        })          
+    }
+    
+    // Edit comment function
+    function editComment(id, post_id, content) {
+        // Edit comment
+        $("#content").bind("enterKey", function(e) {
+            // Get edited comment
+            var content = $("#content").val();
+            
+            $.ajax({
+                type: "PUT",
+                beforeSend: function(request) {
+                    request.setRequestHeader("access_token", getCookie('token'));
+                },
+                url: "http://localhost:8080/miniblog/v1/posts/"+post_id+"/comments/update/"+id,
+                contentType: "application/json",
+                data: JSON.stringify({"content": content}),
+                statusCode: {
+                    2504: function() {
+                        alert("Post is not existed");
+                        window.location.reload();
+                    },
+                    1001: function() {
+                        alert("Input failed");
+                        window.location.reload();
+                    },
+                    9002: function() {
+                        alert("Token is missing. Please login");
+                        window.location = 'welcome.html';
+                    },
+                    1002: function() {
+                        alert("Token has expired.");
+                        window.location = 'welcome.html';
+                    },
+                    1003: function() {
+                        alert("Token is invalid");
+                        window.location = 'welcome.html';
+                    },
+                    3002: function() {
+                        alert("Comment is not existed");
+                        window.location.reload();
+                    },
+                    3004: function() {
+                        alert("Comment does not belong to post");
+                        window.location.reload();
+                    },
+                    3003: function() {
+                        alert("Can not edit comment that is not belong to you.");
+                        window.location.reload();
+                    },
+                    3008: function() {
+                        alert("Comment edited failed");
+                        window.location.reload();
+                    }
+                },
+                success: function(response, status, xhr) {
+                    if (status == "success") {
+                        console.log("Comment edited success");
+                        window.location.reload();   
+                    }
+                }
+            })  
+        })
+              
+    }
+        
+    // Delete comment
+    function deleteComment(id, post_id) {
+        var opt = confirm("Are you sure that you want to delete this comment?");
+        
+        if (opt == true) {
+            $.ajax({
+                type: "DELETE",
+                beforeSend: function(request) {
+                    request.setRequestHeader("access_token", getCookie('token'));
+                },
+                url: "http://localhost:8080/miniblog/v1/posts/"+post_id+"/comments/delete/"+id,
+                statusCode: {
+                    2504: function() {
+                        alert("Post is not existed");
+                        window.location.reload();
+                    },
+                    9002: function() {
+                        alert("Token is missing. Please login");
+                        window.location = 'welcome.html';
+                    },
+                    1002: function() {
+                        alert("Token has expired.");
+                        window.location = 'welcome.html';
+                    },
+                    1003: function() {
+                        alert("Token is invalid");
+                        window.location = 'welcome.html';
+                    },
+                    3002: function() {
+                        alert("Comment is not existed");
+                        window.location.reload();
+                    },
+                    3004: function() {
+                        alert("Comment does not belong to post");
+                        window.location.reload();
+                    },
+                    3003: function() {
+                        alert("Can not edit comment that is not belong to you.");
+                        window.location.reload();
+                    },
+                    3007: function() {
+                        alert("Comment deleted failed");
+                        window.location.reload();
+                    }
+                },
+                success: function(response, status, xhr) {
+                    if (status == "success") {
+                        console.log("Comment deleted success");
+                        window.location.reload();
+                    }
+                }
+            })  
+        
+        }
+        else {          
+            return;
+        }
+        
+    }
+    
+    
+</script>            
+
+</body>
+</html
