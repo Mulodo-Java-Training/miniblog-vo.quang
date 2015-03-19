@@ -15,6 +15,7 @@ body {
 		text-align: center;
 		font-size: 36px;
 		border: 3px solid #C0C0C0;
+        border-radius: 5px;
 		padding-left: 5px;
 	}
 
@@ -109,6 +110,13 @@ body {
 		padding-left: 30px;
 	}
 
+    .searchname {
+          background: #fff;
+          border: 1px solid #ccc;
+          border-radius: 5px;
+          padding: 5px 0 5px 0;
+    }
+
 	.blog-main {
 		font-size: 18px;
 		line-height: 1.4;
@@ -119,6 +127,13 @@ body {
 	.blog-post-meta {
 		color: #999;
 	}
+
+    .post {
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background: #fff;
+        padding: 5px 0 5px 0;
+    }
 
 	.justify {
 		margin-bottom: -5px;

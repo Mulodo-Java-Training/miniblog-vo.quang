@@ -15,6 +15,7 @@ body {
 		text-align: center;
 		font-size: 36px;
 		border: 3px solid #C0C0C0;
+        border-radius: 5px;
 		padding-left: 5px;
 	}
 
@@ -122,7 +123,7 @@ body {
         border: 1px solid #ccc;
         border-radius: 5px;
         background: #fff;
-        padding: 5px 0 0 5px;
+        padding: 10px 0 0 5px;
         margin-top: 5px;
     }
 
@@ -132,6 +133,7 @@ body {
         border-radius: 5px;
         background: #fff;
         padding: 5px 0 0 5px;
+        margin-top: 5px;
     }
 
 	.remove-underline {

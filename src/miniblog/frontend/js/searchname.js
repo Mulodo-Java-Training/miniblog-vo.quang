@@ -13,7 +13,7 @@ function searchname(name) {
                     if (status == "success") {
                         $.each(response['data'], function(key, value) {
                         $("#post").append("\
-					<div class='col-xs-12 col-sm-12 col-md-12'>\
+					<div class='col-xs-12 col-sm-12 col-md-12 searchname'>\
 						<div class='col-xs-2 col-sm-2 col-md-2 inline-block'>\
 							<a href='#'><img src='image/avatar8.jpg' class='img-responsive' alt='Cinque Terre'></a>\
 						</div>\
