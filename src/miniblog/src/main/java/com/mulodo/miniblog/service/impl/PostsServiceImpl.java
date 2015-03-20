@@ -63,6 +63,16 @@ public class PostsServiceImpl implements PostsService
 			return null;
 	}
 
+//	@Override
+//	public List<Posts> getPostsForUser(Users user) 
+//	{
+//		List<Posts> listPost = postsdao.getPostByUserId(user);
+//		if (listPost != null)
+//			return listPost;
+//		else
+//			return null;
+//	}
+	
 	@Override
 	public List<Posts> getPostsForUser(Users user) 
 	{

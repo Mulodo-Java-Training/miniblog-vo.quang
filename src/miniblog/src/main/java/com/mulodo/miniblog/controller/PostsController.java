@@ -411,10 +411,56 @@ public class PostsController
 		}
 	}
 	
+//	@GET
+//	@Path("getpostforuser")
+//	@Produces(MediaType.APPLICATION_JSON)
+//	public Response getPostforUser(@HeaderParam("access_token") String access_token) 
+//	{
+//		ResponseFormat rf = new ResponseFormat();
+//		
+//		// Check token null
+//		if (access_token != null) {
+//			// Check whether token expired or not 
+//			if (tokensService.isCheckTokenValid(access_token) == true) {
+//				Users user = usersService.getUserByToken(access_token);
+//				// Check token valid
+//				if (user != null) {
+//					List<Posts> listPost = postsService.getPostsForUser(user);
+//					if (listPost != null) {
+//						rf.meta.id = Constants.CODE_200;
+//						rf.meta.message = Constants.POST_GET_FOR_USER_SUCCESS;
+//						rf.data = listPost;
+//						return Response.status(Constants.CODE_200).entity(rf).build();
+//					}
+//					else {
+//						rf.meta.id = Constants.CODE_9001;
+//						rf.meta.message = Constants.ERROR_MESSAGE;
+//						return Response.status(Constants.CODE_9001).entity(rf).build();
+//					}
+//				}
+//				else {
+//					rf.meta.id = Constants.CODE_1003;
+//					rf.meta.message = Constants.TOKEN_INVALID;
+//					return Response.status(Constants.CODE_1003).entity(rf).build();
+//				}
+//			}
+//			else {
+//				rf.meta.id = Constants.CODE_1002;
+//				rf.meta.message = Constants.TOKEN_EXPIRED;
+//				return Response.status(Constants.CODE_1002).entity(rf).build();
+//			}
+//		}
+//		else {
+//			rf.meta.id = Constants.CODE_9002;
+//			rf.meta.message = Constants.TOKEN_MISSING;
+//			return Response.status(Constants.CODE_9002).entity(rf).build();
+//		}	
+//	}
+	
 	@GET
-	@Path("getpostforuser")
+	@Path("getpostforuser/{user_id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getPostforUser(@HeaderParam("access_token") String access_token) 
+	public Response getPostforUser(@HeaderParam("access_token") String access_token, @PathParam("user_id") int user_id) 
 	{
 		ResponseFormat rf = new ResponseFormat();
 		
@@ -425,7 +471,8 @@ public class PostsController
 				Users user = usersService.getUserByToken(access_token);
 				// Check token valid
 				if (user != null) {
-					List<Posts> listPost = postsService.getPostsForUser(user);
+					Users user1 = usersService.getUserByUserId(user_id);
+					List<Posts> listPost = postsService.getPostsForUser(user1);
 					if (listPost != null) {
 						rf.meta.id = Constants.CODE_200;
 						rf.meta.message = Constants.POST_GET_FOR_USER_SUCCESS;

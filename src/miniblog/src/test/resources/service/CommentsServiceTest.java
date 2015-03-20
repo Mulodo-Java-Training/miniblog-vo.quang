@@ -81,13 +81,13 @@ public class CommentsServiceTest
 		cmt.setCreated_at(new Date());
 		cmt.setModified_at(new Date());
 		cmt.setPost_id(post.getId());
-		cmt.setUser_id(userLogin.getId());
+		cmt.getUser().setId(userLogin.getId());
 		
 		assertTrue(commentsService.isAddComment(cmt));
 		Comments actualCmt = commentsService.getComment(cmt.getId());
 		assertEquals("TestAddComment", actualCmt.getContent());
 		assertEquals(cmt.getPost_id(), actualCmt.getPost_id());
-		assertEquals(cmt.getUser_id(), actualCmt.getUser_id());
+		assertEquals(cmt.getUser().getId(), actualCmt.getUser().getId());
 		
 		// Edit comment
 		actualCmt.setContent("Edit Comment");

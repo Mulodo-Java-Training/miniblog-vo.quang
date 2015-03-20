@@ -8,11 +8,14 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
+import org.hibernate.annotations.ForeignKey;
 
 @Entity
 @Table(name="Comments")
@@ -22,9 +25,15 @@ public class Comments implements Serializable
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
 
-	@Column(name="user_id", nullable=false)
-	private int user_id;
+//	@Column(name="user_id", nullable=false)
+//	private int user_id;
+	
+	@ManyToOne
+    @JoinColumn(nullable = false)
+    @ForeignKey(name = "fk_comment_user_idx")
+    private Users user;
 	
 	@Column(name="post_id", nullable=false)
 	private int post_id;
@@ -105,15 +114,15 @@ public class Comments implements Serializable
 		this.modified_at = modified_at;
 	}
 
-	public int getUser_id() 
-	{
-		return user_id;
-	}
-
-	public void setUser_id(int user_id) 
-	{
-		this.user_id = user_id;
-	}
+//	public int getUser_id() 
+//	{
+//		return user_id;
+//	}
+//
+//	public void setUser_id(int user_id) 
+//	{
+//		this.user_id = user_id;
+//	}
 
 	public int getPost_id() 
 	{
@@ -141,5 +150,13 @@ public class Comments implements Serializable
 
 	public void setModified_at_fm(String modified_at_fm) {
 		this.modified_at_fm = modified_at_fm;
+	}
+
+	public Users getUser() {
+		return user;
+	}
+
+	public void setUser(Users user) {
+		this.user = user;
 	}	
 }

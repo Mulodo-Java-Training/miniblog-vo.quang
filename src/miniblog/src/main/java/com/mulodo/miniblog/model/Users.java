@@ -90,6 +90,10 @@ public class Users implements Serializable
     @JsonIgnore
 	public List<Posts> listPost;
 	
+	@OneToMany(targetEntity = Posts.class, mappedBy = "user", fetch = FetchType.LAZY)
+    @JsonIgnore
+	public List<Comments> listComment;
+	
 	public Users()
 	{		
 	}

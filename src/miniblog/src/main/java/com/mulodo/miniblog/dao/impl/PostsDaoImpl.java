@@ -88,6 +88,19 @@ public class PostsDaoImpl implements PostsDao
 		trans.commit();
 		return listPost;
 	}
+	
+//	@SuppressWarnings({ "unchecked" })
+//	@Override
+//	public List<Posts> getPostByUsername(String username) 
+//	{
+//		Session session = sessionFactory.getCurrentSession();
+//		Transaction trans = session.beginTransaction();
+//		 
+//		Query query = session.createQuery("from Posts p where p.user.username = :username").setParameter("username", username);
+//		List<Posts> listPost = query.list();
+//		trans.commit();
+//		return listPost;
+//	}
 
 	@SuppressWarnings("unchecked")
 	@Override

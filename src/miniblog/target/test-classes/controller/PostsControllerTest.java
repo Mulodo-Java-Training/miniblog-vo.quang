@@ -597,7 +597,8 @@ public class PostsControllerTest
 	public void getPostForUserSuccess() 
 	{			
 		String access_token = "abc123xyz";
-		Response resp = postsController.getPostforUser(access_token);
+		int user_id = 1;
+		Response resp = postsController.getPostforUser(access_token, user_id);
 		assertEquals(200, resp.getStatus());		
 	}
 	
@@ -611,7 +612,8 @@ public class PostsControllerTest
 	public void getPostForUserFailed1() 
 	{			
 		String access_token = null;
-		Response resp = postsController.getPostforUser(access_token);
+		int user_id = 1;
+		Response resp = postsController.getPostforUser(access_token, user_id);
 		assertEquals(9002, resp.getStatus());		
 	}
 	
@@ -625,7 +627,8 @@ public class PostsControllerTest
 	public void getPostForUserFailed2() 
 	{			
 		String access_token = "token_expired";
-		Response resp = postsController.getPostforUser(access_token);
+		int user_id = 1;
+		Response resp = postsController.getPostforUser(access_token, user_id);
 		assertEquals(1002, resp.getStatus());		
 	}
 	
@@ -639,7 +642,8 @@ public class PostsControllerTest
 	public void getPostForUserFailed3() 
 	{			
 		String access_token = "token_invalid";
-		Response resp = postsController.getPostforUser(access_token);
+		int user_id = 1;
+		Response resp = postsController.getPostforUser(access_token, user_id);
 		assertEquals(1003, resp.getStatus());		
 	}
 	
@@ -653,7 +657,8 @@ public class PostsControllerTest
 	public void getPostForUserFailed4() 
 	{			
 		String access_token = "access_token";
-		Response resp = postsController.getPostforUser(access_token);
+		int user_id = 1;
+		Response resp = postsController.getPostforUser(access_token, user_id);
 		assertEquals(9001, resp.getStatus());		
 	}
 	

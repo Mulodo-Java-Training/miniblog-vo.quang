@@ -62,7 +62,8 @@ public class CommentsController
 					cmt.setCreated_at(new Date());
 					cmt.setModified_at(new Date());
 					cmt.setPost_id(post_id);
-					cmt.setUser_id(usersService.getUserByToken(access_token).getId());					
+					//cmt.setUser_id(usersService.getUserByToken(access_token).getId());					
+					cmt.setUser(usersService.getUserByToken(access_token));
 					// Check whether comment added success
 					if (commentsService.isAddComment(cmt) == true) {			
 						rf.meta.id = Constants.CODE_200;
@@ -127,7 +128,7 @@ public class CommentsController
 								// Check comment belongs to post
 								if (cmt.getPost_id() == post.getId()) {
 									// Check whether comment belongs to right user
-									if (user.getId() == cmt.getUser_id()) {
+									if (user.getId() == cmt.getUser().getId()) {
 										// Set edited data to comment object									
 										cmt.setContent(data.getContent());
 										cmt.setModified_at(new Date());
@@ -221,7 +222,7 @@ public class CommentsController
 							// Check comment belongs to post
 							if (cmt.getPost_id() == post.getId()) {
 								// Check whether comment belongs to right user
-								if (user.getId() == cmt.getUser_id()) {
+								if (user.getId() == cmt.getUser().getId()) {
 									// Delete comment
 									if (commentsService.isDeleteComment(cmt) == true) {
 										rf.meta.id = Constants.CODE_200;

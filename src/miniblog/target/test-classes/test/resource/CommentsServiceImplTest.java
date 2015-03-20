@@ -24,7 +24,7 @@ public class CommentsServiceImplTest implements CommentsService
 	@Override
 	public boolean isUpdateComment(Comments cmt) 
 	{
-		if (cmt.getId() == 1 && cmt.getPost_id() == 1 && cmt.getUser_id() == 1)
+		if (cmt.getId() == 1 && cmt.getPost_id() == 1 && cmt.getUser().getId() == 1)
 			return true;
 		else
 			return false;
@@ -39,35 +39,35 @@ public class CommentsServiceImplTest implements CommentsService
 			cmt1.setId(1);
 			cmt1.setContent("Content Of Comment");
 			cmt1.setPost_id(1);
-			cmt1.setUser_id(1);
+			cmt1.getUser().setId(1);
 			return cmt1;
 		case 2:
 			Comments cmt2 = new Comments();
 			cmt2.setId(2);
 			cmt2.setContent("Content Of Comment");
 			cmt2.setPost_id(2);
-			cmt2.setUser_id(2);
+			cmt2.getUser().setId(2);
 			return cmt2;
 		case 3:
 			Comments cmt3 = new Comments();
 			cmt3.setId(3);
 			cmt3.setContent("Content Of Comment");
 			cmt3.setPost_id(3);
-			cmt3.setUser_id(3);
+			cmt3.getUser().setId(3);
 			return cmt3;	
 		case 4:
 			Comments cmt4 = new Comments();
 			cmt4.setId(4);
 			cmt4.setContent("Content Of Comment");
 			cmt4.setPost_id(4);
-			cmt4.setUser_id(4);
+			cmt4.getUser().setId(4);
 			return cmt4;
 		case 5:
 			Comments cmt5 = new Comments();
 			cmt5.setId(5);
 			cmt5.setContent("Content Of Comment");
 			cmt5.setPost_id(5);
-			cmt5.setUser_id(5);
+			cmt5.getUser().setId(5);
 			return cmt5;
 		default: return null;
 		}
@@ -76,7 +76,7 @@ public class CommentsServiceImplTest implements CommentsService
 	@Override
 	public boolean isDeleteComment(Comments cmt) 
 	{
-		if (cmt.getId() == 4 && cmt.getPost_id() == 4 && cmt.getUser_id() == 4)
+		if (cmt.getId() == 4 && cmt.getPost_id() == 4 && cmt.getUser().getId() == 4)
 			return true;
 		else
 			return false;

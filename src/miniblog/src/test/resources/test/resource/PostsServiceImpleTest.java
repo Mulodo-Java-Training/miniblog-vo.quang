@@ -87,7 +87,7 @@ public class PostsServiceImpleTest implements PostsService
 	@Override
 	public List<Posts> getPostsForUser(Users user) 
 	{
-		if (user.getId() == 1) {
+		if (user != null) {
 			List<Posts> listPost = new ArrayList<Posts>();		
 			return listPost;
 		}
@@ -100,6 +100,7 @@ public class PostsServiceImpleTest implements PostsService
 		// TODO Auto-generated method stub
 		return null;
 	}
+
 
 }
 
