@@ -542,18 +542,4 @@ public class UsersControllerTest
 		assertEquals(1001, resp.getStatus());		
 	}
 	
-	/**
-	 * Test searchUserByName failed 3
-	 * 9001
-	 * Error
-	 * 
-	 * */
-	@Test
-	public void searchUserByNameFailed3() 
-	{		
-		Response resp = usersController.searchUserByName("testSearchFailed");		
-		assertEquals(9001, resp.getStatus());		
-	}
-	
-	
 }

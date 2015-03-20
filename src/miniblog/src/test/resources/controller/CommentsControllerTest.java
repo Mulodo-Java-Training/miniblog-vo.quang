@@ -489,19 +489,19 @@ public class CommentsControllerTest
 		assertEquals(2504, resp.getStatus());
 	}
 	
-	/**
-	 * Test getAllCommentsForPost failed 2
-	 * 3005
-	 * Get all comments for post failed
-	 * 
-	 * */	
-	@Test
-	public void getAllCommentsForPostTestFailed2()
-	{
-		int post_id = 3;
-		Response resp = commentsController.getAllCommentsForPost(post_id);
-		assertEquals(3005, resp.getStatus());
-	}
+//	/**
+//	 * Test getAllCommentsForPost failed 2
+//	 * 3005
+//	 * Get all comments for post failed
+//	 * 
+//	 * */	
+//	@Test
+//	public void getAllCommentsForPostTestFailed2()
+//	{
+//		int post_id = 3;
+//		Response resp = commentsController.getAllCommentsForPost(post_id);
+//		assertEquals(3005, resp.getStatus());
+//	}
 	
 	/**
 	 * Test getAllCommentsForUser success

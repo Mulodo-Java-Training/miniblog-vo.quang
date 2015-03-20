@@ -12,6 +12,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.mulodo.miniblog.controller.PostsController;
 import com.mulodo.miniblog.model.Posts;
+import com.mulodo.miniblog.model.Users;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("file:src/test/resources/TestControllerContext.xml")
@@ -597,7 +598,7 @@ public class PostsControllerTest
 	public void getPostForUserSuccess() 
 	{			
 		String access_token = "abc123xyz";
-		int user_id = 1;
+		int user_id = 1;		
 		Response resp = postsController.getPostforUser(access_token, user_id);
 		assertEquals(200, resp.getStatus());		
 	}
@@ -657,7 +658,7 @@ public class PostsControllerTest
 	public void getPostForUserFailed4() 
 	{			
 		String access_token = "access_token";
-		int user_id = 1;
+		int user_id = 2;
 		Response resp = postsController.getPostforUser(access_token, user_id);
 		assertEquals(9001, resp.getStatus());		
 	}

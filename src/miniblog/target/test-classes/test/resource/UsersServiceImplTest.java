@@ -165,8 +165,20 @@ public class UsersServiceImplTest implements UsersService
 	}
 
 	@Override
-	public Users getUserByUserId(int user_id) {
-		// TODO Auto-generated method stub
+	public Users getUserByUserId(int user_id) 
+	{
+		if (user_id == 1) {
+			Users user = new Users();
+			user.setId(1);
+			return user;
+		}
+		
+		if (user_id == 2) 
+		{
+			Users user2 = new Users();
+			user2.setId(2);
+			return user2;
+		}
 		return null;
 	}
 
