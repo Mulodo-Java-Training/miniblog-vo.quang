@@ -7,7 +7,7 @@ function searchname(name) {
         
             $.ajax({
                 type: "GET",
-                url: "http://localhost:8080/miniblog/v1/users/search/name="+name,
+                url: $apiadd+"users/search/name="+name,
                 data: {"name": name},
                 success: function(response, status, xhr) {
                     if (status == "success") {

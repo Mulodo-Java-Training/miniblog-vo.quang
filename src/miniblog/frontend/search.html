@@ -11,6 +11,7 @@
 <script src="js/getCookie.js"></script>
 <script src="js/displayuser.js"></script>
 <script src="js/logout.js"></script>
+<script src="js/config.js"></script>
 <script src="js/bootstrap.min.js"></script>
 <script src="js/bootstrap.js"></script>
 
@@ -105,7 +106,7 @@
         if (name != null && name != '') {
             $.ajax({
                 type: "GET",
-                url: "http://localhost:8080/miniblog/v1/users/search/name="+name,
+                url: $apiadd+"users/search/name="+name,
                 data: {"name": name},
                 success: function(response, status, xhr) {
                     if (status == "success") {

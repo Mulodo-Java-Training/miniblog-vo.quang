@@ -12,6 +12,7 @@
 <script src="js/displayuser.js"></script>
 <script src="js/deletePost.js"></script>
 <script src="js/logout.js"></script>
+<script src="js/config.js"></script>
 <script src="js/bootstrap.min.js"></script>
 <script src="js/bootstrap.js"></script>
 
@@ -90,7 +91,7 @@
             beforeSend: function(request) {
                 request.setRequestHeader("access_token", getCookie("token"));
             },
-            url: "http://localhost:8080/miniblog/v1/posts/"+id,
+            url: $apiadd+"posts/"+id,
             statusCode: {
                 2504: function() {
                     alert("Post is not  exsited");
@@ -139,7 +140,7 @@
             beforeSend: function(request) {
                 request.setRequestHeader("access_token", getCookie("token"));
             },
-            url: "http://localhost:8080/miniblog/v1/posts/"+id+"/comments/getcommentsofpost",
+            url: $apiadd+"posts/"+id+"/comments/getcommentsofpost",
             statusCode: {
                 2504: function() {
                     alert("Post is not  exsited");
@@ -209,7 +210,7 @@
                     },
                     contentType: "application/json",
                     data: JSON.stringify({"content": content}),
-                    url: "http://localhost:8080/miniblog/v1/posts/"+post_id+"/comments/add",
+                    url: $apiadd+"posts/"+post_id+"/comments/add",
                     statusCode: {
                         9002: function() {
                             alert('Token is missing. Please login');
@@ -288,7 +289,7 @@
                 beforeSend: function(request) {
                     request.setRequestHeader("access_token", getCookie('token'));
                 },
-                url: "http://localhost:8080/miniblog/v1/posts/"+post_id+"/comments/update/"+id,
+                url: $apiadd+"posts/"+post_id+"/comments/update/"+id,
                 contentType: "application/json",
                 data: JSON.stringify({"content": content}),
                 statusCode: {
@@ -350,7 +351,7 @@
                 beforeSend: function(request) {
                     request.setRequestHeader("access_token", getCookie('token'));
                 },
-                url: "http://localhost:8080/miniblog/v1/posts/"+post_id+"/comments/delete/"+id,
+                url: $apiadd+"posts/"+post_id+"/comments/delete/"+id,
                 statusCode: {
                     2504: function() {
                         alert("Post is not existed");

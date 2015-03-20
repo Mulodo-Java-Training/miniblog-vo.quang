@@ -8,6 +8,7 @@
 <link rel="stylesheet" type="text/css" href="css/welcome.css">
 
 <script src="js/jquery-1.11.2.min.js"></script>
+<script src="js/config.js"></script>
 <script src="js/bootstrap.min.js"></script>
 <script src="js/bootstrap.js"></script>
 
@@ -73,7 +74,7 @@
         
         $.ajax({
             type: "GET",
-            url: "http://localhost:8080/miniblog/v1/posts/getlatestpost",
+            url: $apiadd+"posts/getlatestpost",
             statusCode: {
                 9001: function() {
                     alert('Error');
@@ -122,7 +123,7 @@
 
 			$.ajax({
 				type: "POST",
-				url: "http://localhost:8080/miniblog/v1/users/login",
+				url: $apiadd+"users/login",
 				data:"username=" + username + "&password=" + password,
 				statusCode: {
 					1001: function() {

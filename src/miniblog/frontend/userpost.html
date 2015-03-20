@@ -13,6 +13,7 @@
 <script src="js/showPost.js"></script>
 <script src="js/logout.js"></script>
 <script src="js/deletePost.js"></script>
+<script src="js/config.js"></script>
 <script src="js/bootstrap.min.js"></script>
 <script src="js/bootstrap.js"></script>
 
@@ -86,15 +87,22 @@
 
 <script type="text/javascript">
             
-    // Get posts of user (My posts)
+    // Get posts of user
     $(document).ready(function() {
+        // get user_id from previous page
+        var user_id = window.name;
         
+        // Display post of login user if user did not choose to see anyone's post. 
+        if (window.name == "null") {
+            user_id = getCookie('userid');
+        }
+              
         $.ajax({
             type: "GET",
             beforeSend: function(request) {
                 request.setRequestHeader("access_token", getCookie('token'));
             },
-            url: "http://localhost:8080/miniblog/v1/posts/getpostforuser",
+            url: $apiadd+"posts/getpostforuser/"+user_id,
             statusCode: {
                 9002: function() {
                     alert("Token missing. Please login");
@@ -134,14 +142,14 @@
 						            </div>\
 					            </div>\
 				            </div>"
-                                         )
-                                          
+                                         )                                         
                     }
                           );
-                
+                // Assign "null" string to delete user_id from previous page clicked 
+                window.name = "null";
                 }
             }
-
+            
         })
     })
   

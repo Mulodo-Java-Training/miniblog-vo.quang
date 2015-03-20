@@ -8,7 +8,7 @@
                 beforeSend: function(request) {
                     request.setRequestHeader("access_token", getCookie('token'));    
                 },
-                url: "http://localhost:8080/miniblog/v1/posts/"+id+"/delete",
+                url: $apiadd+"posts/"+id+"/delete",
                 statusCode: {
                     9001: function() {
                         alert("Error.");

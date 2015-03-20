@@ -8,7 +8,7 @@
                         beforeSend: function(request) {
                             request.setRequestHeader("access_token", getCookie('token'));
                         },
-                        url: "http://localhost:8080/miniblog/v1/users/logout",
+                        url: $apiadd+"users/logout",
                         statusCode: {
                             9002: function() {
                                 alert('Missing token. Please login!');

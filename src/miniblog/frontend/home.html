@@ -13,6 +13,8 @@
 <script src="js/searchname.js"></script>    
 <script src="js/showPost.js"></script>
 <script src="js/logout.js"></script>
+<script src="js/showUserPost.js"></script>    
+<script src="js/config.js"></script>
 <script src="js/bootstrap.min.js"></script>
 <script src="js/bootstrap.js"></script>
 
@@ -93,7 +95,7 @@
         
         $.ajax({
             type: "GET",
-            url: "http://localhost:8080/miniblog/v1/posts/getlatestpost",
+            url: $apiadd+"posts/getlatestpost",
             statusCode: {
                 9001: function() {
                     alert('Error');
@@ -116,7 +118,7 @@
                                 <div class=' justify'>"+i+")\
                                     <a href='#'><span id='title' onclick='showPost("+value['id']+")'>"+value['title']+"</span></a>\
                                 </div>\
-                                <div class=' blog-post-meta justify' id='created_at'><small>Created at: "+value['created_at_fm']+" | Author: <b>"+value['user']['username']+"</b></small>\
+                                <div class=' blog-post-meta justify' id='created_at'><small>Created at: "+value['created_at_fm']+" | Author: <b><a href='#' onclick='showUserPost("+value['user']['id']+")'>"+value['user']['username']+"</a></b></small>\
                                 </div>\
                                 <div class=' justify' id='description'>"+value['description']+"</div>\
                             </div>\
@@ -138,6 +140,8 @@
             searchname(name);
         }
     }
+    
+    
     
 
     

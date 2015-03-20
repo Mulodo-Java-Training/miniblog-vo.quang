@@ -13,6 +13,7 @@
 <script src="js/logout.js"></script>   
 <script src="js/tinymce.min.js"></script>
 <script src="js/tinymce.js"></script>
+<script src="js/config.js"></script>
 <script src="js/bootstrap.min.js"></script>
 <script src="js/bootstrap.js"></script>
 
@@ -148,7 +149,7 @@
             beforeSend: function(request) {
                 request.setRequestHeader("access_token", getCookie('token'));
             },
-            url: "http://localhost:8080/miniblog/v1/posts/create",
+            url: $apiadd+"posts/create",
             contentType: "application/json",
             data: JSON.stringify({'title': title, 'description': description, 'content': content, 'image': image}),
             statusCode: {
