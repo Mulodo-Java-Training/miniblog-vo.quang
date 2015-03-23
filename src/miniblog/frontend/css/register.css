@@ -1,0 +1,127 @@
+body {
+		background-color: #f5f5f5;
+	}
+
+	.group1 {
+		max-width: 900px;
+		height: 120px;
+	}
+
+	.miniblog {
+		max-width: 200px;
+		max-height: 65px; 
+		background-color: white;
+		color: rgb(41, 94, 33);
+		text-align: center;
+		font-size: 36px;
+		border: 3px solid #C0C0C0;
+		padding-left: 5px;
+        border-radius: 5px;
+		text-align: center;
+	}
+
+	.logo-color {
+		color: #337ab7;
+	}
+
+	@media (max-width: 755px) {
+		.miniblog {
+			width: 180px;
+			height: 50px;
+			font-size: 28px;	
+		}
+
+		.group1 {
+			height: 110px;
+			width: auto;
+		}
+
+		h2 {
+			font-size: 22px;
+		}
+	}
+
+	@media (max-width: 520px) {
+		h2 {
+			font-size: 20px;
+		}
+	}
+
+	.group3 {
+		max-width: 600px;
+	}
+
+	a {
+		text-decoration: underline;
+		color: rgb(46, 100, 38);
+	}
+
+	.inline-block {
+		display: inline-block;
+	}
+
+	span {
+		color: rgb(46, 100, 38);
+	}
+
+	hr { 
+    display: block;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+    margin-left: auto;
+    margin-right: auto;
+    border-style: inset;
+    border-width: 1px;
+    width: 800px;
+	}
+
+	.nav-area {
+		background-color: #f5f5f5;
+		border: none;
+	}
+
+	.navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:focus {
+		color: rgb(46, 100, 38);
+	}
+
+	.navbar-default .navbar-nav > li > a {
+		color: rgb(162, 205, 156);
+	}
+
+	h2 {
+		color: rgb(46, 100, 38);
+	}
+
+	.move-down {
+		margin-top: 2px;
+	}
+
+	.btn {
+		margin-left: 15px;
+		margin-top: 2px;
+		background-color: #E5E4E4;
+		color: white;
+		width: 70px;
+	}
+
+	#frm-change-pass {
+		max-width: 400px;
+		height:	auto;
+	}
+
+	.move-right {
+		padding-left: 33px;
+	}
+
+	.remove-underline {
+		text-decoration: none;
+	}
+
+	.col-xs-4 {
+		padding-right: 0px;
+	}
+
+	.cog {
+		margin-left: -20px;
+		margin-top: 10px;
+	}

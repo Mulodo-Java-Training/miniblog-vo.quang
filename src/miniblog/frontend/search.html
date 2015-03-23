@@ -1,0 +1,228 @@
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="css/search.css">
+
+<script src="js/jquery-1.11.2.min.js"></script>
+<script src="js/getCookie.js"></script>
+<script src="js/displayuser.js"></script>
+<script src="js/logout.js"></script>
+<script src="js/config.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/bootstrap.js"></script>
+
+</head>
+<body>
+	<div class="container">
+		<div class="group1">
+			<div classs="row">
+				<div class="col-xs-3 col-sm-3 col-md-3 miniblog">
+					<a class="remove-underline logo-color">Mini Blog</a>
+				</div>
+				<div class="col-xs-3 col-sm-3 col-md-3 pull-right">	
+					<span>Hi <a href="updateuser.html"id="user"></a><span>
+					<span><a onclick="logout()">Logout</a></span>
+					<br/>
+					<span><a href="changepass.html">Change password</a></span>	
+				</div>				
+			</div>
+		</div>
+		<div class="group2">
+			<!-- Navigation -->
+			<div class="navbar navbar-default nav-area">
+				<div class="container-fluid">
+					<div class="navbar-header">
+						<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".mynavbar-content">
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+						</button>
+						<!-- <a class="remove-underline navbar-brand" href="#"><span>Miniblog</span></a> -->
+					</div>
+					<div class="collapse navbar-collapse mynavbar-content">
+						<ul class=" navbar-nav breadcrumb">
+							<li><a class="remove-underline" href="home.html">Home</a></li>
+							<li><a class="remove-underline" href="addpost.html">New post</a></li>
+							<li><a class="remove-underline" href="userpost.html">User's posts</a></li>
+							<li><a class="remove-underline" href="allpost.html">All posts</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<hr>
+
+		<div class="group3 col-xs-offset-2">
+			<div class="row">
+				<div class="col-xs-4 col-xs-offset-3">
+					<h2><span>Search</span></h2>
+					<br/>
+				</div>
+			</div>
+			<div class="row">
+				<div id="frmSearch">
+				    <div class="col-xs-6 inline-block pull-left	">
+						<input id="name" type="text" class="form-control" placeholder="Search username, firstname, lastname..." />
+                    </div>
+					<div class="btnSearch inline-block pull-left search">
+                        <a href="#" onclick="searchname()">
+                            <span class="glyphicon glyphicon-search"></span>
+                        </a>
+                    </div>
+				</div>
+			</div>
+			<div class="move-down" id="searchdata">
+<!--
+				<div class="row">
+					<div class="col-xs-12 col-sm-12 col-md-12">
+						<div class="col-xs-2 col-sm-2 col-md-2 inline-block">
+							<a href="#"><img src="image/avatar8.jpg" class="img-responsive" alt="Cinque Terre"></a>
+						</div>
+						<div class="col-xs-10 col-sm-10 col-md-10 inline-block blog-main">
+							<div class=" justify">
+								<span><a href="#" class="remove-underline">Username1</a></span>
+							</div>
+							<div class=" blog-post-meta justify">Joined date: January 1, 2014</div>	
+						</div>
+					</div>
+				</div>
+-->
+			</div>
+		</div>		
+	</div>
+
+            
+            
+<script type="text/javascript">
+    
+    function searchname(){
+        var name = $("#name").val(); 
+
+        if (name != null && name != '') {
+            $.ajax({
+                type: "GET",
+                url: $apiadd+"users/search/name="+name,
+                data: {"name": name},
+                success: function(response, status, xhr) {
+                    if (status == "success") {
+                        $.each(response['data'], function(key, value) {
+                        $("#searchdata").append("\
+                        <div class='row'>\
+					<div class='col-xs-12 col-sm-12 col-md-12'>\
+						<div class='col-xs-2 col-sm-2 col-md-2 inline-block'>\
+							<a href='#'><img src='image/avatar8.jpg' class='img-responsive' alt='Cinque Terre'></a>\
+						</div>\
+						<div class='col-xs-10 col-sm-10 col-md-10 inline-block blog-main'>\
+							<div class=' justify'>\
+								<span><a href='#' class='remove-underline'>"+value['username']+"</a></span>\
+							</div>\
+							<div class=' blog-post-meta justify'><small>Joined date: "+value['created_at_fm']+"</small></div>\
+                            <div class=' blog-post-meta justify'>Firstname: "+value['firstname']+"</div>\
+                            <div class=' blog-post-meta justify'>Lastname: "+value['lastname']+"</div>\
+						</div>\
+					</div>\
+				</div>"
+                                              )
+                        });
+                    }
+                }
+            })
+        }      
+    }
+    
+    
+    
+    
+    // Change password
+    $("#save").click(function() {
+        var currentPassword = $("#currentPassword").val();
+        var newPassword = $("#newPassword").val();
+        var confirmPassword = $("#confirmPassword").val();
+        var id = getCookie("userid");
+        
+        currentPassword = $.trim(currentPassword);
+        newPassword = $.trim(newPassword);
+        confirmPassword = $.trim(confirmPassword);
+        
+        // Validate
+        $(".error").hide();
+        var hasError = false;
+        if (currentPassword == '') {
+            $("#currentPassword").after('<span class="error">Please enter a password.</span>');
+            hasError = true;
+        }
+        else if (currentPassword.length < 6) {
+            $("#currentPassword").after('<span class="error">Password must be at least 6 characters.</span>');
+            hasError = true;
+        }
+        else if (newPassword == '') {
+            $("#newPassword").after('<span class="error">Please enter your new password.</span>');
+            hasError = true;
+        }
+        else if (newPassword.length < 6) {
+             $("#newPassword").after('<span class="error">Password must be at least 6 characters.</span>');
+            hasError = true;
+        }
+        else if (confirmPassword == '') {
+            $("#confirmPassword").after('<span class="error">Please enter your confirm password.</span>');
+            hasError = true;
+        }  
+        else if (newPassword != confirmPassword ) {
+            $("#confirmPassword").after('<span class="error">Confirm password and new password do not match.</span>');
+            hasError = true;
+        }
+        if(hasError == true) {
+            return false;
+        }
+                      
+        $.ajax({
+            type: "PUT",
+            url: "http://localhost:8080/miniblog/v1/users/changepassword",
+            data: "currentPassword=" + currentPassword + "&newPassword=" + newPassword + "&id=" + id,
+            statusCode: {
+                1001: function() {
+                    alert('Input invalid');   
+                    return;
+                },
+                2012: function() {
+                    alert('User is not existed. Please login');
+                    window.location = 'welcome.html';
+                    return;
+                },
+                2007: function() {
+                    alert('Password is invalid.');
+                    return;
+                }
+            },
+            success: function(response, status, xhr) {
+                if (status != "success") {
+                    alert('Error');
+                    return;
+                }
+                else {
+                    alert('Change password success.');
+                    window.location = 'welcome.html';
+                }
+
+            }   
+        }) 
+    })
+    // Cancel change password
+    $("#cancel").click(function() {
+        window.location.reload();
+        return;
+    })
+    
+    
+    
+    
+    
+</script>            
+
+</body>
+</html>
