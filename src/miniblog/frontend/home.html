@@ -59,9 +59,10 @@
 				</div>
 				<div class="collapse navbar-collapse mynavbar-content">
 					<ul class=" navbar-nav breadcrumb">
-						<li class="active"><a class="remove-underline" href="home.html">Home</a></li>
+						<li class="active"><a class="remove-underline" href="home.html" id="home">Home</a></li>
 						<li><a class="remove-underline" href="addpost.html">New post</a></li>
 						<li><a class="remove-underline" href="userpost.html">User's posts</a></li>
+                        <li><a class="remove-underline" href="userComment.html">User's comments</a></li>
 						<li><a class="remove-underline" href="allpost.html">All posts</a></li>
 					</ul>
 				</div>
@@ -87,6 +88,8 @@
 			</div>	
 		</div>		
 	</div>
+            <div id="wait" style="display:none;width:69px;height:89px;border:1px solid black;position:absolute;top:50%;left:50%;padding:2px;"><img src='image/demo_wait.gif' width="64" height="64" /><br>Loading..</div>
+
 
 <script type="text/javascript">
     
@@ -130,9 +133,20 @@
             }
             
         })
+        
+        $(document).ajaxStart(function(){
+        $("#wait").css("display", "block");
+    });
+    $(document).ajaxComplete(function(){
+        $("#wait").css("display", "none");
+    });
+    $("#home").click(function(){
+        $("#wait").show().setTime(3000);
     })
 
-    
+    })
+                      
+                      
     function searchUser() {
         var name = $("#name").val();
         if (name != null && name != '') {

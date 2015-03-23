@@ -63,6 +63,7 @@
 						<li><a class="remove-underline" href="home.html">Home</a></li>
                         <li><a class="remove-underline" href="addpost.html">New post</a></li>
                         <li class="active"><a class="remove-underline" href="userpost.html">User's posts</a></li>
+                        <li><a class="remove-underline" href="userComment.html">User's comments</a></li>
                         <li><a class="remove-underline" href="allpost.html">All posts</a></li>
 				    </ul>
 				</div>
@@ -91,7 +92,6 @@
     $(document).ready(function() {
         // get user_id from previous page
         var user_id = window.name;
-        
         // Display post of login user if user did not choose to see anyone's post. 
         if (window.name == "null") {
             user_id = getCookie('userid');
@@ -117,8 +117,8 @@
                     window.location = 'welcome.html';
                 },
                 9001: function() {
-                    alert("Error");
-                    window.location.reload();
+                    $("#post").html("No posts to show");
+                    //window.location.reload();
                 }
             },
             success: function(response, status, xhr) {
@@ -148,8 +148,15 @@
                 // Assign "null" string to delete user_id from previous page clicked 
                 window.name = "null";
                 }
-            }
+            },
+            complete: function(xhr) {
+                var ct = xhr.getResponseHeader("content-type") || "";  
+			     if (ct.indexOf('json') < 0) {
+                     $("#post").html("Create your new post.");
+                     window.name = "null";
+                 }
             
+            }
         })
     })
   

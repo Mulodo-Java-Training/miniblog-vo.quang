@@ -26,7 +26,7 @@
 					<a class="remove-underline" href="home.html"><span class="logo-color">Mini Blog</span></a>
 				</div>
 				<div class="col-xs-3 col-sm-3 col-md-3 pull-right">	
-					<span>Hi <a href="updateuser.html" id="user></a><span>
+					<span>Hi <a href="updateuser.html" id="user"></a><span>
 					<span><a href="#" onclick="logout()">Logout</a></span>
 					<br/>
 					<span><a href="changepass.html">Change password</a></span>	
@@ -217,6 +217,8 @@
                         },
                         2505: function() {
                             alert("Can not edit post that does not belong to you.");
+                            // set null and send to userpost.html page in order to get user_id from cookie at userpost.html page
+                            window.name = "null";
                             window.location = 'userpost.html';
                         },
                         9001: function() {
@@ -240,9 +242,9 @@
         })
            
     function cancel() {
-        $("cancel").click(function() {
-            window.location = "userpost.html";
-        })        
+            // set null and send to userpost.html page in order to get userid from cookie at userpost.html page            
+            window.name = "null";
+            window.location = "userpost.html";  
     }
     
     

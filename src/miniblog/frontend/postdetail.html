@@ -48,7 +48,7 @@
 						<ul class=" navbar-nav breadcrumb">
 							<li><a class="remove-underline" href="home.html">Home</a></li>
 							<li><a class="remove-underline" href="addpost.html">New post</a></li>
-							<li><a class="remove-underline" href="userpost.html">User's posts</a></li>
+							<li><a class="remove-underline" href="#" id="userpost">User's posts</a></li>
 							<li><a class="remove-underline" href="allpost.html">All posts</a></li>
 						</ul>
 					</div>
@@ -151,8 +151,8 @@
             success: function(response, status, xhr) {
                 if (status == "success") {
                     $.each(response['data'], function(key,value) {
-                        $status="inactive";
-				        if(value['status']){$status="active";}
+//                        $status="inactive";
+//				        if(value['status']){$status="active";}
 				        $('#comment').append("\
                         <div class='col-xs-12 comment'>\
                             <div class='form-group'>\
@@ -169,8 +169,8 @@
                                                 </div>\
                                             </div>\
                                             <div class='col-xs-2' id='a'>\
-                                                <a href='#' id='editComment' onclick='getComment("+value['id']+", "+value['post_id']+")'><span id='editspan' class='glyphicon glyphicon-edit'></span></a>\
-                                                <a href='#' onclick='deleteComment("+value['id']+", "+value['post_id']+")'><span class='glyphicon glyphicon-trash'></span></a>\
+                                                <a href='#' id='editComment' onclick='getComment("+value['id']+", "+value['post']['id']+")'><span id='editspan' class='glyphicon glyphicon-edit'></span></a>\
+                                                <a href='#' onclick='deleteComment("+value['id']+", "+value['post']['id']+")'><span class='glyphicon glyphicon-trash'></span></a>\
                                             </div>\
                                         </div>\
                                     </div>\
@@ -257,7 +257,8 @@
         // Get comment and display in input content -> user can edit comment
         $.ajax({
             type: "GET",
-            beforeSend : function(request) {request.setRequestHeader("access_token", getCookie('token'));
+            beforeSend : function(request) {
+                request.setRequestHeader("access_token", getCookie('token'));
             },
             url: "http://localhost:8080/miniblog/v1/posts/comments/getcommentbyid/"+id,
             success: function(response, status, xhr) {
@@ -279,6 +280,7 @@
     
     // Edit comment function
     function editComment(id, post_id, content) {
+        console.log("post_id: ",post_id);
         // Edit comment
         $("#content").bind("enterKey", function(e) {
             // Get edited comment
@@ -378,7 +380,7 @@
                         window.location.reload();
                     },
                     3003: function() {
-                        alert("Can not edit comment that is not belong to you.");
+                        alert("Can not delete comment that is not belong to you.");
                         window.location.reload();
                     },
                     3007: function() {
@@ -400,6 +402,12 @@
         }
         
     }
+    // navigate to userpost.html page
+    $("#userpost").click(function() {
+        // set null and send to userpost.html page in order to get userid from cookie at userpost.html page
+        window.name = "null";
+        window.location = 'userpost.html'
+    })
     
     
 </script>            

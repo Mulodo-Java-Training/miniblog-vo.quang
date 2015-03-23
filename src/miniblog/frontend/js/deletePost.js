@@ -16,6 +16,8 @@
                     },
                     2505: function() {
                         alert("Can not delete post that does not belong to you.");
+                        // set null and send to userpost.html page in order to get userid from cookie at userpost.html page
+                        window.name = "null";
                         window.location = 'userpost.html';
                     },
                     1003: function() {
@@ -37,6 +39,8 @@
                 },
                 success: function(response, status, xhr) {
                     alert("Post is deleted success");
+                    // set null and send to userpost.html page in order to get userid from cookie at userpost.html page
+                    window.name = "null";
                     window.location = 'userpost.html';
                 }
             })

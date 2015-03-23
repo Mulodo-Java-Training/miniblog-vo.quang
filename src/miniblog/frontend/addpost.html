@@ -50,6 +50,7 @@
 							<li><a class="remove-underline" href="home.html">Home</a></li>
 							<li class="active"><a class="remove-underline" href="addpost.html">New post</a></li>
 							<li><a class="remove-underline" href="userpost.html">User's posts</a></li>
+                            <li><a class="remove-underline" href="userComment.html">User's comments</a></li>
 							<li><a class="remove-underline" href="allpost.html">All posts</a></li>
 						</ul>
 					</div>
@@ -175,7 +176,8 @@
             success: function(response, status, xhr) {
                 if (status == "success") {
                     alert("New post created success.");
-                    window.location = 'home.html';
+                    window.name = response['data']['user']['id'];
+                    window.location = 'userpost.html';
                 }
             }
         

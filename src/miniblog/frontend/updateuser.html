@@ -163,7 +163,7 @@
         
          $.ajax({
              type: "PUT",
-             url: $apiadd+"v1/users/"+id,
+             url: $apiadd+"users/"+id,
              beforeSend: function(request) {
                 request.setRequestHeader("access_token", getCookie('token')); 
              },
