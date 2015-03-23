@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.mulodo.miniblog.dao.CommentsDao;
 import com.mulodo.miniblog.model.Comments;
+import com.mulodo.miniblog.model.Posts;
 import com.mulodo.miniblog.service.CommentsService;
 
 @Service
@@ -54,9 +55,9 @@ public class CommentsServiceImpl implements CommentsService
 	}
 
 	@Transactional
-	public List<Comments> getCommentsByPostId(int post_id)
+	public List<Comments> getCommentsByPostId(Posts post)
 	{
-		List<Comments> listComment = commentsDao.getCommentsByPostId(post_id);
+		List<Comments> listComment = commentsDao.getCommentsByPostId(post.getId());
 		if (listComment.size() > 0)
 			return listComment;
 		else

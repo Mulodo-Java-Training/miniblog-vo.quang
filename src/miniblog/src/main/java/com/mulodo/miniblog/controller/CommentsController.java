@@ -61,7 +61,13 @@ public class CommentsController
 					cmt.setContent(data.getContent());
 					cmt.setCreated_at(new Date());
 					cmt.setModified_at(new Date());
-					cmt.setPost_id(post_id);
+					Posts post = postsService.getPostById(post_id);
+					if (post == null) { 
+						rf.meta.id = Constants.CODE_2504;
+						rf.meta.message = Constants.POST_NOT_EXISTED;
+						return Response.status(Constants.CODE_2504).entity(rf).build();
+					}
+					cmt.setPost(post);
 					//cmt.setUser_id(usersService.getUserByToken(access_token).getId());					
 					cmt.setUser(usersService.getUserByToken(access_token));
 					// Check whether comment added success
@@ -126,7 +132,7 @@ public class CommentsController
 							// Check comment existed
 							if (cmt != null) {
 								// Check comment belongs to post
-								if (cmt.getPost_id() == post.getId()) {
+								if (cmt.getPost().getId() == post.getId()) {
 									// Check whether comment belongs to right user
 									if (user.getId() == cmt.getUser().getId()) {
 										// Set edited data to comment object									
@@ -220,7 +226,7 @@ public class CommentsController
 						// Check comment existed
 						if (cmt != null) {
 							// Check comment belongs to post
-							if (cmt.getPost_id() == post.getId()) {
+							if (cmt.getPost().getId() == post.getId()) {
 								// Check whether comment belongs to right user
 								if (user.getId() == cmt.getUser().getId()) {
 									// Delete comment
@@ -286,7 +292,7 @@ public class CommentsController
 		ResponseFormat rf = new ResponseFormat();
 		Posts post = postsService.getPostById(post_id);
 		if (post != null) {
-			List<Comments> listComment = commentsService.getCommentsByPostId(post_id);
+			List<Comments> listComment = commentsService.getCommentsByPostId(post);
 			// Check whether post have comment(s) or not
 //			if (listComment != null) {
 				rf.meta.id = Constants.CODE_200;

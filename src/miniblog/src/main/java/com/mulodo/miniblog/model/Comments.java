@@ -32,11 +32,16 @@ public class Comments implements Serializable
 	
 	@ManyToOne
     @JoinColumn(nullable = false)
-    @ForeignKey(name = "fk_comment_user_idx")
+    @ForeignKey(name = "fk_comment_user")
     private Users user;
 	
-	@Column(name="post_id", nullable=false)
-	private int post_id;
+	@ManyToOne
+    @JoinColumn(nullable = false)
+    @ForeignKey(name = "fk_comment_post")
+    private Posts post;
+	
+//	@Column(name="post_id", nullable=false)
+//	private int post_id;
 	
 	@Id
 	@Column(nullable=false)
@@ -124,15 +129,15 @@ public class Comments implements Serializable
 //		this.user_id = user_id;
 //	}
 
-	public int getPost_id() 
-	{
-		return post_id;
-	}
-
-	public void setPost_id(int post_id) 
-	{
-		this.post_id = post_id;
-	}
+//	public int getPost_id() 
+//	{
+//		return post_id;
+//	}
+//
+//	public void setPost_id(int post_id) 
+//	{
+//		this.post_id = post_id;
+//	}
 
 	@SuppressWarnings("deprecation")
 	public String getCreated_at_fm() {
@@ -158,5 +163,13 @@ public class Comments implements Serializable
 
 	public void setUser(Users user) {
 		this.user = user;
+	}
+
+	public Posts getPost() {
+		return post;
+	}
+
+	public void setPost(Posts post) {
+		this.post = post;
 	}	
 }

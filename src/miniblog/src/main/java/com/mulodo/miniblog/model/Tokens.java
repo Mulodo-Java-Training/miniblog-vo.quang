@@ -8,12 +8,15 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
+import org.hibernate.annotations.ForeignKey;
 import org.hibernate.validator.constraints.NotEmpty;
 
 @Entity
@@ -25,10 +28,16 @@ public class Tokens implements Serializable
 	 */
 	private static final long serialVersionUID = 1L;
 
-	@NotEmpty
-	@NotNull
-	@Column(name="user_id")
-	private int user_id;
+//	@NotEmpty
+//	@NotNull
+//	@Column(name="user_id")
+//	private int user_id;
+	
+	@ManyToOne
+    @JoinColumn(nullable = false)
+    @ForeignKey(name = "fk_token_user")
+    @JsonIgnore
+    private Users user;
 	
 	@Id
 	@Column(nullable=false)
@@ -72,15 +81,15 @@ public class Tokens implements Serializable
 		this.expired = expired;
 	}
 	
-	public int getUser_id() 
-	{
-		return user_id;
-	}
-
-	public void setUser_id(int user_id) 
-	{
-		this.user_id = user_id;
-	}
+//	public int getUser_id() 
+//	{
+//		return user_id;
+//	}
+//
+//	public void setUser_id(int user_id) 
+//	{
+//		this.user_id = user_id;
+//	}
 
 	public int getId() 
 	{
@@ -138,5 +147,13 @@ public class Tokens implements Serializable
 
 	public void setExpired_fm(String expired_fm) {
 		this.expired_fm = expired_fm;
+	}
+
+	public Users getUser() {
+		return user;
+	}
+
+	public void setUser(Users user) {
+		this.user = user;
 	}		
 }

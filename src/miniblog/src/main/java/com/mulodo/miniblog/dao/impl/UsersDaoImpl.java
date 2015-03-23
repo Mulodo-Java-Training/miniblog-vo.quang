@@ -127,7 +127,7 @@ public class UsersDaoImpl implements UsersDao
 		if (token != null) {
 			// Get user by token
 			Criteria cr1 = session.createCriteria(Users.class);
-			cr1.add(Restrictions.eq("id", token.getUser_id()));
+			cr1.add(Restrictions.eq("id", token.getUser().getId()));
 			Users user = (Users) cr1.list().get(0);
 			trans.commit();
 			return user;

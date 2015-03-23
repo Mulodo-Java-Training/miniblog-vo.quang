@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 
 import com.mulodo.miniblog.dao.CommentsDao;
 import com.mulodo.miniblog.model.Comments;
+import com.mulodo.miniblog.model.Posts;
 
 @Repository
 public class CommentsDaoImpl implements CommentsDao 
@@ -66,7 +67,7 @@ public class CommentsDaoImpl implements CommentsDao
 		Session session = sessionFactory.getCurrentSession();
 		Transaction trans = session.beginTransaction();
 		Criteria cr = session.createCriteria(Comments.class);
-		List<Comments> listComment = cr.add(Restrictions.eq("post_id", post_id)).list();
+		List<Comments> listComment = cr.add(Restrictions.eq("post.id", post_id)).list();
 		trans.commit();		
 		return listComment;		
 	}
@@ -78,7 +79,7 @@ public class CommentsDaoImpl implements CommentsDao
 		Session session = sessionFactory.getCurrentSession();
 		Transaction trans = session.beginTransaction();
 		Criteria cr = session.createCriteria(Comments.class);
-		List<Comments> listComment = cr.add(Restrictions.eq("user_id", user_id)).list();
+		List<Comments> listComment = cr.add(Restrictions.eq("user.id", user_id)).list();
 		trans.commit();		
 		return listComment;	
 	}

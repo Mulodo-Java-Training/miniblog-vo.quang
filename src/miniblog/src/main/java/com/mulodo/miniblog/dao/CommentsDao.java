@@ -3,6 +3,7 @@ package com.mulodo.miniblog.dao;
 import java.util.List;
 
 import com.mulodo.miniblog.model.Comments;
+import com.mulodo.miniblog.model.Posts;
 
 
 public interface CommentsDao 

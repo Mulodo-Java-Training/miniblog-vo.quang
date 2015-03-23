@@ -83,10 +83,17 @@ public class PostsDaoImpl implements PostsDao
 	{
 		Session session = sessionFactory.getCurrentSession();
 		Transaction trans = session.beginTransaction();
-		Criteria cr = session.createCriteria(Posts.class);
-		List<Posts> listPost = cr.add(Restrictions.eq("user.id", user.getId())).list();
-		trans.commit();
-		return listPost;
+		try {
+			Criteria cr = session.createCriteria(Posts.class);
+			List<Posts> listPost = cr.add(Restrictions.eq("user.id", user.getId())).list();
+			trans.commit();
+			return listPost;
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+		
 	}
 	
 //	@SuppressWarnings({ "unchecked" })

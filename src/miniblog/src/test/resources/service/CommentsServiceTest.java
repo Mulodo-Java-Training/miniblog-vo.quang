@@ -57,7 +57,9 @@ public class CommentsServiceTest
 		post.setContent("TestPost");
 		post.setCreated_at(new Date());
 		post.setModified_at(new Date());
-		post.getUser().setId(userLogin.getId());
+		Users user = new Users();
+		user.setId(userLogin.getId());
+		post.setUser(user);
 		postsService.createPost(post);
 		
 	}
@@ -80,13 +82,16 @@ public class CommentsServiceTest
 		cmt.setContent("TestAddComment");
 		cmt.setCreated_at(new Date());
 		cmt.setModified_at(new Date());
-		cmt.setPost_id(post.getId());
-		cmt.getUser().setId(userLogin.getId());
+		Posts post1 = postsService.getPostById(post.getId());
+		cmt.setPost(post1);
+		Users user1 = new Users();
+		user1.setId(userLogin.getId());
+		cmt.setUser(user1);
 		
 		assertTrue(commentsService.isAddComment(cmt));
 		Comments actualCmt = commentsService.getComment(cmt.getId());
 		assertEquals("TestAddComment", actualCmt.getContent());
-		assertEquals(cmt.getPost_id(), actualCmt.getPost_id());
+		assertEquals(cmt.getPost().getId(), actualCmt.getPost().getId());
 		assertEquals(cmt.getUser().getId(), actualCmt.getUser().getId());
 		
 		// Edit comment
@@ -97,7 +102,7 @@ public class CommentsServiceTest
 		assertEquals("Edit Comment", actualEditedCmt.getContent());
 		
 		// Get all comment for a post
-		List<Comments> listCmt = commentsService.getCommentsByPostId(post.getId());
+		List<Comments> listCmt = commentsService.getCommentsByPostId(post);
 		assertTrue(listCmt.size() > 0);
 		
 		// Get all comment for user

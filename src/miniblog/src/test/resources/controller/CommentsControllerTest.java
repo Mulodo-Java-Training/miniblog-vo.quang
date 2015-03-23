@@ -95,8 +95,8 @@ public class CommentsControllerTest
 	
 	/**
 	 * Test addComment failed 4
-	 * 3009
-	 * Add comment failed
+	 * 2504
+	 * post of comment is not existed
 	 * 
 	 * */	
 	@Test
@@ -106,6 +106,24 @@ public class CommentsControllerTest
 		Comments data = new Comments();
 		data.setContent("TestComment");
 		int post_id = 2;
+		
+		Response resp = commentsController.addComment(data, post_id, access_token);
+		assertEquals(2504, resp.getStatus());		
+	}
+	
+	/**
+	 * Test addComment failed 5
+	 * 3009
+	 * Add comment failed
+	 * 
+	 * */	
+	@Test
+	public void addCommentTestFailed5() 
+	{	
+		String access_token = "abc123xyz";
+		Comments data = new Comments();
+		data.setContent("TestComment");
+		int post_id = 3;
 		
 		Response resp = commentsController.addComment(data, post_id, access_token);
 		assertEquals(3009, resp.getStatus());		

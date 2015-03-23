@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -86,13 +87,17 @@ public class Users implements Serializable
 	@Transient
 	private String access_token;
 
-	@OneToMany(targetEntity = Posts.class, mappedBy = "user", fetch = FetchType.LAZY)
+	@OneToMany(targetEntity = Posts.class, mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonIgnore
 	public List<Posts> listPost;
 	
-	@OneToMany(targetEntity = Posts.class, mappedBy = "user", fetch = FetchType.LAZY)
+	@OneToMany(targetEntity = Posts.class, mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonIgnore
 	public List<Comments> listComment;
+	
+	@OneToMany(targetEntity = Tokens.class, mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Tokens> user_token;
 	
 	public Users()
 	{		

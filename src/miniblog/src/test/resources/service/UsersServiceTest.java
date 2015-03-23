@@ -56,23 +56,16 @@ public class UsersServiceTest
 		Users userLogin = new Users();
 		userLogin = usersService.getUserByUsername(form.getUsername());
 		assertTrue(tokensService.isCreateToken(userLogin));			
-		assertTrue(usersService.isLogin(userLogin.getUsername(), userLogin.getPassword()));	
+		assertTrue(usersService.isLogin(form.getUsername(), form.getPassword()));	
 		
 		
-		// Change Password
-		userLogin.setPassword(Encryption.hashSHA256("abc123"));
-		userLogin.setModified_at(new Date());
-		assertTrue(usersService.isUpdateUserInfo(userLogin));		
-		// Check changed password matches actual password
-		String passChange = Encryption.hashSHA256("abc123");
-		assertEquals(passChange, userLogin.getPassword());
-			
 		// Update User Info
 		// Check token expired
 		assertTrue(tokensService.isCheckTokenValid(userLogin.getAccess_token()));
 		userLogin.setUsername("testUserUpdate");
 		userLogin.setLastname("testUserUpdate");
 		userLogin.setFirstname("testUserUpdate");
+		userLogin.setPassword(Encryption.hashSHA256("abc123"));
 		userLogin.setModified_at(new Date());
 		assertTrue(usersService.isUpdateUserInfo(userLogin));
 		// Get return user
@@ -81,6 +74,8 @@ public class UsersServiceTest
 		assertEquals("testUserUpdate", getUserUpdate.getUsername());
 		assertEquals("testUserUpdate", getUserUpdate.getLastname());
 		assertEquals("testUserUpdate", getUserUpdate.getFirstname());
+		String passChange = Encryption.hashSHA256("abc123");
+		assertEquals(passChange, userLogin.getPassword());
 		
 		// Logout
 		assertTrue(tokensService.isDeleteTokenByUserId(userLogin.getId()));
@@ -103,12 +98,12 @@ public class UsersServiceTest
 		assertTrue(listUser.size() > 0);
 														
 		// Delete user
-//		assertTrue(usersService.isDeleteUser("testUserUpdate"));						
+		assertTrue(usersService.isDeleteUser("testUserUpdate"));						
 	}
-	
+//	@Test
 	public void delete()
 	{
-		assertTrue(usersService.isDeleteUser("testUserUpdate"));
+		assertTrue(usersService.isDeleteUser("testRegister"));
 	}
 	
 }

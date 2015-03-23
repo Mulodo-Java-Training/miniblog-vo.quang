@@ -62,7 +62,9 @@ public class PostsServiceTest
 		post.setContent("TestCreatePost");
 		post.setCreated_at(new Date());
 		post.setModified_at(new Date());
-		post.getUser().setId(userLogin.getId());
+		Users user = new Users();
+		user.setId(userLogin.getId());
+		post.setUser(user);
 				
 		assertTrue(postsService.createPost(post));
 		Posts actual = postsService.getPostById(post.getId());

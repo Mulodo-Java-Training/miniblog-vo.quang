@@ -36,7 +36,7 @@ public class TokensServiceImpl implements TokensService
 			// Expired in 7 days
 			token.setExpired(new Timestamp(System.currentTimeMillis() + 7*24*60*60*1000));
 			token.setAccess_token(access_token);
-			token.setUser_id(user.getId());						
+			token.setUser(user);						
 			if (tokensDao.isSave(token) == true)
 				return true;
 			else
